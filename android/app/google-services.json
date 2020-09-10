@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "279490609071",
+    "firebase_url": "https://superagile-app.firebaseio.com",
+    "project_id": "superagile-app",
+    "storage_bucket": "superagile-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279490609071:android:89ba5beab3a16372e9395a",
+        "android_client_info": {
+          "package_name": "ee.concise.superagile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279490609071-jhmnhl28g2jvskodk5ihin3ksmlg4978.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi-k-j7zFnfjxTmKEk-JjTxbO4yfXc0Xo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279490609071-jhmnhl28g2jvskodk5ihin3ksmlg4978.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
