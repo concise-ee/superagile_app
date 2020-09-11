@@ -1,87 +1,43 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/pages/start.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(SuperagileApp());
 
-class MyApp extends StatelessWidget {
+final primaryColor = Colors.grey[800];
+final accentColor = Colors.yellow[500];
+
+class SuperagileApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Superagile',
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() {
-    return _MyHomePageState();
-  }
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Superagile')),
-      body: _buildBody(context),
-    );
+        title: 'Superagile', home: StartPage(), theme: _setTheme());
   }
 
-  Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('votes').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
-
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
-  }
-
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
-
-    return Padding(
-      key: ValueKey(record.name),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: ListTile(
-          title: Text(record.name),
-          trailing: Text(record.count.toString()),
-          onTap: () => record.reference.updateData({'count': FieldValue.increment(1)}),
-        ),
+  ThemeData _setTheme() {
+    return ThemeData(
+      brightness: Brightness.dark,
+      primaryColor: primaryColor,
+      accentColor: accentColor,
+      textTheme: TextTheme(
+          bodyText1: TextStyle(color: accentColor),
+          bodyText2: TextStyle(color: accentColor),
+          headline1: TextStyle(color: accentColor),
+          headline2: TextStyle(color: accentColor),
+          headline3: TextStyle(color: accentColor),
+          headline4: TextStyle(color: accentColor),
+          headline5: TextStyle(color: accentColor),
+          headline6: TextStyle(color: accentColor)),
+      buttonTheme: ButtonThemeData(
+        buttonColor: primaryColor,
+        textTheme: ButtonTextTheme.accent,
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: accentColor),
+      ),
+      appBarTheme: AppBarTheme(
+          textTheme: TextTheme(
+              headline6: TextStyle(color: accentColor, fontSize: 20.0)),
+          iconTheme: IconThemeData(color: accentColor)),
     );
   }
-}
-
-class Record {
-  final String name;
-  final int count;
-  final DocumentReference reference;
-
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['name'] != null),
-        assert(map['count'] != null),
-        name = map['name'],
-        count = map['count'];
-
-  Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$name:$count>";
 }
