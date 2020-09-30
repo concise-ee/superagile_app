@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:superagile_app/pages/start.dart';
+import 'package:superagile_app/constants/Labels.dart';
+import 'package:superagile_app/pages/start_page.dart';
 
 void main() => runApp(SuperagileApp());
 
@@ -10,7 +11,7 @@ class SuperagileApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Superagile', home: StartPage(), theme: _setTheme());
+        title: SUPERAGILE, home: StartPage(), theme: _setTheme());
   }
 
   ThemeData _setTheme() {
