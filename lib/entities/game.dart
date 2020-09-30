@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'Player.dart';
+import 'player.dart';
 
 class Game {
   int pin;

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:superagile_app/constants/Labels.dart';
-import 'package:superagile_app/entities/Game.dart';
+import 'package:superagile_app/constants/labels.dart';
+import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 
 class GameStartWaitingPage extends StatefulWidget {

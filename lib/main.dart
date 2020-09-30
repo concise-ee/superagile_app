@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:superagile_app/constants/Labels.dart';
+import 'package:superagile_app/constants/labels.dart';
 import 'package:superagile_app/pages/start_page.dart';
 
 void main() => runApp(SuperagileApp());

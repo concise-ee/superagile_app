@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:superagile_app/constants/Labels.dart';
-import 'package:superagile_app/entities/Game.dart';
-import 'package:superagile_app/entities/Player.dart';
+import 'package:superagile_app/constants/labels.dart';
+import 'package:superagile_app/entities/game.dart';
+import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 
 import 'game_start_waiting_page.dart';

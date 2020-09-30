@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:superagile_app/entities/Game.dart';
+import 'package:superagile_app/entities/game.dart';
 
 class GameRepository {
   final CollectionReference _repository =
