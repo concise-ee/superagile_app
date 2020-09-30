@@ -30,8 +30,6 @@ class _HostStartPageState extends State<HostStartPage> {
             padding: EdgeInsets.all(25),
             child: ListView(
               children: [
-                Text(game.pin.toString(),
-                    style: Theme.of(context).textTheme.headline6),
                 TextField(
                   controller: _nameController,
                   decoration: InputDecoration(hintText: ENTER_NAME),
