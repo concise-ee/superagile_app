@@ -20,19 +20,16 @@ class _StartPageState extends State<StartPage> {
   Widget _buildBody(BuildContext context) {
     return Container(
         padding: EdgeInsets.all(25),
-        child: ListView(
+        child: Column(
+
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            RaisedButton(
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return PlayerStartPage();
-                    }),
-                  );
-                },
-                child: Text(JOIN)),
+            Align(
+              alignment: Alignment.center,
+            ),
+
+            Spacer(flex: 2,),
+            Flexible(flex: 5,child:
             RaisedButton(
                 onPressed: () {
                   FocusScope.of(context).unfocus();
@@ -43,7 +40,30 @@ class _StartPageState extends State<StartPage> {
                     }),
                   );
                 },
-                child: Text(HOST)),
+                child: Text(HOST, style: new TextStyle(
+                  fontSize: 45.0,
+                  color: Colors.yellow
+                ), ), padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),),
+            ),
+            Spacer(flex: 1,),
+            Flexible(flex: 5,child:
+            RaisedButton(
+
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return PlayerStartPage();
+                    }),
+                  );
+                },
+                child: Text(JOIN, style: new TextStyle(
+                    fontSize: 45.0,
+                    color: Colors.yellow
+                ), ), padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10), ),
+            ),
+            Spacer(flex: 2,)
           ],
         ));
   }
