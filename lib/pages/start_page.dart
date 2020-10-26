@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:superagile_app/Resources/AgileButton.dart';
 import 'package:superagile_app/constants/labels.dart';
 import 'package:superagile_app/pages/host_start_page.dart';
 import 'package:superagile_app/pages/player_start_page.dart';
@@ -30,7 +31,8 @@ class _StartPageState extends State<StartPage> {
 
             Spacer(flex: 2,),
             Flexible(flex: 5,child:
-            RaisedButton(
+            AgileButton(
+              buttonTitle: HOST,
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   Navigator.push(
@@ -40,15 +42,12 @@ class _StartPageState extends State<StartPage> {
                     }),
                   );
                 },
-                child: Text(HOST, style: new TextStyle(
-                  fontSize: 45.0,
-                  color: Colors.yellow
-                ), ), padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),),
+                ),
             ),
             Spacer(flex: 1,),
             Flexible(flex: 5,child:
-            RaisedButton(
-
+            AgileButton(
+                buttonTitle: JOIN,
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   Navigator.push(
@@ -58,10 +57,7 @@ class _StartPageState extends State<StartPage> {
                     }),
                   );
                 },
-                child: Text(JOIN, style: new TextStyle(
-                    fontSize: 45.0,
-                    color: Colors.yellow
-                ), ), padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10), ),
+                ),
             ),
             Spacer(flex: 2,)
           ],

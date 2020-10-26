@@ -4,7 +4,7 @@ import 'package:superagile_app/pages/start_page.dart';
 
 void main() => runApp(SuperagileApp());
 
-final primaryColor = Colors.grey[800];
+final primaryColor = Color.fromRGBO(13, 13, 13, 1);
 final accentColor = Colors.yellow[500];
 
 class SuperagileApp extends StatelessWidget {
@@ -18,6 +18,7 @@ class SuperagileApp extends StatelessWidget {
     return ThemeData(
       brightness: Brightness.dark,
       primaryColor: primaryColor,
+      scaffoldBackgroundColor: primaryColor,
       accentColor: accentColor,
       textTheme: TextTheme(
           bodyText1: TextStyle(color: accentColor),
