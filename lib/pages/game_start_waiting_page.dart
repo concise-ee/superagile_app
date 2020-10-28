@@ -57,8 +57,8 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
               Text(WAITING_ROOM, style: Theme.of(context).textTheme.headline4),
               Text(pin.toString(),
                   style: Theme.of(context).textTheme.headline5),
-              buildActivePlayersWidget(pin)
-            ],
+              buildActivePlayersWidget(pin),
+              ],
           )),
     );
   }

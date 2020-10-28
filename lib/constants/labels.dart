@@ -7,3 +7,7 @@ const WAITING_ROOM = "Waiting room...";
 const CONTINUE = "CONTINUE";
 const ENTER_NAME = "Enter name";
 const ENTER_PIN = "Enter PIN";
+const ZERO = "0";
+const ONE = "1";
+const TWO = "2";
+const THREE = "3";
