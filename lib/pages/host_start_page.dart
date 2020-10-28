@@ -21,7 +21,7 @@ class HostStartPage extends StatefulWidget {
 class _HostStartPageState extends State<HostStartPage> {
   final GameRepository _gameRepository = GameRepository();
   final _nameController = TextEditingController();
-  var game = Game(_generate6DigitPin(), []);
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _HostStartPageState extends State<HostStartPage> {
                     child: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          "Are you a member of the team and planning to play along? Or just a host?",
+                          HOST_OR_JOIN,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -63,7 +63,7 @@ class _HostStartPageState extends State<HostStartPage> {
                     child: Container(
                         alignment: Alignment.center,
                         child: Text(
-                          "* The decision can't be changed.",
+                          DECISION_CANT_BE_CHANGED,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -79,6 +79,7 @@ class _HostStartPageState extends State<HostStartPage> {
                     buttonTitle: PLAYING_ALONG,
                     onPressed: () {
                       FocusScope.of(context).unfocus();
+                      var game = Game(_generate6DigitPin(), []);
                       game.players.add(Player(
                           _nameController.text, DateTime.now().toString()));
                       _gameRepository.addGame(game).then((ref) {
@@ -102,6 +103,7 @@ class _HostStartPageState extends State<HostStartPage> {
                     buttonTitle: JUST_A_HOST,
                     onPressed: () {
                       FocusScope.of(context).unfocus();
+                      var game = Game(_generate6DigitPin(), []);
                       _gameRepository.addGame(game).then((ref) {
                         Navigator.push(
                           context,

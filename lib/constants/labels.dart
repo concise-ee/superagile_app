@@ -13,3 +13,5 @@ const TWO = "2";
 const THREE = "3";
 const PLAYING_ALONG = "Playing along";
 const JUST_A_HOST = "Just a host";
+const HOST_OR_JOIN = "Are you a member of the team and planning to play along? Or just a host?";
+const DECISION_CANT_BE_CHANGED = "* The decision can't be changed.";
