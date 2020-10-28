@@ -11,3 +11,5 @@ const ZERO = "0";
 const ONE = "1";
 const TWO = "2";
 const THREE = "3";
+const PLAYING_ALONG = "Playing along";
+const JUST_A_HOST = "Just a host";

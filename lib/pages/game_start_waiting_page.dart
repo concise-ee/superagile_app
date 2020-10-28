@@ -32,10 +32,12 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
 
   sendLastActive() {
     _gameRepository.findGameByPin(pin).then((game) {
-      var currentPlayer =
-          game.players.where((player) => player.name == playerName).first;
-      currentPlayer.lastActive = DateTime.now().toString();
-      _gameRepository.updateGame(game);
+      if (game.players.any((player) => player.name == playerName)) {
+        var currentPlayer =
+            game.players.where((player) => player.name == playerName).first;
+        currentPlayer.lastActive = DateTime.now().toString();
+        _gameRepository.updateGame(game);
+      }
     });
   }
 
@@ -58,7 +60,7 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
               Text(pin.toString(),
                   style: Theme.of(context).textTheme.headline5),
               buildActivePlayersWidget(pin),
-              ],
+            ],
           )),
     );
   }

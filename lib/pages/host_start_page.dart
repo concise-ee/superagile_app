@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:superagile_app/Resources/AgileButton.dart';
 import 'package:superagile_app/constants/labels.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
@@ -20,7 +21,7 @@ class HostStartPage extends StatefulWidget {
 class _HostStartPageState extends State<HostStartPage> {
   final GameRepository _gameRepository = GameRepository();
   final _nameController = TextEditingController();
-  final game = Game(_generate6DigitPin(), []);
+  var game = Game(_generate6DigitPin(), []);
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +29,54 @@ class _HostStartPageState extends State<HostStartPage> {
         appBar: AppBar(title: Text(HASH_SUPERAGILE)),
         body: Container(
             padding: EdgeInsets.all(25),
-            child: ListView(
+            child: Column(
               children: [
+                Align(
+                  alignment: Alignment.center,
+                ),
+                Spacer(
+                  flex: 2,
+                ),
                 TextField(
                   controller: _nameController,
                   decoration: InputDecoration(hintText: ENTER_NAME),
                 ),
-                RaisedButton(
+                Spacer(
+                  flex: 1,
+                ),
+                Flexible(
+                    fit: FlexFit.loose,
+                    flex: 3,
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Are you a member of the team and planning to play along? Or just a host?",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              letterSpacing: 1.5),
+                          textAlign: TextAlign.center,
+                        ))),
+                Flexible(
+                    fit: FlexFit.loose,
+                    flex: 2,
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "* The decision can't be changed.",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              letterSpacing: 1.5),
+                          textAlign: TextAlign.center,
+                        ))),
+                Spacer(
+                  flex: 1,
+                ),
+                Flexible(
+                  flex: 5,
+                  child: AgileButton(
+                    buttonTitle: PLAYING_ALONG,
                     onPressed: () {
                       FocusScope.of(context).unfocus();
                       game.players.add(Player(
@@ -49,7 +91,29 @@ class _HostStartPageState extends State<HostStartPage> {
                         );
                       });
                     },
-                    child: Text(CONTINUE))
+                  ),
+                ),
+                Spacer(
+                  flex: 1,
+                ),
+                Flexible(
+                  flex: 5,
+                  child: AgileButton(
+                    buttonTitle: JUST_A_HOST,
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      _gameRepository.addGame(game).then((ref) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return GameStartWaitingPage(
+                                game.pin, _nameController.text);
+                          }),
+                        );
+                      });
+                    },
+                  ),
+                ),
               ],
             )));
   }
