@@ -1,36 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/game.dart';
+import 'package:superagile_app/entities/player.dart';
+
+const GAMES_COLLECTION = 'games';
+const PLAYERS_SUB_COLLECTION = 'players';
 
 class GameRepository {
   final CollectionReference _repository =
-      Firestore.instance.collection('games');
+      FirebaseFirestore.instance.collection(GAMES_COLLECTION);
 
-  Stream<QuerySnapshot> getStream() {
+  Stream<QuerySnapshot> getGamesStream() {
     return _repository.snapshots();
   }
 
-  Future<DocumentReference> addGame(Game game) {
-    return _repository.add(game.toJson());
+  Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
+    return gameRef.collection(PLAYERS_SUB_COLLECTION).snapshots();
   }
 
-  Future<Game> findGameByRef(DocumentReference ref) async {
-    DocumentSnapshot snapshot =
-        await _repository.document(ref.documentID).get();
-    return Game.fromSnapshot(snapshot);
+  Future<Game> addGame(Game game) async {
+    var gameRef = await _repository.add(game.toJson());
+    game.reference = gameRef;
+    return game;
   }
 
   Future<Game> findGameByPin(int pin) async {
-    QuerySnapshot result =
-        await _repository.where('pin', isEqualTo: pin).getDocuments();
-    if (result.documents.isEmpty || result.documents.length > 1) {
-      throw ("findGameByPin documents count is not 1");
-    }
-    return Game.fromSnapshot(result.documents[0]);
+    QuerySnapshot result = await _repository.where('pin', isEqualTo: pin).get();
+    return Game.fromSnapshot(result.docs.single);
   }
 
-  updateGame(Game game) async {
-    await _repository
-        .document(game.reference.documentID)
-        .updateData(game.toJson());
+  Future<List<Player>> findGamePlayers(DocumentReference gameRef) async {
+    QuerySnapshot playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
+    return playersSnap.docs.map((snap) => Player.fromSnapshot(snap)).toList();
+  }
+
+  addGamePlayer(DocumentReference gameRef, Player player) {
+    CollectionReference players = gameRef.collection(PLAYERS_SUB_COLLECTION);
+    players.add(player.toJson());
+  }
+
+  updateGamePlayer(DocumentReference gameRef, Player player) {
+    gameRef
+        .collection(PLAYERS_SUB_COLLECTION)
+        .doc(player.reference.id)
+        .update(player.toJson());
   }
 }

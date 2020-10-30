@@ -1,8 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/constants/labels.dart';
 import 'package:superagile_app/pages/start_page.dart';
 
-void main() => runApp(SuperagileApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(SuperagileApp());
+}
 
 final primaryColor = Color.fromRGBO(13, 13, 13, 1);
 final accentColor = Colors.yellow[500];

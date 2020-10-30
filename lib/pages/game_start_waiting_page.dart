@@ -8,10 +8,10 @@ import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 
 class GameStartWaitingPage extends StatefulWidget {
-  final String _name;
-  final int _pin;
+  final Game _game;
+  final String _playerName;
 
-  GameStartWaitingPage(this._pin, this._name);
+  GameStartWaitingPage(this._game, this._playerName);
 
   @override
   _GameStartWaitingPageState createState() => _GameStartWaitingPageState();
@@ -19,8 +19,8 @@ class GameStartWaitingPage extends StatefulWidget {
 
 class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
   final GameRepository _gameRepository = GameRepository();
+  Game game;
   String playerName;
-  int pin;
   Timer timer;
 
   @override
@@ -30,21 +30,17 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
         Timer.periodic(Duration(seconds: 10), (Timer t) => sendLastActive());
   }
 
-  sendLastActive() {
-    _gameRepository.findGameByPin(pin).then((game) {
-      if (game.players.any((player) => player.name == playerName)) {
-        var currentPlayer =
-            game.players.where((player) => player.name == playerName).first;
-        currentPlayer.lastActive = DateTime.now().toString();
-        _gameRepository.updateGame(game);
-      }
-    });
+  sendLastActive() async {
+    List<Player> players = await _gameRepository.findGamePlayers(game.reference);
+    Player player = players.where((player) => player.name == playerName).single;
+    player.lastActive = DateTime.now().toString();
+    _gameRepository.updateGamePlayer(game.reference, player);
   }
 
   @override
   Widget build(BuildContext context) {
-    pin = widget._pin;
-    playerName = widget._name;
+    game = widget._game;
+    playerName = widget._playerName;
 
     return WillPopScope(
       onWillPop: () async {
@@ -57,9 +53,9 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
             padding: EdgeInsets.all(25),
             children: [
               Text(WAITING_ROOM, style: Theme.of(context).textTheme.headline4),
-              Text(pin.toString(),
+              Text(game.pin.toString(),
                   style: Theme.of(context).textTheme.headline5),
-              buildActivePlayersWidget(pin),
+              buildActivePlayersWidget(game.pin),
             ],
           )),
     );
@@ -67,11 +63,10 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
 
   Widget buildActivePlayersWidget(int pin) {
     return StreamBuilder<QuerySnapshot>(
-        stream: _gameRepository.getStream(),
+        stream: _gameRepository.getGamePlayersStream(game.reference),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          Game game = findGameByPin(snapshot.data.documents, pin);
-          List<Player> players = findActivePlayers(game);
+          var players = findActivePlayers(snapshot.data.docs);
           return ListView.builder(
             shrinkWrap: true,
             itemCount: players.length,
@@ -85,19 +80,10 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
         });
   }
 
-  Game findGameByPin(List<DocumentSnapshot> documents, int pin) {
-    Game game = documents
-        .where((element) => element["pin"] == pin)
-        .map((snap) => Game.fromSnapshot(snap))
-        .single;
-    return game;
-  }
-
-  List<Player> findActivePlayers(Game game) {
-    var activePLayers = game.players
-        .where((player) => DateTime.parse(player.lastActive)
-            .isAfter(DateTime.now().subtract(Duration(seconds: 11))))
+  List<Player> findActivePlayers(List<QueryDocumentSnapshot> snaps) {
+    return snaps
+        .map((playerSnap) => Player.fromSnapshot(playerSnap))
+        .where((player) => DateTime.parse(player.lastActive).isAfter(DateTime.now().subtract(Duration(seconds: 11))))
         .toList();
-    return activePLayers;
   }
 }

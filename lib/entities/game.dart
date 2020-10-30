@@ -1,44 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'player.dart';
+const PIN = 'pin';
 
 class Game {
   int pin;
-  List<Player> players;
   DocumentReference reference;
 
-  Game(this.pin, this.players);
+  Game(this.pin);
 
   factory Game.fromSnapshot(DocumentSnapshot snapshot) {
-    Game newGame = Game.fromJson(snapshot.data);
+    Game newGame = Game.fromJson(snapshot.data());
     newGame.reference = snapshot.reference;
     return newGame;
   }
 
   factory Game.fromJson(Map<String, dynamic> json) {
-    var playersJson = json['players'] as List;
-    List<Player> players = [];
-
-    for (final el in playersJson) {
-      players.add(Player.fromJson(el));
-    }
-    return Game(json["pin"] as int, players);
+    return Game(json[PIN] as int);
   }
 
   Map<String, dynamic> toJson() {
-    var playerList = [];
-    for (final player in players) {
-      var playersMap = new Map();
-      playersMap["name"] = player.name;
-      playersMap["lastActive"] = player.lastActive;
-      playerList.add(playersMap);
-    }
     return <String, dynamic>{
-      'pin': pin,
-      'players': playerList,
+      PIN: pin,
     };
   }
 
   @override
-  String toString() => "Game<$pin, $players>";
+  String toString() {
+    return 'Game{$PIN: $pin}';
+  }
 }

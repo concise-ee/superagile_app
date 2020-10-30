@@ -6,6 +6,7 @@ import 'package:superagile_app/constants/labels.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
+import 'package:superagile_app/services/security_service.dart';
 
 import 'game_start_waiting_page.dart';
 
@@ -21,7 +22,6 @@ class HostStartPage extends StatefulWidget {
 class _HostStartPageState extends State<HostStartPage> {
   final GameRepository _gameRepository = GameRepository();
   final _nameController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,20 +77,21 @@ class _HostStartPageState extends State<HostStartPage> {
                   flex: 5,
                   child: AgileButton(
                     buttonTitle: PLAYING_ALONG,
-                    onPressed: () {
+                    onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      var game = Game(_generate6DigitPin(), []);
-                      game.players.add(Player(
-                          _nameController.text, DateTime.now().toString()));
-                      _gameRepository.addGame(game).then((ref) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return GameStartWaitingPage(
-                                game.pin, _nameController.text);
-                          }),
-                        );
-                      });
+                      var loggedInUserUid = await signInAnonymously();
+                      var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
+                      await _gameRepository.addGamePlayer(
+                          game.reference,
+                          Player(_nameController.text, loggedInUserUid,
+                              DateTime.now().toString()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return GameStartWaitingPage(
+                              game, _nameController.text);
+                        }),
+                      );
                     },
                   ),
                 ),
@@ -101,18 +102,21 @@ class _HostStartPageState extends State<HostStartPage> {
                   flex: 5,
                   child: AgileButton(
                     buttonTitle: JUST_A_HOST,
-                    onPressed: () {
+                    onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      var game = Game(_generate6DigitPin(), []);
-                      _gameRepository.addGame(game).then((ref) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return GameStartWaitingPage(
-                                game.pin, _nameController.text);
-                          }),
-                        );
-                      });
+                      var loggedInUserUid = await signInAnonymously();
+                      var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
+                      await _gameRepository.addGamePlayer(
+                          game.reference,
+                          Player(_nameController.text, loggedInUserUid,
+                              DateTime.now().toString()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return GameStartWaitingPage(
+                              game, _nameController.text);
+                        }),
+                      );
                     },
                   ),
                 ),
