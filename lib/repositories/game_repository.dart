@@ -24,21 +24,21 @@ class GameRepository {
   }
 
   Future<Game> findGameByPin(int pin) async {
-    QuerySnapshot result = await _repository.where('pin', isEqualTo: pin).get();
-    return Game.fromSnapshot(result.docs.single);
+    var snapshot = await _repository.where('pin', isEqualTo: pin).get();
+    return Game.fromSnapshot(snapshot.docs.single);
   }
 
   Future<List<Player>> findGamePlayers(DocumentReference gameRef) async {
-    QuerySnapshot playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
+    var playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
     return playersSnap.docs.map((snap) => Player.fromSnapshot(snap)).toList();
   }
 
-  addGamePlayer(DocumentReference gameRef, Player player) {
-    CollectionReference players = gameRef.collection(PLAYERS_SUB_COLLECTION);
+  void addGamePlayer(DocumentReference gameRef, Player player) {
+    var players = gameRef.collection(PLAYERS_SUB_COLLECTION);
     players.add(player.toJson());
   }
 
-  updateGamePlayer(DocumentReference gameRef, Player player) {
+  void updateGamePlayer(DocumentReference gameRef, Player player) {
     gameRef
         .collection(PLAYERS_SUB_COLLECTION)
         .doc(player.reference.id)

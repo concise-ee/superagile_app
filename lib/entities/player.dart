@@ -13,7 +13,7 @@ class Player {
   Player(this.name, this.uid, this.lastActive);
 
   factory Player.fromSnapshot(DocumentSnapshot snapshot) {
-    Player newPlayer = Player.fromJson(snapshot.data());
+    var newPlayer = Player.fromJson(snapshot.data());
     newPlayer.reference = snapshot.reference;
     return newPlayer;
   }

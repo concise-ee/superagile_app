@@ -9,7 +9,7 @@ class Game {
   Game(this.pin);
 
   factory Game.fromSnapshot(DocumentSnapshot snapshot) {
-    Game newGame = Game.fromJson(snapshot.data());
+    var newGame = Game.fromJson(snapshot.data());
     newGame.reference = snapshot.reference;
     return newGame;
   }

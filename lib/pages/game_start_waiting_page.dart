@@ -30,9 +30,9 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
         Timer.periodic(Duration(seconds: 10), (Timer t) => sendLastActive());
   }
 
-  sendLastActive() async {
-    List<Player> players = await _gameRepository.findGamePlayers(game.reference);
-    Player player = players.where((player) => player.name == playerName).single;
+  void sendLastActive() async {
+    var players = await _gameRepository.findGamePlayers(game.reference);
+    var player = players.where((player) => player.name == playerName).single;
     player.lastActive = DateTime.now().toString();
     _gameRepository.updateGamePlayer(game.reference, player);
   }

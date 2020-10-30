@@ -47,7 +47,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             Padding(
                               padding: EdgeInsets.all(12.0),
                               child:
-                                Text("1", style: TextStyle(color: Colors.white, fontSize: 110, letterSpacing: 1.5),)),
+                                Text('1', style: TextStyle(color: Colors.white, fontSize: 110, letterSpacing: 1.5),)),
                         )
                       ),
                       Expanded(
@@ -57,7 +57,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child:
-                                Text("How comfortable do you feel about releasing without any manual testing?",
+                                Text('How comfortable do you feel about releasing without any manual testing?',
                                   style: TextStyle(color: Colors.white, fontSize: 18, height: 1.2, letterSpacing: 1.5),)),
                       ),
                       ),
@@ -72,7 +72,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       child:
                       Padding(
                           padding: EdgeInsets.all(5.0),
-                          child: Text("0 - Lorem Ipsum is simply dummy text of",
+                          child: Text('0 - Lorem Ipsum is simply dummy text of',
                             style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),)
                             ),
                     )
@@ -86,7 +86,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                         child:
                         Padding(
                             padding: EdgeInsets.all(5.0),
-                            child: Text("1 - the printing and typesetting industry.",
+                            child: Text('1 - the printing and typesetting industry.',
                               style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),)
                         ),
                       )
@@ -115,7 +115,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                         Padding(
                             padding: EdgeInsets.all(5.0),
 
-                            child: Text("3 - text ever since the 1500s, when an unknown printer took a",
+                            child: Text('3 - text ever since the 1500s, when an unknown printer took a',
                               style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),)
                         ),
                       )
@@ -134,7 +134,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             top: 25,
                             bottom: 25,
                           ),
-                            child: Text("dui sit amet commodo dictum, lectus tortor faubicuspurus, nec maximus nibh neque",
+                            child: Text('dui sit amet commodo dictum, lectus tortor faubicuspurus, nec maximus nibh neque',
                               style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.5), textAlign: TextAlign.center,)
                         )
                     ),
@@ -149,18 +149,18 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                         Padding(
                             padding: EdgeInsets.all(5),
                           child:
-                          Text("Contrary to popular belief, Lorem Ipsum "
-                              "is not simply random text. It has roots in "
-                              "a piece of classical Latin literature from 45 BC,"
-                              " making it over 2000 years old. Richard McClintock, "
-                              "a Latin professor at Hampden-Sydney College in Virginia, "
-                              "looked up one of the more obscure Latin words, consectetur, from"
-                              " a Lorem Ipsum passage, and going through the cites of the word in "
-                              "classical literature, discovered the undoubtable source. Lorem Ipsum "
-                              "comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum"
-                              " (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book "
-                              "is a treatise on the theory of ethics, very popular during the Renaissance."
-                              " The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.., comes from a "
+                          Text('Contrary to popular belief, Lorem Ipsum '
+                              'is not simply random text. It has roots in '
+                              'a piece of classical Latin literature from 45 BC,'
+                              ' making it over 2000 years old. Richard McClintock, '
+                              'a Latin professor at Hampden-Sydney College in Virginia, '
+                              'looked up one of the more obscure Latin words, consectetur, from'
+                              ' a Lorem Ipsum passage, and going through the cites of the word in '
+                              'classical literature, discovered the undoubtable source. Lorem Ipsum '
+                              'comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum'
+                              ' (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book '
+                              'is a treatise on the theory of ethics, very popular during the Renaissance.'
+                              ' The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.., comes from a '
                               "line in section 1.10.32.",
                             style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),)
                         ),

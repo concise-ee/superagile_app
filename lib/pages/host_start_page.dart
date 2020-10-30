@@ -10,9 +10,9 @@ import 'package:superagile_app/services/security_service.dart';
 
 import 'game_start_waiting_page.dart';
 
-final _random = new Random();
+final _random = Random();
 
-_generate6DigitPin() => _random.nextInt(900000) + 100000;
+int _generate6DigitPin() => _random.nextInt(900000) + 100000;
 
 class HostStartPage extends StatefulWidget {
   @override
