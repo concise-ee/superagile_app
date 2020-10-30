@@ -26,8 +26,7 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
   @override
   void initState() {
     super.initState();
-    timer =
-        Timer.periodic(Duration(seconds: 10), (Timer t) => sendLastActive());
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) => sendLastActive());
   }
 
   void sendLastActive() async {
@@ -53,8 +52,7 @@ class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
             padding: EdgeInsets.all(25),
             children: [
               Text(WAITING_ROOM, style: Theme.of(context).textTheme.headline4),
-              Text(game.pin.toString(),
-                  style: Theme.of(context).textTheme.headline5),
+              Text(game.pin.toString(), style: Theme.of(context).textTheme.headline5),
               buildActivePlayersWidget(game.pin),
             ],
           )),

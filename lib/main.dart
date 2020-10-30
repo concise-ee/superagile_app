@@ -15,8 +15,7 @@ final accentColor = Colors.yellow[500];
 class SuperagileApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: SUPERAGILE, home: StartPage(), theme: _setTheme());
+    return MaterialApp(title: SUPERAGILE, home: StartPage(), theme: _setTheme());
   }
 
   ThemeData _setTheme() {
@@ -42,8 +41,7 @@ class SuperagileApp extends StatelessWidget {
         hintStyle: TextStyle(color: accentColor),
       ),
       appBarTheme: AppBarTheme(
-          textTheme: TextTheme(
-              headline6: TextStyle(color: accentColor, fontSize: 20.0)),
+          textTheme: TextTheme(headline6: TextStyle(color: accentColor, fontSize: 20.0)),
           iconTheme: IconThemeData(color: accentColor)),
     );
   }

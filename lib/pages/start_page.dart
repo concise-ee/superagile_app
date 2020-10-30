@@ -22,17 +22,18 @@ class _StartPageState extends State<StartPage> {
     return Container(
         padding: EdgeInsets.all(25),
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Align(
               alignment: Alignment.center,
             ),
-
-            Spacer(flex: 2,),
-            Flexible(flex: 5,child:
-            AgileButton(
-              buttonTitle: HOST,
+            Spacer(
+              flex: 2,
+            ),
+            Flexible(
+              flex: 5,
+              child: AgileButton(
+                buttonTitle: HOST,
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   Navigator.push(
@@ -42,11 +43,14 @@ class _StartPageState extends State<StartPage> {
                     }),
                   );
                 },
-                ),
+              ),
             ),
-            Spacer(flex: 1,),
-            Flexible(flex: 5,child:
-            AgileButton(
+            Spacer(
+              flex: 1,
+            ),
+            Flexible(
+              flex: 5,
+              child: AgileButton(
                 buttonTitle: JOIN,
                 onPressed: () {
                   FocusScope.of(context).unfocus();
@@ -57,9 +61,11 @@ class _StartPageState extends State<StartPage> {
                     }),
                   );
                 },
-                ),
+              ),
             ),
-            Spacer(flex: 2,)
+            Spacer(
+              flex: 2,
+            )
           ],
         ));
   }

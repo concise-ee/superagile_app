@@ -51,10 +51,7 @@ class _HostStartPageState extends State<HostStartPage> {
                         alignment: Alignment.center,
                         child: Text(
                           HOST_OR_JOIN,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              letterSpacing: 1.5),
+                          style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                           textAlign: TextAlign.center,
                         ))),
                 Flexible(
@@ -64,10 +61,7 @@ class _HostStartPageState extends State<HostStartPage> {
                         alignment: Alignment.center,
                         child: Text(
                           DECISION_CANT_BE_CHANGED,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              letterSpacing: 1.5),
+                          style: TextStyle(color: Colors.white, fontSize: 12, letterSpacing: 1.5),
                           textAlign: TextAlign.center,
                         ))),
                 Spacer(
@@ -82,14 +76,11 @@ class _HostStartPageState extends State<HostStartPage> {
                       var loggedInUserUid = await signInAnonymously();
                       var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
                       await _gameRepository.addGamePlayer(
-                          game.reference,
-                          Player(_nameController.text, loggedInUserUid,
-                              DateTime.now().toString()));
+                          game.reference, Player(_nameController.text, loggedInUserUid, DateTime.now().toString()));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return GameStartWaitingPage(
-                              game, _nameController.text);
+                          return GameStartWaitingPage(game, _nameController.text);
                         }),
                       );
                     },
@@ -107,14 +98,11 @@ class _HostStartPageState extends State<HostStartPage> {
                       var loggedInUserUid = await signInAnonymously();
                       var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
                       await _gameRepository.addGamePlayer(
-                          game.reference,
-                          Player(_nameController.text, loggedInUserUid,
-                              DateTime.now().toString()));
+                          game.reference, Player(_nameController.text, loggedInUserUid, DateTime.now().toString()));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return GameStartWaitingPage(
-                              game, _nameController.text);
+                          return GameStartWaitingPage(game, _nameController.text);
                         }),
                       );
                     },

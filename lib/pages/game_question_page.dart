@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:superagile_app/Resources/AgileButton.dart';
-
 import 'package:superagile_app/constants/labels.dart';
 
 class GameQuestionPage extends StatefulWidget {
@@ -12,10 +10,9 @@ class GameQuestionPage extends StatefulWidget {
 
   @override
   _GameQuestionPage createState() => _GameQuestionPage();
-
 }
-class _GameQuestionPage extends State<GameQuestionPage> {
 
+class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,128 +25,113 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     return Column(
       children: [
         Expanded(
-            child:
-          SingleChildScrollView(
-              padding: EdgeInsets.all(25),
-              child:
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
+            child: SingleChildScrollView(
+                padding: EdgeInsets.all(25),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                            fit: FlexFit.loose,
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: Text(
+                                    '1',
+                                    style: TextStyle(color: Colors.white, fontSize: 110, letterSpacing: 1.5),
+                                  )),
+                            )),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'How comfortable do you feel about releasing without any manual testing?',
+                                  style: TextStyle(color: Colors.white, fontSize: 18, height: 1.2, letterSpacing: 1.5),
+                                )),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Flexible(
                         fit: FlexFit.loose,
                         flex: 1,
-                        child:
-                        Container(
-                            alignment: Alignment.center,
-                            child:
-                            Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child:
-                                Text('1', style: TextStyle(color: Colors.white, fontSize: 110, letterSpacing: 1.5),)),
-                        )
-                      ),
-                      Expanded(
-                        flex: 3,
                         child: Container(
-                            child:
-                            Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child:
-                                Text('How comfortable do you feel about releasing without any manual testing?',
-                                  style: TextStyle(color: Colors.white, fontSize: 18, height: 1.2, letterSpacing: 1.5),)),
-                      ),
-                      ),
-                    ],
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    flex: 1,
-                    child:
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child:
-                      Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text('0 - Lorem Ipsum is simply dummy text of',
-                            style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),)
-                            ),
-                    )
-                  ),
-                  Flexible(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                '0 - Lorem Ipsum is simply dummy text of',
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                              )),
+                        )),
+                    Flexible(
+                        fit: FlexFit.loose,
+                        flex: 1,
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                '1 - the printing and typesetting industry.',
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                              )),
+                        )),
+                    Flexible(
+                        fit: FlexFit.loose,
+                        flex: 1,
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                "2 - Lorem Ipsum has been the industry's standard dummy",
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                              )),
+                        )),
+                    Flexible(
+                        fit: FlexFit.loose,
+                        flex: 1,
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                '3 - text ever since the 1500s, when an unknown printer took a',
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                              )),
+                        )),
+                    Flexible(
                       fit: FlexFit.loose,
                       flex: 1,
-                      child:
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child:
-                        Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Text('1 - the printing and typesetting industry.',
-                              style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),)
-                        ),
-                      )
-                  ),
-                  Flexible(
-                      fit: FlexFit.loose,
-                      flex: 1,
-                      child:
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child:
-                        Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Text("2 - Lorem Ipsum has been the industry's standard dummy",
-                              style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),)
-                        ),
-                      )
-                  ),
-                  Flexible(
-                      fit: FlexFit.loose,
-                      flex: 1,
-                      child:
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child:
-                        Padding(
-                            padding: EdgeInsets.all(5.0),
-
-                            child: Text('3 - text ever since the 1500s, when an unknown printer took a',
-                              style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),)
-                        ),
-                      )
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    flex: 1,
-                    child:
-                    Container(
-                        alignment: Alignment.center,
-                        child: 
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 5,
-                            right: 5,
-                            top: 25,
-                            bottom: 25,
-                          ),
-                            child: Text('dui sit amet commodo dictum, lectus tortor faubicuspurus, nec maximus nibh neque',
-                              style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.5), textAlign: TextAlign.center,)
-                        )
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: Padding(
+                              padding: EdgeInsets.only(
+                                left: 5,
+                                right: 5,
+                                top: 25,
+                                bottom: 25,
+                              ),
+                              child: Text(
+                                'dui sit amet commodo dictum, lectus tortor faubicuspurus, nec maximus nibh neque',
+                                style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.5),
+                                textAlign: TextAlign.center,
+                              ))),
                     ),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    flex: 1,
-                    child:
-                    Container(
+                    Flexible(
+                      fit: FlexFit.loose,
+                      flex: 1,
+                      child: Container(
                         alignment: Alignment.center,
-                        child:
-                        Padding(
+                        child: Padding(
                             padding: EdgeInsets.all(5),
-                          child:
-                          Text('Contrary to popular belief, Lorem Ipsum '
+                            child: Text(
+                              'Contrary to popular belief, Lorem Ipsum '
                               'is not simply random text. It has roots in '
                               'a piece of classical Latin literature from 45 BC,'
                               ' making it over 2000 years old. Richard McClintock, '
@@ -162,14 +144,12 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               'is a treatise on the theory of ethics, very popular during the Renaissance.'
                               ' The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.., comes from a '
                               "line in section 1.10.32.",
-                            style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),)
-                        ),
-                        ),
-                  ),
-                ],
-              )
-          )
-        ),
+                              style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
+                            )),
+                      ),
+                    ),
+                  ],
+                ))),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -203,7 +183,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
             ),
             Expanded(
               child: AgileButton(
-                buttonTitle: TWO ,
+                buttonTitle: TWO,
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   Navigator.push(

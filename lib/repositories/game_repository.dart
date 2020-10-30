@@ -6,8 +6,7 @@ const GAMES_COLLECTION = 'games';
 const PLAYERS_SUB_COLLECTION = 'players';
 
 class GameRepository {
-  final CollectionReference _repository =
-      FirebaseFirestore.instance.collection(GAMES_COLLECTION);
+  final CollectionReference _repository = FirebaseFirestore.instance.collection(GAMES_COLLECTION);
 
   Stream<QuerySnapshot> getGamesStream() {
     return _repository.snapshots();
@@ -39,9 +38,6 @@ class GameRepository {
   }
 
   void updateGamePlayer(DocumentReference gameRef, Player player) {
-    gameRef
-        .collection(PLAYERS_SUB_COLLECTION)
-        .doc(player.reference.id)
-        .update(player.toJson());
+    gameRef.collection(PLAYERS_SUB_COLLECTION).doc(player.reference.id).update(player.toJson());
   }
 }

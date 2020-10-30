@@ -39,14 +39,11 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       if (game != null) {
                         var loggedInUserUid = await signInAnonymously();
                         _gameRepository.addGamePlayer(
-                            game.reference, Player(_nameController.text,
-                            loggedInUserUid, DateTime.now().toString()));
+                            game.reference, Player(_nameController.text, loggedInUserUid, DateTime.now().toString()));
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return GameStartWaitingPage(
-                                game,
-                                _nameController.text);
+                            return GameStartWaitingPage(game, _nameController.text);
                           }),
                         );
                       }
