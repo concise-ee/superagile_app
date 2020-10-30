@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:superagile_app/Resources/AgileButton.dart';
-import 'package:superagile_app/constants/labels.dart';
-import 'package:superagile_app/pages/host_start_page.dart';
-import 'package:superagile_app/pages/player_start_page.dart';
+import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/ui/components/agile_button.dart';
+import 'package:superagile_app/ui/views/host_start_page.dart';
+import 'package:superagile_app/ui/views/player_start_page.dart';
 
 class StartPage extends StatefulWidget {
   @override

@@ -1,14 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:superagile_app/Resources/AgileButton.dart';
-import 'package:superagile_app/constants/labels.dart';
+import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 import 'package:superagile_app/services/security_service.dart';
+import 'package:superagile_app/ui/components/agile_button.dart';
 
-import 'game_start_waiting_page.dart';
+import 'waiting_room_page.dart';
 
 final _random = Random();
 
@@ -80,7 +80,7 @@ class _HostStartPageState extends State<HostStartPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return GameStartWaitingPage(game, _nameController.text);
+                          return WaitingRoomPage(game, _nameController.text);
                         }),
                       );
                     },
@@ -102,7 +102,7 @@ class _HostStartPageState extends State<HostStartPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return GameStartWaitingPage(game, _nameController.text);
+                          return WaitingRoomPage(game, _nameController.text);
                         }),
                       );
                     },

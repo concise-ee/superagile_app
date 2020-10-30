@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:superagile_app/constants/labels.dart';
-import 'package:superagile_app/pages/start_page.dart';
+import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/ui/views/start_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

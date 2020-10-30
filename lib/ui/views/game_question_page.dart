@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:superagile_app/Resources/AgileButton.dart';
-import 'package:superagile_app/constants/labels.dart';
+import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/ui/components/agile_button.dart';
 
 class GameQuestionPage extends StatefulWidget {
-  final int question_nr;
+  final int questionNr;
 
-  GameQuestionPage(this.question_nr);
+  GameQuestionPage(this.questionNr);
 
   @override
   _GameQuestionPage createState() => _GameQuestionPage();

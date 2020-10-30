@@ -2,22 +2,22 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:superagile_app/constants/labels.dart';
+import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 
-class GameStartWaitingPage extends StatefulWidget {
+class WaitingRoomPage extends StatefulWidget {
   final Game _game;
   final String _playerName;
 
-  GameStartWaitingPage(this._game, this._playerName);
+  WaitingRoomPage(this._game, this._playerName);
 
   @override
-  _GameStartWaitingPageState createState() => _GameStartWaitingPageState();
+  _WaitingRoomPageState createState() => _WaitingRoomPageState();
 }
 
-class _GameStartWaitingPageState extends State<GameStartWaitingPage> {
+class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final GameRepository _gameRepository = GameRepository();
   Game game;
   String playerName;
