@@ -75,8 +75,8 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
-                      await _gameRepository.addGamePlayer(
-                          game.reference, Player(_nameController.text, loggedInUserUid, DateTime.now().toString()));
+                      await _gameRepository.addGamePlayer(game.reference,
+                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), 'H', true));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
@@ -97,8 +97,8 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
-                      await _gameRepository.addGamePlayer(
-                          game.reference, Player(_nameController.text, loggedInUserUid, DateTime.now().toString()));
+                      await _gameRepository.addGamePlayer(game.reference,
+                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), 'H', false));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {

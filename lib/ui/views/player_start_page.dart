@@ -38,8 +38,8 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       var game = await _gameRepository.findGameByPin(int.parse(_pinController.text));
                       if (game != null) {
                         var loggedInUserUid = await signInAnonymously();
-                        _gameRepository.addGamePlayer(
-                            game.reference, Player(_nameController.text, loggedInUserUid, DateTime.now().toString()));
+                        _gameRepository.addGamePlayer(game.reference,
+                            Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), 'P', true));
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {

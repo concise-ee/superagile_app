@@ -81,6 +81,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   List<Player> findActivePlayers(List<QueryDocumentSnapshot> snaps) {
     return snaps
         .map((playerSnap) => Player.fromSnapshot(playerSnap))
+        .where((player) => player.isPlayingAlong == true)
         .where((player) => DateTime.parse(player.lastActive).isAfter(DateTime.now().subtract(Duration(seconds: 11))))
         .toList();
   }
