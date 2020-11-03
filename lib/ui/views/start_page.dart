@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:superagile_app/ui/views/game_question_page.dart';
-import 'package:superagile_app/ui/views/question_results_page.dart';
-import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
+import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/ui/views/host_start_page.dart';
 import 'package:superagile_app/ui/views/player_start_page.dart';
+import 'package:superagile_app/ui/views/question_results_page.dart';
+import 'package:superagile_app/utils/labels.dart';
+
+import 'game_question_page.dart';
 
 class StartPage extends StatefulWidget {
   @override

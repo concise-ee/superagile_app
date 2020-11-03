@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/entities/player.dart';
-import 'package:superagile_app/ui/views/waiting_room_page.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 import 'package:superagile_app/services/security_service.dart';
+import 'package:superagile_app/ui/views/waiting_room_page.dart';
+import 'package:superagile_app/utils/labels.dart';
 
 class PlayerStartPage extends StatefulWidget {
   @override

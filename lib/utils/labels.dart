@@ -17,3 +17,4 @@ const HOST_OR_JOIN = 'Are you a member of the team and planning to play along? O
 const DECISION_CANT_BE_CHANGED = "* The decision can't be changed.";
 const SAME_ANSWER = '* You are stuck on this question until your team agrees on the same number';
 const CHANGE_ANSWER = 'Change answer';
+const BEGIN_GAME = 'Begin the game';
