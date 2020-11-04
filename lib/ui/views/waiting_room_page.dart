@@ -13,8 +13,9 @@ import 'game_question_page.dart';
 class WaitingRoomPage extends StatefulWidget {
   final Game _game;
   final String _playerName;
+  final bool _isHost;
 
-  WaitingRoomPage(this._game, this._playerName);
+  WaitingRoomPage(this._game, this._playerName, this._isHost);
 
   @override
   _WaitingRoomPageState createState() => _WaitingRoomPageState();
@@ -25,6 +26,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Game game;
   String playerName;
   Timer timer;
+  bool isHost;
 
   @override
   void initState() {
@@ -43,6 +45,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Widget build(BuildContext context) {
     game = widget._game;
     playerName = widget._playerName;
+    isHost = widget._isHost;
 
     return WillPopScope(
       onWillPop: () async {
@@ -57,7 +60,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
               Text(WAITING_ROOM, style: Theme.of(context).textTheme.headline4),
               Text(game.pin.toString(), style: Theme.of(context).textTheme.headline5),
               buildActivePlayersWidget(game.pin),
-              buildStartGameButton(),
+              if (isHost) buildStartGameButton(),
             ],
           )),
     );

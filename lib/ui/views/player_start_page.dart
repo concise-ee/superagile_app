@@ -43,7 +43,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return WaitingRoomPage(game, _nameController.text);
+                            return WaitingRoomPage(game, _nameController.text, false);
                           }),
                         );
                       }

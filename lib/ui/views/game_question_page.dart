@@ -55,15 +55,15 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                     Row(
                       children: [
                         Flexible(
-                            fit: FlexFit.loose,
-                            flex: 1,
+                            fit: FlexFit.tight,
+                            flex: 2,
                             child: Container(
                               alignment: Alignment.center,
                               child: Padding(
                                   padding: EdgeInsets.all(12.0),
                                   child: Text(
                                     questionNr.toString(),
-                                    style: TextStyle(color: Colors.white, fontSize: 100, letterSpacing: 1.5),
+                                    style: TextStyle(color: Colors.white, fontSize: 90, letterSpacing: 1.5),
                                   )),
                             )),
                         Expanded(

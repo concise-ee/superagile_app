@@ -80,7 +80,7 @@ class _HostStartPageState extends State<HostStartPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return WaitingRoomPage(game, _nameController.text);
+                          return WaitingRoomPage(game, _nameController.text, true);
                         }),
                       );
                     },
@@ -102,7 +102,7 @@ class _HostStartPageState extends State<HostStartPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return WaitingRoomPage(game, _nameController.text);
+                          return WaitingRoomPage(game, _nameController.text, true);
                         }),
                       );
                     },
