@@ -20,6 +20,7 @@ class HostStartPage extends StatefulWidget {
 }
 
 class _HostStartPageState extends State<HostStartPage> {
+  static const HOST = 'HOST';
   final GameRepository _gameRepository = GameRepository();
   final _nameController = TextEditingController();
 
@@ -74,9 +75,9 @@ class _HostStartPageState extends State<HostStartPage> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
-                      var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
+                      var game = await _gameRepository.addGame(Game(_generate6DigitPin(), loggedInUserUid, true));
                       await _gameRepository.addGamePlayer(game.reference,
-                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), 'H', true));
+                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
@@ -96,9 +97,9 @@ class _HostStartPageState extends State<HostStartPage> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
-                      var game = await _gameRepository.addGame(Game(_generate6DigitPin()));
+                      var game = await _gameRepository.addGame(Game(_generate6DigitPin(), loggedInUserUid, true));
                       await _gameRepository.addGamePlayer(game.reference,
-                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), 'H', false));
+                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, false));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {

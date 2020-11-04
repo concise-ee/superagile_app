@@ -11,6 +11,7 @@ class PlayerStartPage extends StatefulWidget {
 }
 
 class _PlayerStartPageState extends State<PlayerStartPage> {
+  static const PLAYER = 'PLAYER';
   final _pinController = TextEditingController();
   final _nameController = TextEditingController();
   final GameRepository _gameRepository = GameRepository();
@@ -39,7 +40,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       if (game != null) {
                         var loggedInUserUid = await signInAnonymously();
                         _gameRepository.addGamePlayer(game.reference,
-                            Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), 'P', true));
+                            Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), PLAYER, true));
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
