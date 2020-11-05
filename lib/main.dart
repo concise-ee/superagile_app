@@ -21,6 +21,7 @@ class SuperagileApp extends StatelessWidget {
       scaffoldBackgroundColor: primaryColor,
       accentColor: accentColor,
       textTheme: TextTheme(
+        subtitle1: TextStyle(fontSize: 35, color: accentColor),
           bodyText1: TextStyle(color: accentColor),
           bodyText2: TextStyle(color: accentColor),
           headline1: TextStyle(color: accentColor),
@@ -34,7 +35,11 @@ class SuperagileApp extends StatelessWidget {
         textTheme: ButtonTextTheme.accent,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: TextStyle(color: accentColor),
+        hintStyle: TextStyle(color: accentColor, fontSize: 35),
+
+        contentPadding: EdgeInsets.all(15),
+        isDense: true,
+        border: new OutlineInputBorder(borderSide: new BorderSide( color: accentColor))
       ),
       appBarTheme: AppBarTheme(
           textTheme: TextTheme(
