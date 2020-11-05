@@ -1,9 +1,0 @@
-const HASH_SUPERAGILE = "#superagile";
-const SUPERAGILE = "Superagile";
-const JOIN = "JOIN";
-const HOST = "HOST";
-const PLAY = "PLAY";
-const WAITING_ROOM = "Waiting room...";
-const CONTINUE = "CONTINUE";
-const ENTER_NAME = "Enter name";
-const ENTER_PIN = "Enter PIN";

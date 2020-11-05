@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:superagile_app/constants/labels.dart';
 import 'package:superagile_app/entities/player.dart';
-import 'package:superagile_app/pages/game_start_waiting_page.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
+import 'package:superagile_app/services/security_service.dart';
+import 'package:superagile_app/ui/views/waiting_room_page.dart';
+import 'package:superagile_app/utils/labels.dart';
 
 class PlayerStartPage extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class PlayerStartPage extends StatefulWidget {
 }
 
 class _PlayerStartPageState extends State<PlayerStartPage> {
+  static const PLAYER = 'PLAYER';
   final _pinController = TextEditingController();
   final _nameController = TextEditingController();
   final GameRepository _gameRepository = GameRepository();
@@ -32,25 +34,20 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                   decoration: InputDecoration(hintText: ENTER_NAME),
                 ),
                 RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      _gameRepository
-                          .findGameByPin(int.parse(_pinController.text))
-                          .then((game) {
-                        if (game != null) {
-                          game.players.add(Player(
-                              _nameController.text, DateTime.now().toString()));
-                          _gameRepository.updateGame(game);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return GameStartWaitingPage(
-                                  int.parse(_pinController.text),
-                                  _nameController.text);
-                            }),
-                          );
-                        }
-                      });
+                      var game = await _gameRepository.findGameByPin(int.parse(_pinController.text));
+                      if (game != null) {
+                        var loggedInUserUid = await signInAnonymously();
+                        _gameRepository.addGamePlayer(game.reference,
+                            Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), PLAYER, true));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return WaitingRoomPage(game, _nameController.text, false);
+                          }),
+                        );
+                      }
                     },
                     child: Text(PLAY)),
               ],

@@ -1,8 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:superagile_app/constants/labels.dart';
-import 'package:superagile_app/pages/start_page.dart';
+import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/ui/views/start_page.dart';
 
-void main() => runApp(SuperagileApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(SuperagileApp());
+}
 
 final primaryColor = Color.fromRGBO(13, 13, 13, 1);
 final accentColor = Colors.yellow[500];
@@ -10,8 +15,7 @@ final accentColor = Colors.yellow[500];
 class SuperagileApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: SUPERAGILE, home: StartPage(), theme: _setTheme());
+    return MaterialApp(title: SUPERAGILE, home: StartPage(), theme: _setTheme());
   }
 
   ThemeData _setTheme() {
@@ -42,8 +46,7 @@ class SuperagileApp extends StatelessWidget {
         border: new OutlineInputBorder(borderSide: new BorderSide( color: accentColor))
       ),
       appBarTheme: AppBarTheme(
-          textTheme: TextTheme(
-              headline6: TextStyle(color: accentColor, fontSize: 20.0)),
+          textTheme: TextTheme(headline6: TextStyle(color: accentColor, fontSize: 20.0)),
           iconTheme: IconThemeData(color: accentColor)),
     );
   }
