@@ -12,10 +12,9 @@ import 'game_question_page.dart';
 
 class WaitingRoomPage extends StatefulWidget {
   final Game _game;
-  final String _playerName;
-  final bool _isHost;
+  final Player _playerName;
 
-  WaitingRoomPage(this._game, this._playerName, this._isHost);
+  WaitingRoomPage(this._game, this._playerName);
 
   @override
   _WaitingRoomPageState createState() => _WaitingRoomPageState();
@@ -24,9 +23,8 @@ class WaitingRoomPage extends StatefulWidget {
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final GameRepository _gameRepository = GameRepository();
   Game game;
-  String playerName;
+  Player playerName;
   Timer timer;
-  bool isHost;
 
   @override
   void initState() {
@@ -36,7 +34,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   void sendLastActive() async {
     var players = await _gameRepository.findGamePlayers(game.reference);
-    var player = players.where((player) => player.name == playerName).single;
+    var player = players.where((player) => player.name == playerName.name).single;
     player.lastActive = DateTime.now().toString();
     _gameRepository.updateGamePlayer(game.reference, player);
   }
@@ -45,7 +43,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Widget build(BuildContext context) {
     game = widget._game;
     playerName = widget._playerName;
-    isHost = widget._isHost;
 
     return WillPopScope(
       onWillPop: () async {
@@ -60,7 +57,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
               Text(WAITING_ROOM, style: Theme.of(context).textTheme.headline4),
               Text(game.pin.toString(), style: Theme.of(context).textTheme.headline5),
               buildActivePlayersWidget(game.pin),
-              if (isHost) buildStartGameButton(),
+              buildStartGameButton(),
             ],
           )),
     );
@@ -92,7 +89,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
-              return GameQuestionPage(1);
+              return GameQuestionPage(1, playerName, game);
             }),
           );
         },

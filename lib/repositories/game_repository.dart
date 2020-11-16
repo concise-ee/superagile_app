@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/score.dart';
 
 const GAMES_COLLECTION = 'games';
 const PLAYERS_SUB_COLLECTION = 'players';
+const SCORES_SUB_COLLECTION = 'scores';
 
 class GameRepository {
   final CollectionReference _repository = FirebaseFirestore.instance.collection(GAMES_COLLECTION);
@@ -39,5 +41,10 @@ class GameRepository {
 
   void updateGamePlayer(DocumentReference gameRef, Player player) {
     gameRef.collection(PLAYERS_SUB_COLLECTION).doc(player.reference.id).update(player.toJson());
+  }
+
+  void addScore(DocumentReference gameRef, Player player, Score score) {
+    var scores = gameRef.collection(PLAYERS_SUB_COLLECTION).doc(player.reference.id).collection(SCORES_SUB_COLLECTION);
+    scores.add(score.toJson());
   }
 }

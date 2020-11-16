@@ -39,12 +39,13 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       var game = await _gameRepository.findGameByPin(int.parse(_pinController.text));
                       if (game != null) {
                         var loggedInUserUid = await signInAnonymously();
-                        _gameRepository.addGamePlayer(game.reference,
-                            Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), PLAYER, true));
+                        var player =
+                            Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), PLAYER, true);
+                        _gameRepository.addGamePlayer(game.reference, player);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return WaitingRoomPage(game, _nameController.text, false);
+                            return WaitingRoomPage(game, player);
                           }),
                         );
                       }

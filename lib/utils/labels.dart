@@ -18,3 +18,4 @@ const DECISION_CANT_BE_CHANGED = "* The decision can't be changed.";
 const SAME_ANSWER = '* You are stuck on this question until your team agrees on the same number';
 const CHANGE_ANSWER = 'Change answer';
 const BEGIN_GAME = 'Begin the game';
+const CLICK_QUESTION_MARK = 'Click the question mark in the top right corner to read mare about superagile until all of your team is here.';

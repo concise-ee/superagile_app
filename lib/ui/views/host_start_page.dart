@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
+import 'package:superagile_app/utils/labels.dart';
 
 import 'waiting_room_page.dart';
 
@@ -75,13 +75,14 @@ class _HostStartPageState extends State<HostStartPage> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
+                      var player = Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true);
                       var game = await _gameRepository.addGame(Game(_generate6DigitPin(), loggedInUserUid, true));
                       await _gameRepository.addGamePlayer(game.reference,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return WaitingRoomPage(game, _nameController.text, true);
+                          return WaitingRoomPage(game, player);
                         }),
                       );
                     },
@@ -97,13 +98,14 @@ class _HostStartPageState extends State<HostStartPage> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
+                      var player = Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true);
                       var game = await _gameRepository.addGame(Game(_generate6DigitPin(), loggedInUserUid, true));
                       await _gameRepository.addGamePlayer(game.reference,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, false));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return WaitingRoomPage(game, _nameController.text, true);
+                          return WaitingRoomPage(game, player);
                         }),
                       );
                     },
