@@ -3,6 +3,9 @@ import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/score.dart';
 
+const PIN = 'pin';
+const IS_ACTIVE = 'isActive';
+
 const GAMES_COLLECTION = 'games';
 const PLAYERS_SUB_COLLECTION = 'players';
 const SCORES_SUB_COLLECTION = 'scores';
@@ -24,8 +27,16 @@ class GameRepository {
     return game;
   }
 
-  Future<Game> findGameByPin(int pin) async {
-    var snapshot = await _repository.where('pin', isEqualTo: pin).get();
+  Future<Game> findActiveGameByPin(int pin) async {
+    var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
+    return Game.fromSnapshot(snapshot.docs.single);
+  }
+
+  Future<Game> findActiveGameByPinNullable(int pin) async {
+    var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
+    if (snapshot.docs.isEmpty) {
+      return null;
+    }
     return Game.fromSnapshot(snapshot.docs.single);
   }
 

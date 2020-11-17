@@ -1,18 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
-import 'package:superagile_app/repositories/game_repository.dart';
+import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'waiting_room_page.dart';
-
-final _random = Random();
-
-int _generate6DigitPin() => _random.nextInt(900000) + 100000;
 
 class HostStartPage extends StatefulWidget {
   @override
@@ -21,7 +15,7 @@ class HostStartPage extends StatefulWidget {
 
 class _HostStartPageState extends State<HostStartPage> {
   static const HOST = 'HOST';
-  final GameRepository _gameRepository = GameRepository();
+  final GameService _gameService = GameService();
   final _nameController = TextEditingController();
 
   @override
@@ -76,8 +70,9 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var player = Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true);
-                      var game = await _gameRepository.addGame(Game(_generate6DigitPin(), loggedInUserUid, true));
-                      await _gameRepository.addGamePlayer(game.reference,
+                      var pin = await _gameService.generateAvailable4DigitPin();
+                      var game = await _gameService.addGame(Game(pin, loggedInUserUid, true));
+                      await _gameService.addGamePlayer(game.reference,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true));
                       Navigator.push(
                         context,
@@ -99,8 +94,9 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var player = Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true);
-                      var game = await _gameRepository.addGame(Game(_generate6DigitPin(), loggedInUserUid, true));
-                      await _gameRepository.addGamePlayer(game.reference,
+                      var pin = await _gameService.generateAvailable4DigitPin();
+                      var game = await _gameService.addGame(Game(pin, loggedInUserUid, true));
+                      await _gameService.addGamePlayer(game.reference,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, false));
                       Navigator.push(
                         context,

@@ -4,8 +4,8 @@ import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question.dart';
 import 'package:superagile_app/entities/score.dart';
-import 'package:superagile_app/repositories/game_repository.dart';
 import 'package:superagile_app/repositories/question_repository.dart';
+import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/labels.dart';
 
@@ -22,7 +22,7 @@ class GameQuestionPage extends StatefulWidget {
 
 class _GameQuestionPage extends State<GameQuestionPage> {
   final QuestionRepository _questionRepository = QuestionRepository();
-  final GameRepository _gameRepository = GameRepository();
+  final GameService _gameService = GameService();
   var questionNr;
   var player;
   var game;
@@ -179,11 +179,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                 buttonTitle: ZERO,
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  var players = await _gameRepository.findGamePlayers(game.reference);
+                  var players = await _gameService.findGamePlayers(game.reference);
                   var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameRepository.findGameByPin(game.pin);
+                  var gae = await _gameService.findActiveGameByPin(game.pin);
                   var score = Score(questionNr, int.parse(ZERO));
-                  _gameRepository.addScore(gae.reference, currentPlayer, score);
+                  _gameService.addScore(gae.reference, currentPlayer, score);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
@@ -198,11 +198,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                 buttonTitle: ONE,
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  var players = await _gameRepository.findGamePlayers(game.reference);
+                  var players = await _gameService.findGamePlayers(game.reference);
                   var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameRepository.findGameByPin(game.pin);
+                  var gae = await _gameService.findActiveGameByPin(game.pin);
                   var score = Score(questionNr, int.parse(ONE));
-                  _gameRepository.addScore(gae.reference, currentPlayer, score);
+                  _gameService.addScore(gae.reference, currentPlayer, score);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
@@ -217,11 +217,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                 buttonTitle: TWO,
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  var players = await _gameRepository.findGamePlayers(game.reference);
+                  var players = await _gameService.findGamePlayers(game.reference);
                   var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameRepository.findGameByPin(game.pin);
+                  var gae = await _gameService.findActiveGameByPin(game.pin);
                   var score = Score(questionNr, int.parse(TWO));
-                  _gameRepository.addScore(gae.reference, currentPlayer, score);
+                  _gameService.addScore(gae.reference, currentPlayer, score);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
@@ -236,11 +236,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                 buttonTitle: THREE,
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  var players = await _gameRepository.findGamePlayers(game.reference);
+                  var players = await _gameService.findGamePlayers(game.reference);
                   var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameRepository.findGameByPin(game.pin);
+                  var gae = await _gameService.findActiveGameByPin(game.pin);
                   var score = Score(questionNr, int.parse(THREE));
-                  _gameRepository.addScore(gae.reference, currentPlayer, score);
+                  _gameService.addScore(gae.reference, currentPlayer, score);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
