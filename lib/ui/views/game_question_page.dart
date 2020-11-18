@@ -54,6 +54,21 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     });
   }
 
+  Future<void> saveScore(String value) async {
+    FocusScope.of(context).unfocus();
+    var players = await _gameService.findGamePlayers(game.reference);
+    var currentPlayer = players.where((player) => player.name == player.name).single;
+    var gae = await _gameService.findActiveGameByPin(game.pin);
+    var score = Score(questionNr, int.parse(value));
+    _gameService.addScore(gae.reference, currentPlayer, score);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return GameQuestionPage(questionNr + 1, currentPlayer, game);
+      }),
+    );
+  }
+
   Widget _buildBody(BuildContext context) {
     return Column(
       children: [
@@ -178,18 +193,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: ZERO,
                 onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  var players = await _gameService.findGamePlayers(game.reference);
-                  var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameService.findActiveGameByPin(game.pin);
-                  var score = Score(questionNr, int.parse(ZERO));
-                  _gameService.addScore(gae.reference, currentPlayer, score);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return GameQuestionPage(questionNr + 1, currentPlayer, game);
-                    }),
-                  );
+                  saveScore(ZERO);
                 },
               ),
             ),
@@ -197,18 +201,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: ONE,
                 onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  var players = await _gameService.findGamePlayers(game.reference);
-                  var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameService.findActiveGameByPin(game.pin);
-                  var score = Score(questionNr, int.parse(ONE));
-                  _gameService.addScore(gae.reference, currentPlayer, score);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return GameQuestionPage(questionNr + 1, currentPlayer, game);
-                    }),
-                  );
+                  saveScore(ONE);
                 },
               ),
             ),
@@ -216,18 +209,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: TWO,
                 onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  var players = await _gameService.findGamePlayers(game.reference);
-                  var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameService.findActiveGameByPin(game.pin);
-                  var score = Score(questionNr, int.parse(TWO));
-                  _gameService.addScore(gae.reference, currentPlayer, score);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return GameQuestionPage(questionNr + 1, currentPlayer, game);
-                    }),
-                  );
+                  saveScore(TWO);
                 },
               ),
             ),
@@ -235,18 +217,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: THREE,
                 onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  var players = await _gameService.findGamePlayers(game.reference);
-                  var currentPlayer = players.where((player) => player.name == player.name).single;
-                  var gae = await _gameService.findActiveGameByPin(game.pin);
-                  var score = Score(questionNr, int.parse(THREE));
-                  _gameService.addScore(gae.reference, currentPlayer, score);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return GameQuestionPage(questionNr + 1, currentPlayer, game);
-                    }),
-                  );
+                  saveScore(THREE);
                 },
               ),
             )
