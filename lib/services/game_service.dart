@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/score.dart';
@@ -34,7 +35,7 @@ class GameService {
     return _gameRepository.addGame(game);
   }
 
-  void addGamePlayer(reference, Player player) {
+  void addGamePlayer(DocumentReference reference, Player player) {
     _gameRepository.addGamePlayer(reference, player);
   }
 
@@ -42,11 +43,11 @@ class GameService {
     return _gameRepository.findActiveGameByPin(pin);
   }
 
-  Future<List<Player>> findGamePlayers(reference) {
+  Future<List<Player>> findGamePlayers(DocumentReference reference) {
     return _gameRepository.findGamePlayers(reference);
   }
 
-  void addScore(reference, currentPlayer, Score score) {
+  void addScore(DocumentReference reference, currentPlayer, Score score) {
     _gameRepository.addScore(reference, currentPlayer, score);
   }
 }
