@@ -21,8 +21,8 @@ class GameRepository {
     return gameRef.collection(PLAYERS_SUB_COLLECTION).snapshots();
   }
 
-  Future<DocumentReference> addGame(Game game) async {
-    return await _repository.add(game.toJson());
+  Future<DocumentReference> addGame(Game game) {
+    return _repository.add(game.toJson());
   }
 
   Future<Game> findActiveGameByPin(int pin) async {

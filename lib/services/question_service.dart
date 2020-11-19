@@ -8,11 +8,11 @@ class QuestionService {
   final QuestionRepository _questionRepository = QuestionRepository();
   final GameRepository _gameRepository = GameRepository();
 
-  Future<void> saveScore(Score score, DocumentReference playerRef, DocumentReference gameRef) async {
+  void saveScore(Score score, DocumentReference playerRef, DocumentReference gameRef) {
     _gameRepository.addScore(playerRef, gameRef, score);
   }
 
-  Future<Question> findQuestionByNumber(questionNr) async {
+  Future<Question> findQuestionByNumber(questionNr) {
     return _questionRepository.findQuestionByNumber(questionNr);
   }
 }

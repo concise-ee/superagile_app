@@ -51,8 +51,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     });
   }
 
-  Future<void> saveScore(String buttonValue) async {
-    _questionService.saveScore(Score(questionNr, int.parse(buttonValue)), playerRef, gameRef);
+  void saveScore(String buttonValue) async {
+    await _questionService.saveScore(Score(questionNr, int.parse(buttonValue)), playerRef, gameRef);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
