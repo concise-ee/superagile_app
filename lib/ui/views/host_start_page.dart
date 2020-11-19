@@ -69,15 +69,14 @@ class _HostStartPageState extends State<HostStartPage> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
-                      var player = Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true);
                       var pin = await _gameService.generateAvailable4DigitPin();
-                      var game = await _gameService.addGame(Game(pin, loggedInUserUid, true));
-                      await _gameService.addGamePlayer(game.reference,
+                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true));
+                      var playerRef = await _gameService.addGamePlayer(gameRef,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return WaitingRoomPage(game, player);
+                          return WaitingRoomPage(gameRef, playerRef);
                         }),
                       );
                     },
@@ -93,15 +92,14 @@ class _HostStartPageState extends State<HostStartPage> {
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
-                      var player = Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, true);
                       var pin = await _gameService.generateAvailable4DigitPin();
-                      var game = await _gameService.addGame(Game(pin, loggedInUserUid, true));
-                      await _gameService.addGamePlayer(game.reference,
+                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true));
+                      var playerRef = await _gameService.addGamePlayer(gameRef,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), HOST, false));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return WaitingRoomPage(game, player);
+                          return WaitingRoomPage(gameRef, playerRef);
                         }),
                       );
                     },

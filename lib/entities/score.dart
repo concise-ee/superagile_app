@@ -30,6 +30,6 @@ class Score {
 
   @override
   String toString() {
-    return 'score {$question}, {$score}';
+    return 'Score{$QUESTION: $question, $SCORE: $score}';
   }
 }

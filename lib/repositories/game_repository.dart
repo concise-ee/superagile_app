@@ -21,15 +21,23 @@ class GameRepository {
     return gameRef.collection(PLAYERS_SUB_COLLECTION).snapshots();
   }
 
-  Future<Game> addGame(Game game) async {
-    var gameRef = await _repository.add(game.toJson());
-    game.reference = gameRef;
-    return game;
+  Future<DocumentReference> addGame(Game game) async {
+    return await _repository.add(game.toJson());
   }
 
   Future<Game> findActiveGameByPin(int pin) async {
     var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
     return Game.fromSnapshot(snapshot.docs.single);
+  }
+
+  Future<DocumentReference> findActiveGameRefByPin(int pin) async {
+    var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
+    return snapshot.docs.single.reference;
+  }
+
+  Future<Game> findActiveGameByRef(DocumentReference gameRef) async {
+    var snapshot = await _repository.doc(gameRef.id).get();
+    return Game.fromSnapshot(snapshot);
   }
 
   Future<Game> findActiveGameByPinNullable(int pin) async {
@@ -45,17 +53,17 @@ class GameRepository {
     return playersSnap.docs.map((snap) => Player.fromSnapshot(snap)).toList();
   }
 
-  void addGamePlayer(DocumentReference gameRef, Player player) {
+  Future<DocumentReference> addGamePlayer(DocumentReference gameRef, Player player) {
     var players = gameRef.collection(PLAYERS_SUB_COLLECTION);
-    players.add(player.toJson());
+    return players.add(player.toJson());
   }
 
   void updateGamePlayer(DocumentReference gameRef, Player player) {
     gameRef.collection(PLAYERS_SUB_COLLECTION).doc(player.reference.id).update(player.toJson());
   }
 
-  void addScore(DocumentReference gameRef, Player player, Score score) {
-    var scores = gameRef.collection(PLAYERS_SUB_COLLECTION).doc(player.reference.id).collection(SCORES_SUB_COLLECTION);
+  void addScore(DocumentReference gameRef, DocumentReference playerRef, Score score) {
+    var scores = gameRef.collection(PLAYERS_SUB_COLLECTION).doc(playerRef.id).collection(SCORES_SUB_COLLECTION);
     scores.add(score.toJson());
   }
 }

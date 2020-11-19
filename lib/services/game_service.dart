@@ -31,23 +31,50 @@ class GameService {
     return false;
   }
 
-  Future<Game> addGame(Game game) {
+  List<Player> findActivePlayers(List<QueryDocumentSnapshot> snaps) {
+    return snaps
+        .map((playerSnap) => Player.fromSnapshot(playerSnap))
+        .where((player) => player.isPlayingAlong == true)
+        .where((player) => DateTime.parse(player.lastActive).isAfter(DateTime.now().subtract(Duration(seconds: 11))))
+        .toList();
+  }
+
+  void sendLastActive(DocumentReference gameRef, DocumentReference playerRef) async {
+    var players = await _gameRepository.findGamePlayers(gameRef);
+    var player = players.where((player) => player.reference == playerRef).single;
+    player.lastActive = DateTime.now().toString();
+    _gameRepository.updateGamePlayer(gameRef, player);
+  }
+
+  Future<DocumentReference> addGame(Game game) {
     return _gameRepository.addGame(game);
   }
 
-  void addGamePlayer(DocumentReference reference, Player player) {
-    _gameRepository.addGamePlayer(reference, player);
+  Future<DocumentReference> addGamePlayer(DocumentReference reference, Player player) {
+    return _gameRepository.addGamePlayer(reference, player);
   }
 
   Future<Game> findActiveGameByPin(int pin) {
     return _gameRepository.findActiveGameByPin(pin);
   }
 
+  Future<DocumentReference> findActiveGameRefByPin(int pin) {
+    return _gameRepository.findActiveGameRefByPin(pin);
+  }
+
   Future<List<Player>> findGamePlayers(DocumentReference reference) {
     return _gameRepository.findGamePlayers(reference);
   }
 
-  void addScore(DocumentReference reference, currentPlayer, Score score) {
-    _gameRepository.addScore(reference, currentPlayer, score);
+  void addScore(DocumentReference gameRef, DocumentReference playerRef, Score score) {
+    _gameRepository.addScore(gameRef, playerRef, score);
+  }
+
+  Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
+    return _gameRepository.getGamePlayersStream(gameRef);
+  }
+
+  Future<Game> findActiveGameByRef(DocumentReference gameRef) {
+    return _gameRepository.findActiveGameByRef(gameRef);
   }
 }

@@ -3,47 +3,56 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
-import 'package:superagile_app/entities/player.dart';
-import 'package:superagile_app/repositories/game_repository.dart';
+import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
 
 class WaitingRoomPage extends StatefulWidget {
-  final Game _game;
-  final Player _playerName;
+  final DocumentReference _gameRef;
+  final DocumentReference _playerRef;
 
-  WaitingRoomPage(this._game, this._playerName);
+  WaitingRoomPage(this._gameRef, this._playerRef);
 
   @override
   _WaitingRoomPageState createState() => _WaitingRoomPageState();
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
-  final GameRepository _gameRepository = GameRepository();
-  Game game;
-  Player playerName;
+  final GameService gameService = GameService();
+  DocumentReference gameRef;
+  DocumentReference playerRef;
   Timer timer;
+  Game game;
+
+  @override
+  void setState(state) {
+    if (mounted) {
+      super.setState(state);
+    }
+  }
+
+  void loadGame() async {
+    Game g = await gameService.findActiveGameByRef(gameRef);
+    setState(() {
+      game = g;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) => sendLastActive());
-  }
-
-  void sendLastActive() async {
-    var players = await _gameRepository.findGamePlayers(game.reference);
-    var player = players.where((player) => player.name == playerName.name).single;
-    player.lastActive = DateTime.now().toString();
-    _gameRepository.updateGamePlayer(game.reference, player);
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
+      gameService.sendLastActive(gameRef, playerRef);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    game = widget._game;
-    playerName = widget._playerName;
-
+    gameRef = widget._gameRef;
+    playerRef = widget._playerRef;
+    loadGame();
     return WillPopScope(
       onWillPop: () async {
         timer.cancel();
@@ -55,20 +64,20 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             padding: EdgeInsets.all(25),
             children: [
               Text(WAITING_ROOM, style: Theme.of(context).textTheme.headline4),
-              Text(game.pin.toString(), style: Theme.of(context).textTheme.headline5),
-              buildActivePlayersWidget(game.pin),
+              Text(game != null ? game.pin.toString() : '', style: Theme.of(context).textTheme.headline5),
+              buildActivePlayersWidget(),
               buildStartGameButton(),
             ],
           )),
     );
   }
 
-  Widget buildActivePlayersWidget(int pin) {
+  Widget buildActivePlayersWidget() {
     return StreamBuilder<QuerySnapshot>(
-        stream: _gameRepository.getGamePlayersStream(game.reference),
+        stream: gameService.getGamePlayersStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var players = findActivePlayers(snapshot.data.docs);
+          var players = gameService.findActivePlayers(snapshot.data.docs);
           return ListView.builder(
             shrinkWrap: true,
             itemCount: players.length,
@@ -89,18 +98,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
-              return GameQuestionPage(1, playerName, game);
+              return GameQuestionPage(1, playerRef, gameRef);
             }),
           );
         },
         buttonTitle: BEGIN_GAME);
-  }
-
-  List<Player> findActivePlayers(List<QueryDocumentSnapshot> snaps) {
-    return snaps
-        .map((playerSnap) => Player.fromSnapshot(playerSnap))
-        .where((player) => player.isPlayingAlong == true)
-        .where((player) => DateTime.parse(player.lastActive).isAfter(DateTime.now().subtract(Duration(seconds: 11))))
-        .toList();
   }
 }

@@ -36,19 +36,16 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                 RaisedButton(
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      var game = await _gameService.findActiveGameByPin(int.parse(_pinController.text));
-                      if (game != null) {
-                        var loggedInUserUid = await signInAnonymously();
-                        var player =
-                            Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), PLAYER, true);
-                        _gameService.addGamePlayer(game.reference, player);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return WaitingRoomPage(game, player);
-                          }),
-                        );
-                      }
+                      var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+                      var loggedInUserUid = await signInAnonymously();
+                      var playerRef = await _gameService.addGamePlayer(gameRef,
+                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), PLAYER, true));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return WaitingRoomPage(gameRef, playerRef);
+                        }),
+                      );
                     },
                     child: Text(PLAY)),
               ],

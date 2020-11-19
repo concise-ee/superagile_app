@@ -1,45 +1,42 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:superagile_app/entities/game.dart';
-import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question.dart';
 import 'package:superagile_app/entities/score.dart';
-import 'package:superagile_app/repositories/question_repository.dart';
-import 'package:superagile_app/services/game_service.dart';
+import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class GameQuestionPage extends StatefulWidget {
   final int _questionNr;
-  final Player _player;
-  final Game _game;
+  final DocumentReference _playerRef;
+  final DocumentReference _gameRef;
 
-  GameQuestionPage(this._questionNr, this._player, this._game);
+  GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
 
   @override
   _GameQuestionPage createState() => _GameQuestionPage();
 }
 
 class _GameQuestionPage extends State<GameQuestionPage> {
-  final QuestionRepository _questionRepository = QuestionRepository();
-  final GameService _gameService = GameService();
+  final QuestionService _questionService = QuestionService();
   var questionNr;
-  var player;
-  var game;
+  var playerRef;
+  var gameRef;
   Question question;
 
   @override
-  void setState(fn) {
+  void setState(state) {
     if (mounted) {
-      super.setState(fn);
+      super.setState(state);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     questionNr = widget._questionNr;
-    player = widget._player;
-    game = widget._game;
+    playerRef = widget._playerRef;
+    gameRef = widget._gameRef;
     loadQuestionContentByNumber();
     return Scaffold(
       appBar: AppBar(title: Text(HASH_SUPERAGILE)),
@@ -48,23 +45,18 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void loadQuestionContentByNumber() async {
-    final Question questionByNumber = await _questionRepository.findQuestionByNumber(questionNr);
+    final Question questionByNumber = await _questionService.findQuestionByNumber(questionNr);
     setState(() {
       question = questionByNumber;
     });
   }
 
-  Future<void> saveScore(String value) async {
-    FocusScope.of(context).unfocus();
-    var players = await _gameService.findGamePlayers(game.reference);
-    var currentPlayer = players.where((player) => player.name == player.name).single;
-    var gae = await _gameService.findActiveGameByPin(game.pin);
-    var score = Score(questionNr, int.parse(value));
-    _gameService.addScore(gae.reference, currentPlayer, score);
+  Future<void> saveScore(String buttonValue) async {
+    _questionService.saveScore(Score(questionNr, int.parse(buttonValue)), playerRef, gameRef);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
-        return GameQuestionPage(questionNr + 1, currentPlayer, game);
+        return GameQuestionPage(questionNr + 1, playerRef, gameRef);
       }),
     );
   }
