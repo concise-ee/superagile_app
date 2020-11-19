@@ -66,8 +66,8 @@ class GameService {
     return _gameRepository.findGamePlayers(reference);
   }
 
-  void addScore(DocumentReference gameRef, DocumentReference playerRef, Score score) {
-    _gameRepository.addScore(gameRef, playerRef, score);
+  void addScore(DocumentReference playerRef, Score score) {
+    _gameRepository.addScore(playerRef, score);
   }
 
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {

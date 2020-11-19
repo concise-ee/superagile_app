@@ -62,8 +62,7 @@ class GameRepository {
     gameRef.collection(PLAYERS_SUB_COLLECTION).doc(player.reference.id).update(player.toJson());
   }
 
-  void addScore(DocumentReference gameRef, DocumentReference playerRef, Score score) {
-    var scores = gameRef.collection(PLAYERS_SUB_COLLECTION).doc(playerRef.id).collection(SCORES_SUB_COLLECTION);
-    scores.add(score.toJson());
+  void addScore(DocumentReference playerRef, Score score) {
+    playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
   }
 }

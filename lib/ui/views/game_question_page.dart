@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/question.dart';
 import 'package:superagile_app/entities/score.dart';
+import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -20,6 +21,7 @@ class GameQuestionPage extends StatefulWidget {
 
 class _GameQuestionPage extends State<GameQuestionPage> {
   final QuestionService _questionService = QuestionService();
+  final GameService _gameService = GameService();
   var questionNr;
   var playerRef;
   var gameRef;
@@ -52,7 +54,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void saveScore(String buttonValue) async {
-    await _questionService.saveScore(Score(questionNr, int.parse(buttonValue)), playerRef, gameRef);
+    await _gameService.addScore(playerRef, Score(questionNr, int.parse(buttonValue)));
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
