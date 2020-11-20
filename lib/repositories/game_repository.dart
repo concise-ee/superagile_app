@@ -66,7 +66,7 @@ class GameRepository {
     playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
   }
 
-  findGamePlayerByRef(DocumentReference playerRef) async {
+  Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
     var playerSnap = await playerRef.get();
     return Player.fromSnapshot(playerSnap);
   }
