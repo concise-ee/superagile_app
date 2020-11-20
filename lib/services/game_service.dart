@@ -39,11 +39,10 @@ class GameService {
         .toList();
   }
 
-  void sendLastActive(DocumentReference gameRef, DocumentReference playerRef) async {
-    var players = await _gameRepository.findGamePlayers(gameRef);
-    var player = players.where((player) => player.reference == playerRef).single;
+  void sendLastActive(DocumentReference playerRef) async {
+    Player player = await _gameRepository.findGamePlayerByRef(playerRef);
     player.lastActive = DateTime.now().toString();
-    _gameRepository.updateGamePlayer(gameRef, player);
+    _gameRepository.updateGamePlayer(player);
   }
 
   Future<DocumentReference> addGame(Game game) {

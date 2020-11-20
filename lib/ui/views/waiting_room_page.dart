@@ -24,7 +24,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   DocumentReference gameRef;
   DocumentReference playerRef;
   Timer timer;
-  Game game;
+  String gamePin = '';
 
   @override
   void setState(state) {
@@ -34,9 +34,9 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   void loadGame() async {
-    Game g = await gameService.findActiveGameByRef(gameRef);
+    Game game = await gameService.findActiveGameByRef(gameRef);
     setState(() {
-      game = g;
+      gamePin = game.pin.toString();
     });
   }
 
@@ -44,7 +44,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   void initState() {
     super.initState();
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-      gameService.sendLastActive(gameRef, playerRef);
+      gameService.sendLastActive(playerRef);
     });
   }
 
@@ -64,7 +64,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             padding: EdgeInsets.all(25),
             children: [
               Text(WAITING_ROOM, style: Theme.of(context).textTheme.headline4),
-              Text(game != null ? game.pin.toString() : '', style: Theme.of(context).textTheme.headline5),
+              Text(gamePin, style: Theme.of(context).textTheme.headline5),
               buildActivePlayersWidget(),
               buildStartGameButton(),
             ],

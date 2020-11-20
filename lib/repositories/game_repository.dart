@@ -58,11 +58,16 @@ class GameRepository {
     return players.add(player.toJson());
   }
 
-  void updateGamePlayer(DocumentReference gameRef, Player player) {
-    gameRef.collection(PLAYERS_SUB_COLLECTION).doc(player.reference.id).update(player.toJson());
+  void updateGamePlayer(Player player) async {
+    player.reference.update(player.toJson());
   }
 
   void addScore(DocumentReference playerRef, Score score) {
     playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
+  }
+
+  findGamePlayerByRef(DocumentReference playerRef) async {
+    var playerSnap = await playerRef.get();
+    return Player.fromSnapshot(playerSnap);
   }
 }
