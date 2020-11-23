@@ -29,8 +29,8 @@ class Question {
   }
 
   factory Question.fromJson(Map<String, dynamic> json) {
-    return Question(json[ZERO_MEANING] as String, json[ONE_MEANING] as String, json[TWO_MEANING] as String,
-        json[THREE_MEANING] as String, json[SHORT_DESC] as String, json[LONG_DESC] as String, json[QUESTION] as String);
+    return Question(json[ZERO_MEANING], json[ONE_MEANING], json[TWO_MEANING], json[THREE_MEANING], json[SHORT_DESC],
+        json[LONG_DESC], json[QUESTION]);
   }
 
   @override

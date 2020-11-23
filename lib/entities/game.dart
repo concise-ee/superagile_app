@@ -21,7 +21,7 @@ class Game {
   }
 
   factory Game.fromJson(Map<String, dynamic> json) {
-    var game = Game(json[PIN] as int, json[HOST_UID] as String, json[IS_ACTIVE] as bool);
+    var game = Game(json[PIN], json[HOST_UID], json[IS_ACTIVE]);
     game.createdAt = DateTime.parse(json[CREATED_AT]);
     return game;
   }

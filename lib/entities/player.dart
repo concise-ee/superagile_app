@@ -24,8 +24,7 @@ class Player {
   }
 
   factory Player.fromJson(Map<String, dynamic> json) {
-    return Player(json[NAME] as String, json[UID] as String, json[LAST_ACTIVE] as String, toRoleEnum(json[ROLE] as String),
-        json[IS_PLAYING_ALONG] as bool);
+    return Player(json[NAME], json[UID], json[LAST_ACTIVE], toRoleEnum(json[ROLE]), json[IS_PLAYING_ALONG]);
   }
 
   Map<String, dynamic> toJson() {
