@@ -16,16 +16,18 @@ class GameQuestionPage extends StatefulWidget {
   GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
 
   @override
-  _GameQuestionPage createState() => _GameQuestionPage();
+  _GameQuestionPage createState() => _GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
 }
 
 class _GameQuestionPage extends State<GameQuestionPage> {
   final QuestionService _questionService = QuestionService();
   final GameService _gameService = GameService();
-  var questionNr;
-  var playerRef;
-  var gameRef;
+  final int questionNr;
+  final DocumentReference playerRef;
+  final DocumentReference gameRef;
   Question question;
+
+  _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
 
   @override
   void setState(state) {
@@ -36,9 +38,6 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    questionNr = widget._questionNr;
-    playerRef = widget._playerRef;
-    gameRef = widget._gameRef;
     loadQuestionContentByNumber();
     return Scaffold(
       appBar: AppBar(title: Text(HASH_SUPERAGILE)),

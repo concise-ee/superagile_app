@@ -16,15 +16,17 @@ class WaitingRoomPage extends StatefulWidget {
   WaitingRoomPage(this._gameRef, this._playerRef);
 
   @override
-  _WaitingRoomPageState createState() => _WaitingRoomPageState();
+  _WaitingRoomPageState createState() => _WaitingRoomPageState(this._gameRef, this._playerRef);
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final GameService gameService = GameService();
-  DocumentReference gameRef;
-  DocumentReference playerRef;
+  final DocumentReference gameRef;
+  final DocumentReference playerRef;
   Timer timer;
   String gamePin = '';
+
+  _WaitingRoomPageState(this.gameRef, this.playerRef);
 
   @override
   void setState(state) {
@@ -46,13 +48,11 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       gameService.sendLastActive(playerRef);
     });
+    loadGame();
   }
 
   @override
   Widget build(BuildContext context) {
-    gameRef = widget._gameRef;
-    playerRef = widget._playerRef;
-    loadGame();
     return WillPopScope(
       onWillPop: () async {
         timer.cancel();
