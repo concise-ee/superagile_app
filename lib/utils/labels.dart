@@ -19,4 +19,4 @@ const SAME_ANSWER = '* You are stuck on this question until your team agrees on 
 const CHANGE_ANSWER = 'Change answer';
 const BEGIN_GAME = 'Begin the game';
 const CLICK_QUESTION_MARK = 'Click the question mark in the top right corner to read mare about superagile until all of your team is here.';
-const ROLE_HOST = 'HOST';
+const ROLE_HOST = 'Role.HOST';

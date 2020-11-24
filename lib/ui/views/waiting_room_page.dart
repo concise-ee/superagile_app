@@ -54,6 +54,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     playerTimer = Timer.periodic(Duration(seconds: 1), (Timer t) => setPlayerCount());
     playerNumber = 0;
     isPlayerHosting();
+    loadGame();
   }
 
   void isPlayerHosting() async{
@@ -67,7 +68,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     var players = await gameService.findGamePlayers(gameRef);
     playerNumber = players.length;
     setState(() {});
-    loadGame();
   }
 
   @override

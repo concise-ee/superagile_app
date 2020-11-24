@@ -68,7 +68,7 @@ class GameService {
 
   Future<bool> isPlayerHosting(DocumentReference playerRef) async {
     Player player = await _gameRepository.findGamePlayerByRef(playerRef);
-    return player.role == ROLE_HOST;
+    return player.role.toString() == ROLE_HOST;
   }
 
   void addScore(DocumentReference playerRef, Score score) {
