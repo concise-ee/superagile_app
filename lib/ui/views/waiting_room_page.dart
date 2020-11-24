@@ -26,7 +26,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Timer timer;
   Timer playerTimer;
   int playerNumber;
-  bool isHost;
+  bool isHost = false;
   String gamePin = '';
 
   @override
@@ -50,11 +50,15 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     });
     playerTimer = Timer.periodic(Duration(seconds: 1), (Timer t) => setPlayerCount());
     playerNumber = 0;
-
-    isHost = true;
-
+    isPlayerHosting();
   }
 
+  void isPlayerHosting() async{
+    bool host = await gameService.isPlayerHosting(playerRef);
+    setState(() {
+      isHost = host;
+    });
+  }
 
   void setPlayerCount() async{
     var players = await gameService.findGamePlayers(gameRef);
