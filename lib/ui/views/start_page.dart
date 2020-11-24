@@ -7,10 +7,10 @@ import 'package:superagile_app/utils/labels.dart';
 
 class StartPage extends StatefulWidget {
   @override
-  _StartPageState createState() => _StartPageState();
+  StartPageState createState() => StartPageState();
 }
 
-class _StartPageState extends State<StartPage> {
+class StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
