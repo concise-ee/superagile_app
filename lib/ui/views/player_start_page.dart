@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/security_service.dart';
@@ -11,7 +12,6 @@ class PlayerStartPage extends StatefulWidget {
 }
 
 class _PlayerStartPageState extends State<PlayerStartPage> {
-  static const PLAYER = 'PLAYER';
   final _pinController = TextEditingController();
   final _nameController = TextEditingController();
   final GameService _gameService = GameService();
@@ -39,7 +39,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
                       var loggedInUserUid = await signInAnonymously();
                       var playerRef = await _gameService.addGamePlayer(gameRef,
-                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), PLAYER, true));
+                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {

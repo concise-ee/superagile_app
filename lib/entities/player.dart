@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:superagile_app/entities/role.dart';
 
 const NAME = 'name';
 const UID = 'uid';
@@ -10,7 +11,7 @@ class Player {
   String name;
   String uid;
   String lastActive;
-  String role;
+  Role role;
   bool isPlayingAlong;
   DocumentReference reference;
 
@@ -23,8 +24,7 @@ class Player {
   }
 
   factory Player.fromJson(Map<String, dynamic> json) {
-    return Player(json[NAME] as String, json[UID] as String, json[LAST_ACTIVE] as String, json[ROLE] as String,
-        json[IS_PLAYING_ALONG] as bool);
+    return Player(json[NAME], json[UID], json[LAST_ACTIVE], toRoleEnum(json[ROLE]), json[IS_PLAYING_ALONG]);
   }
 
   Map<String, dynamic> toJson() {
@@ -32,7 +32,7 @@ class Player {
       NAME: name,
       UID: uid,
       LAST_ACTIVE: lastActive,
-      ROLE: role,
+      ROLE: role.toExactString,
       IS_PLAYING_ALONG: isPlayingAlong
     };
   }

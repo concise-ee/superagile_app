@@ -17,8 +17,7 @@ class Score {
   }
 
   factory Score.fromJson(Map<String, dynamic> json) {
-    var score = Score(json[QUESTION] as int, json[SCORE] as int);
-    return score;
+    return Score(json[QUESTION], json[SCORE]);
   }
 
   Map<String, dynamic> toJson() {
