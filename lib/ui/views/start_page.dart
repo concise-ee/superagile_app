@@ -64,40 +64,6 @@ class _StartPageState extends State<StartPage> {
                 },
               ),
             ),
-            Spacer(
-              flex: 2,
-            ),
-            Flexible(
-              flex: 5,
-              child: AgileButton(
-                buttonTitle: 'Question results',
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return QuestionResultsPage();
-                    }),
-                  );
-                },
-              ),
-            ),
-            /*Flexible(
-
-              flex: 5,
-              child: AgileButton(
-                buttonTitle: 'Question',
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return GameQuestionPage(1);
-                    }),
-                  );
-                },
-              ),
-            ),*/
           ],
         ));
   }
