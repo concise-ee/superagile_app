@@ -6,6 +6,7 @@ import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
+import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class GameQuestionPage extends StatefulWidget {
@@ -52,14 +53,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     });
   }
 
-  void saveScore(String buttonValue) async {
-    await _gameService.addScore(playerRef, Score(questionNr, int.parse(buttonValue)));
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return GameQuestionPage(questionNr + 1, playerRef, gameRef);
-      }),
-    );
+  Future<void> saveScore(String buttonValue) async {
+    return _gameService.addScore(playerRef, Score(questionNr, int.parse(buttonValue)));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -185,32 +180,40 @@ class _GameQuestionPage extends State<GameQuestionPage> {
             Expanded(
               child: AgileButton(
                 buttonTitle: ZERO,
-                onPressed: () async {
-                  saveScore(ZERO);
+                onPressed: () {
+                  saveScore(ZERO).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
+                      })));
                 },
               ),
             ),
             Expanded(
               child: AgileButton(
                 buttonTitle: ONE,
-                onPressed: () async {
-                  saveScore(ONE);
+                onPressed: () {
+                  saveScore(ONE).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
+                      })));
                 },
               ),
             ),
             Expanded(
               child: AgileButton(
                 buttonTitle: TWO,
-                onPressed: () async {
-                  saveScore(TWO);
+                onPressed: () {
+                  saveScore(TWO).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
+                      })));
                 },
               ),
             ),
             Expanded(
               child: AgileButton(
                 buttonTitle: THREE,
-                onPressed: () async {
-                  saveScore(THREE);
+                onPressed: () {
+                  saveScore(THREE).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
+                      })));
                 },
               ),
             )

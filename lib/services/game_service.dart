@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -71,8 +72,8 @@ class GameService {
     return player.role.toString() == ROLE_HOST;
   }
 
-  void addScore(DocumentReference playerRef, Score score) {
-    _gameRepository.addScore(playerRef, score);
+  Future<void> addScore(DocumentReference playerRef, Score score) {
+    return _gameRepository.addScore(playerRef, score);
   }
 
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
@@ -81,5 +82,9 @@ class GameService {
 
   Future<Game> findActiveGameByRef(DocumentReference gameRef) {
     return _gameRepository.findActiveGameByRef(gameRef);
+  }
+
+  Future<QuestionScores> findScoresForQuestion(DocumentReference gameReference, int questionNumber) {
+    return _gameRepository.findScoresForQuestion(gameReference, questionNumber);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/score.dart';
 
 const PIN = 'pin';
@@ -52,7 +53,6 @@ class GameRepository {
     var playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
     return playersSnap.docs.map((snap) => Player.fromSnapshot(snap)).toList();
   }
-  
 
   Future<DocumentReference> addGamePlayer(DocumentReference gameRef, Player player) {
     var players = gameRef.collection(PLAYERS_SUB_COLLECTION);
@@ -63,12 +63,26 @@ class GameRepository {
     player.reference.update(player.toJson());
   }
 
-  void addScore(DocumentReference playerRef, Score score) {
-    playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
+  Future<void> addScore(DocumentReference playerRef, Score score) {
+    return playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
   }
 
   Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
     var playerSnap = await playerRef.get();
     return Player.fromSnapshot(playerSnap);
+  }
+
+  Future<QuestionScores> findScoresForQuestion(DocumentReference gameRef, int questionNumber) async {
+    var scores = {0: [], 1: [], 2: [], 3: []};
+
+    var querySnapshot = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
+    querySnapshot.docs.forEach((doc) async {
+      var snaps = await doc.reference.collection(SCORES_SUB_COLLECTION).where('question', isEqualTo: questionNumber).snapshots().first;
+      var scoreVal = snaps.docs.first.data()['score'];
+      var name = doc.data()['name'];
+      scores[scoreVal].add(name);
+    });
+    QuestionScores scoresObj = new QuestionScores(scores[0], scores[1], scores[2], scores[3]);
+    return scoresObj;
   }
 }
