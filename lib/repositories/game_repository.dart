@@ -63,7 +63,7 @@ class GameRepository {
     player.reference.update(player.toJson());
   }
 
-  Future<void> addScore(DocumentReference playerRef, Score score) {
+  Future<DocumentReference> addScore(DocumentReference playerRef, Score score) {
     return playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
   }
 
@@ -73,16 +73,19 @@ class GameRepository {
   }
 
   Future<QuestionScores> findScoresForQuestion(DocumentReference gameRef, int questionNumber) async {
-    var scores = {0: [], 1: [], 2: [], 3: []};
+    QuerySnapshot playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
+    var scores = await buildScores(playersSnap, questionNumber);
+    return new QuestionScores(scores[0], scores[1], scores[2], scores[3]);
+  }
 
-    var querySnapshot = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
-    querySnapshot.docs.forEach((doc) async {
-      var snaps = await doc.reference.collection(SCORES_SUB_COLLECTION).where('question', isEqualTo: questionNumber).snapshots().first;
-      var scoreVal = snaps.docs.first.data()['score'];
-      var name = doc.data()['name'];
+  Future<Map<int, List<String>>> buildScores(QuerySnapshot querySnapshot, int questionNumber) async {
+    Map<int, List<String>> scores = {0: [], 1: [], 2: [], 3: []};
+    await Future.forEach(querySnapshot.docs, (player) async {
+      var scoreSnaps = await player.reference.collection(SCORES_SUB_COLLECTION).where('question', isEqualTo: questionNumber).get();
+      var scoreVal = scoreSnaps.docs.single.data()['score'];
+      var name = player.data()['name'];
       scores[scoreVal].add(name);
     });
-    QuestionScores scoresObj = new QuestionScores(scores[0], scores[1], scores[2], scores[3]);
-    return scoresObj;
+    return scores;
   }
 }
