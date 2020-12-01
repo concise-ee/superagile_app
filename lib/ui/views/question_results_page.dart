@@ -80,5 +80,4 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       _questionScores = scores;
     });
   }
-
 }
