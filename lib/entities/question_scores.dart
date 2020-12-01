@@ -1,6 +1,3 @@
-const QUESTION = 'question';
-const SCORE = 'score';
-
 class QuestionScores {
   List<String> answered0;
   List<String> answered1;

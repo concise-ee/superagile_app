@@ -6,7 +6,7 @@ class QuestionAnswersSection extends StatelessWidget {
   QuestionAnswersSection({@required this.answerNumber, @required this.playerNames});
 
   final int answerNumber;
-  final List<dynamic> playerNames;
+  final List<String> playerNames;
 
   @override
   Widget build(BuildContext context) {

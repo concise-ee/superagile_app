@@ -28,9 +28,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final DocumentReference _gameRef;
 
   _QuestionResultsPageState(this._questionNr, this._playerRef, this._gameRef) {
-    getQuestionScores().then((scores) => setState(() {
-          _questionScores = scores;
-        }));
+    loadQuestionScores();
   }
 
   @override
@@ -76,7 +74,11 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
         ));
   }
 
-  Future<QuestionScores> getQuestionScores() async {
-    return await _gameService.findScoresForQuestion(this._gameRef, this._questionNr);
+  void loadQuestionScores() async {
+    var scores = await _gameService.findScoresForQuestion(this._gameRef, this._questionNr);
+    setState(() {
+      _questionScores = scores;
+    });
   }
+
 }
