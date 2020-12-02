@@ -16,7 +16,8 @@ class WaitingRoomPage extends StatefulWidget {
   WaitingRoomPage(this._gameRef, this._playerRef);
 
   @override
-  _WaitingRoomPageState createState() => _WaitingRoomPageState(this._gameRef, this._playerRef);
+  _WaitingRoomPageState createState() =>
+      _WaitingRoomPageState(this._gameRef, this._playerRef);
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
@@ -24,8 +25,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final DocumentReference gameRef;
   final DocumentReference playerRef;
   Timer timer;
-  Timer playerTimer;
-  int playerNumber;
   bool isHost = false;
   String gamePin = '';
 
@@ -51,23 +50,15 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       gameService.sendLastActive(playerRef);
     });
-    playerTimer = Timer.periodic(Duration(seconds: 1), (Timer t) => setPlayerCount());
-    playerNumber = 0;
-    isPlayerHosting();
+    loadIsHost();
     loadGame();
   }
 
-  void isPlayerHosting() async{
+  void loadIsHost() async {
     bool host = await gameService.isPlayerHosting(playerRef);
     setState(() {
       isHost = host;
     });
-  }
-
-  void setPlayerCount() async{
-    var players = await gameService.findGamePlayers(gameRef);
-    playerNumber = players.length;
-    setState(() {});
   }
 
   @override
@@ -79,24 +70,40 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       },
       child: Scaffold(
           appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-          body:  Column(
+          body: ListView(
             children: [
               Align(
                 alignment: Alignment.center,
               ),
-              Flexible( child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
-                  BorderedText(gamePin) ,
-              if (isHost) buildText('*Share this code with your team.'),
-              Spacer(),
-              Text('Paragraph'),
-              Spacer(),
-              if (isHost) buildText('Then click the play button.'),
+              Container(
+                  child: Text(WAITING_ROOM,
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
+              BorderedText(gamePin),
+              if (isHost) buildText(CODE_SHARE_CALL),
+              buildText('Paragraph'),
+              if (isHost) buildText(PLAY_BUTTON_CALL),
               if (isHost) buildStartGameButton(),
-              FittedBox( fit: BoxFit.fitWidth, child: Text('There are ' + playerNumber.toString() + ' people in this game.',textAlign: TextAlign.center, style: TextStyle(fontSize: 24),)) ,
-              Flexible( child:buildActivePlayersWidget()),
+              buildPlayerCount(),
+              Container(child: buildActivePlayersWidget()),
             ],
           )),
     );
+  }
+
+  Widget buildPlayerCount() {
+    return StreamBuilder<QuerySnapshot>(
+        stream: gameService.getGamePlayersStream(gameRef),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return LinearProgressIndicator();
+          var players = gameService.findActivePlayers(snapshot.data.docs);
+          return FittedBox(
+              fit: BoxFit.fitWidth,
+              child:  Text('There are ' + players.length.toString() + ' people in this game.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 24)));
+        });
   }
 
   Widget buildActivePlayersWidget() {
@@ -109,8 +116,11 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             shrinkWrap: true,
             itemCount: players.length,
             itemBuilder: (context, index) {
-              return  ListTile(
-                title: Text(players[index].name, style: TextStyle(color: Color(0xffFFFFFF)),),
+              return ListTile(
+                title: Text(
+                  players[index].name,
+                  style: TextStyle(color: Color(0xffFFFFFF)),
+                ),
                 subtitle: Center(child: Text(players[index].lastActive)),
               );
             },
@@ -119,32 +129,34 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   Widget buildStartGameButton() {
-    return PlayButton(
-        onPressed: () {
-          FocusScope.of(context).unfocus();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return GameQuestionPage(1, playerRef, gameRef);
-            }),
-          );
-        }
-    );
+    return PlayButton(onPressed: () {
+      FocusScope.of(context).unfocus();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return GameQuestionPage(1, playerRef, gameRef);
+        }),
+      );
+    });
   }
-  Widget buildText(String text){
-    return Text (text, textAlign: TextAlign.center,style: TextStyle(color: Colors.yellowAccent));
+
+  Widget buildText(String text) {
+    return Text(text,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.yellowAccent));
   }
 
   Widget BorderedText(String text) {
     return Container(
       margin: const EdgeInsets.all(30.0),
       padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(border: Border.all(width: 3.0, color: Color(0xff656565))), //             <--- BoxDecoration here
+      decoration: BoxDecoration(
+          border: Border.all(width: 3.0, color: Color(0xff656565))),
       child: Text(
-        text, textAlign: TextAlign.center,
+        text,
+        textAlign: TextAlign.center,
         style: TextStyle(fontSize: 60),
       ),
     );
   }
-
 }
