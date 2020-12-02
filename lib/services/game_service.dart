@@ -73,7 +73,7 @@ class GameService {
     return player.role == Role.HOST;
   }
 
-  Future<void> addScore(DocumentReference playerRef, Score score) {
+  Future<DocumentReference> addScore(DocumentReference playerRef, Score score) {
     return _gameRepository.addScore(playerRef, score);
   }
 

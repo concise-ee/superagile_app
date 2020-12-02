@@ -6,7 +6,7 @@ class QuestionAnswersSection extends StatelessWidget {
   QuestionAnswersSection({@required this.answerNumber, @required this.playerNames});
 
   final int answerNumber;
-  final List<dynamic> playerNames;
+  final List<String> playerNames;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,10 @@ class QuestionAnswersSection extends StatelessWidget {
             style: TextStyle(color: Colors.white, fontSize: 100, fontWeight: FontWeight.w600),
           ),
           Column(
-              children: playerNames.map((item) => new Text(item, style: TextStyle(color: Colors.white, fontSize: 14, height: 3, letterSpacing: 2))).toList()),
+              children: playerNames
+                  .map((item) =>
+                      new Text(item, style: TextStyle(color: Colors.white, fontSize: 14, height: 3, letterSpacing: 2)))
+                  .toList()),
         ]));
   }
 }

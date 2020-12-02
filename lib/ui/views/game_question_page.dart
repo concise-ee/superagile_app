@@ -53,8 +53,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     });
   }
 
-  Future<void> saveScore(String buttonValue) async {
-    return _gameService.addScore(playerRef, Score(questionNr, int.parse(buttonValue)));
+  void saveScoreAndPushNext(String buttonValue) async {
+    await _gameService.addScore(playerRef, Score(questionNr, int.parse(buttonValue)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
+    }));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -181,9 +184,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: ZERO,
                 onPressed: () {
-                  saveScore(ZERO).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
-                      })));
+                  saveScoreAndPushNext(ZERO);
                 },
               ),
             ),
@@ -191,9 +192,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: ONE,
                 onPressed: () {
-                  saveScore(ONE).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
-                      })));
+                  saveScoreAndPushNext(ONE);
                 },
               ),
             ),
@@ -201,9 +200,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: TWO,
                 onPressed: () {
-                  saveScore(TWO).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
-                      })));
+                  saveScoreAndPushNext(TWO);
                 },
               ),
             ),
@@ -211,9 +208,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: THREE,
                 onPressed: () {
-                  saveScore(THREE).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
-                      })));
+                  saveScoreAndPushNext(THREE);
                 },
               ),
             )
