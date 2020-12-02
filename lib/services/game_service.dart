@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_scores.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -69,7 +70,7 @@ class GameService {
 
   Future<bool> isPlayerHosting(DocumentReference playerRef) async {
     Player player = await _gameRepository.findGamePlayerByRef(playerRef);
-    return player.role.toString() == ROLE_HOST;
+    return player.role == Role.HOST;
   }
 
   Future<void> addScore(DocumentReference playerRef, Score score) {
