@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question.dart';
+import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/question_service.dart';
@@ -21,12 +25,13 @@ class GameQuestionPage extends StatefulWidget {
 }
 
 class _GameQuestionPage extends State<GameQuestionPage> {
-  final QuestionService _questionService = QuestionService();
-  final GameService _gameService = GameService();
+  final QuestionService questionService = QuestionService();
+  final GameService gameService = GameService();
   final int questionNr;
   final DocumentReference playerRef;
   final DocumentReference gameRef;
   Question question;
+  List<StreamSubscription<QuerySnapshot>> playerQuestionStreams = [];
 
   _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
 
@@ -34,6 +39,41 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   void setState(state) {
     if (mounted) {
       super.setState(state);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    listenForScoreUpdatesToGoResultsPage();
+  }
+
+  @override
+  void dispose() {
+    playerQuestionStreams.forEach((stream) {
+      stream.cancel();
+    });
+    super.dispose();
+  }
+
+  void listenForScoreUpdatesToGoResultsPage() async {
+    List<Player> players = await gameService.findGamePlayers(gameRef);
+    for (var player in players) {
+      StreamSubscription<QuerySnapshot> stream =
+      gameService.getScoresStream(player.reference).listen((event) async {
+        QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
+        int answeredPlayersCount = gameService.getAnsweredPlayersCount(questionScores);
+
+        if (players.length == answeredPlayersCount) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, playerRef: playerRef);
+            }),
+          );
+        }
+      });
+      playerQuestionStreams.add(stream);
     }
   }
 
@@ -47,17 +87,14 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void loadQuestionContentByNumber() async {
-    final Question questionByNumber = await _questionService.findQuestionByNumber(questionNr);
+    final Question questionByNumber = await questionService.findQuestionByNumber(questionNr);
     setState(() {
       question = questionByNumber;
     });
   }
 
-  void saveScoreAndPushNext(String buttonValue) async {
-    await _gameService.addScore(playerRef, Score(questionNr, int.parse(buttonValue)));
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return QuestionResultsPage(questionNr: questionNr, playerRef: playerRef, gameRef: gameRef);
-    }));
+  void saveScoreAndWaitForNextPage(String buttonValue) async {
+    await gameService.saveOrSetScore(playerRef, gameRef, Score(questionNr, int.parse(buttonValue)));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -184,7 +221,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: ZERO,
                 onPressed: () {
-                  saveScoreAndPushNext(ZERO);
+                  saveScoreAndWaitForNextPage(ZERO);
                 },
               ),
             ),
@@ -192,7 +229,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: ONE,
                 onPressed: () {
-                  saveScoreAndPushNext(ONE);
+                  saveScoreAndWaitForNextPage(ONE);
                 },
               ),
             ),
@@ -200,7 +237,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: TWO,
                 onPressed: () {
-                  saveScoreAndPushNext(TWO);
+                  saveScoreAndWaitForNextPage(TWO);
                 },
               ),
             ),
@@ -208,7 +245,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               child: AgileButton(
                 buttonTitle: THREE,
                 onPressed: () {
-                  saveScoreAndPushNext(THREE);
+                  saveScoreAndWaitForNextPage(THREE);
                 },
               ),
             )

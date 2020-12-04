@@ -7,7 +7,6 @@ import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
-import 'package:superagile_app/utils/labels.dart';
 
 final _random = Random();
 
@@ -64,8 +63,8 @@ class GameService {
     return _gameRepository.findActiveGameRefByPin(pin);
   }
 
-  Future<List<Player>> findGamePlayers(DocumentReference reference) {
-    return _gameRepository.findGamePlayers(reference);
+  Future<List<Player>> findGamePlayers(DocumentReference gameRef) {
+    return _gameRepository.findGamePlayers(gameRef);
   }
 
   Future<bool> isPlayerHosting(DocumentReference playerRef) async {
@@ -73,12 +72,28 @@ class GameService {
     return player.role == Role.HOST;
   }
 
-  Future<DocumentReference> addScore(DocumentReference playerRef, Score score) {
-    return _gameRepository.addScore(playerRef, score);
+  Future<DocumentReference> saveOrSetScore(DocumentReference playerRef, DocumentReference gameRef, Score score) async {
+    QuestionScores scores = await _gameRepository.findScoresForQuestion(gameRef, score.question);
+    Player player = await _gameRepository.findGamePlayerByRef(playerRef);
+    if (hasPlayerAnswered(scores, player)) {
+      return _gameRepository.setScore(playerRef, score);
+    }
+    return _gameRepository.saveScore(playerRef, score);
+  }
+
+  bool hasPlayerAnswered(QuestionScores scores, Player player) {
+    return scores.answered0.contains(player.name)
+      || scores.answered1.contains(player.name)
+      || scores.answered2.contains(player.name)
+      || scores.answered3.contains(player.name);
   }
 
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
     return _gameRepository.getGamePlayersStream(gameRef);
+  }
+
+  Stream<QuerySnapshot> getScoresStream(DocumentReference playerRef) {
+    return _gameRepository.getScoresStream(playerRef);
   }
 
   Future<Game> findActiveGameByRef(DocumentReference gameRef) {
@@ -88,4 +103,16 @@ class GameService {
   Future<QuestionScores> findScoresForQuestion(DocumentReference gameReference, int questionNumber) {
     return _gameRepository.findScoresForQuestion(gameReference, questionNumber);
   }
+
+  int getAnsweredPlayersCount(QuestionScores questionScores) {
+    return questionScores.answered0.length +
+        questionScores.answered1.length +
+        questionScores.answered2.length +
+        questionScores.answered3.length;
+  }
+
+  void deleteOldScore(DocumentReference playerRef, int questionNr) {
+    _gameRepository.deleteScore(playerRef, questionNr);
+  }
+
 }

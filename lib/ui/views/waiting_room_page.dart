@@ -84,7 +84,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
               if (isHost) buildText(CODE_SHARE_CALL),
               buildText(LEARN_MORE),
               if (isHost) buildText(PLAY_BUTTON_CALL),
-              if (isHost) buildStartGameButton(),
+              buildStartGameButton(), // todo: 'if (isHost)' removed until player and host are synced
               buildPlayerCount(),
               Container(child: buildActivePlayersWidget()),
             ],
@@ -130,7 +130,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildStartGameButton() {
     return PlayButton(onPressed: () {
-      FocusScope.of(context).unfocus();
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {

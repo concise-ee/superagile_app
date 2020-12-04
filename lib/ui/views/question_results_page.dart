@@ -5,6 +5,7 @@ import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/question_answers_section.dart';
+import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
@@ -21,13 +22,13 @@ class QuestionResultsPage extends StatefulWidget {
 }
 
 class _QuestionResultsPageState extends State<QuestionResultsPage> {
-  final GameService _gameService = GameService();
-  QuestionScores _questionScores = new QuestionScores([], [], [], []);
-  final int _questionNr;
-  final DocumentReference _playerRef;
-  final DocumentReference _gameRef;
+  final GameService gameService = GameService();
+  QuestionScores questionScores = new QuestionScores([], [], [], []);
+  final int questionNr;
+  final DocumentReference playerRef;
+  final DocumentReference gameRef;
 
-  _QuestionResultsPageState(this._questionNr, this._playerRef, this._gameRef) {
+  _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef) {
     loadQuestionScores();
   }
 
@@ -42,10 +43,10 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
                     child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                QuestionAnswersSection(answerNumber: 3, playerNames: _questionScores.answered3),
-                QuestionAnswersSection(answerNumber: 2, playerNames: _questionScores.answered2),
-                QuestionAnswersSection(answerNumber: 1, playerNames: _questionScores.answered1),
-                QuestionAnswersSection(answerNumber: 0, playerNames: _questionScores.answered0),
+                QuestionAnswersSection(answerNumber: 3, playerNames: questionScores.answered3),
+                QuestionAnswersSection(answerNumber: 2, playerNames: questionScores.answered2),
+                QuestionAnswersSection(answerNumber: 1, playerNames: questionScores.answered1),
+                QuestionAnswersSection(answerNumber: 0, playerNames: questionScores.answered0),
               ],
             ))),
             Container(
@@ -53,20 +54,9 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
               height: 160.0,
               child: Column(
                 children: [
-                  Text(SAME_ANSWER, textAlign: TextAlign.center),
+                  Text(areVotedScoresSame() ? '' : SAME_ANSWER, textAlign: TextAlign.center),
                   Spacer(flex: 1),
-                  AgileButton(
-                    buttonTitle: CHANGE_ANSWER,
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return GameQuestionPage(this._questionNr + 1, this._playerRef, this._gameRef);
-                        }),
-                      );
-                    },
-                  ),
+                  buildBackOrNextButton()
                 ],
               ),
             )
@@ -75,9 +65,51 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   }
 
   void loadQuestionScores() async {
-    var scores = await _gameService.findScoresForQuestion(this._gameRef, this._questionNr);
+    var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
     setState(() {
-      _questionScores = scores;
+      questionScores = scores;
     });
+  }
+
+  Widget buildBackOrNextButton() {
+    if (areVotedScoresSame()) {
+      return AgileButton(
+        buttonTitle: CONTINUE,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
+            }),
+          );
+        },
+      );
+    }
+    return AgileButton(
+      buttonTitle: CHANGE_ANSWER,
+      onPressed: () async {
+        await gameService.deleteOldScore(playerRef, questionNr);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
+          }),
+        );
+      },
+    );
+  }
+
+  bool areVotedScoresSame() {
+    int numberOfPlayersAnswered = questionScores.answered0.length +
+        questionScores.answered1.length +
+        questionScores.answered2.length +
+        questionScores.answered3.length;
+    if (questionScores.answered0.length == numberOfPlayersAnswered ||
+        questionScores.answered1.length == numberOfPlayersAnswered ||
+        questionScores.answered2.length == numberOfPlayersAnswered ||
+        questionScores.answered3.length == numberOfPlayersAnswered) {
+      return true;
+    }
+    return false;
   }
 }

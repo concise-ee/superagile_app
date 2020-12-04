@@ -6,6 +6,7 @@ import 'package:superagile_app/entities/score.dart';
 
 const PIN = 'pin';
 const IS_ACTIVE = 'isActive';
+const QUESTION = 'question';
 
 const GAMES_COLLECTION = 'games';
 const PLAYERS_SUB_COLLECTION = 'players';
@@ -16,6 +17,10 @@ class GameRepository {
 
   Stream<QuerySnapshot> getGamesStream() {
     return _repository.snapshots();
+  }
+
+  Stream<QuerySnapshot> getScoresStream(DocumentReference playerRef) {
+    return playerRef.collection(SCORES_SUB_COLLECTION).snapshots();
   }
 
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
@@ -63,8 +68,15 @@ class GameRepository {
     player.reference.update(player.toJson());
   }
 
-  Future<DocumentReference> addScore(DocumentReference playerRef, Score score) {
+  Future<DocumentReference> saveScore(DocumentReference playerRef, Score score) {
     return playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
+  }
+
+  Future<DocumentReference> setScore(DocumentReference playerRef, Score score) async {
+    QuerySnapshot scoreToUpdate = await playerRef.collection(SCORES_SUB_COLLECTION)
+        .where(QUESTION, isEqualTo: score.question).get();
+    scoreToUpdate.docs.single.reference.set(score.toJson());
+    return scoreToUpdate.docs.single.reference;
   }
 
   Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
@@ -81,11 +93,19 @@ class GameRepository {
   Future<Map<int, List<String>>> buildScores(QuerySnapshot querySnapshot, int questionNumber) async {
     Map<int, List<String>> scores = {0: [], 1: [], 2: [], 3: []};
     await Future.forEach(querySnapshot.docs, (player) async {
-      var scoreSnaps = await player.reference.collection(SCORES_SUB_COLLECTION).where('question', isEqualTo: questionNumber).get();
-      var scoreVal = scoreSnaps.docs.single.data()['score'];
-      var name = player.data()['name'];
-      scores[scoreVal].add(name);
+      QuerySnapshot scoreSnaps = await player.reference.collection(SCORES_SUB_COLLECTION).where(
+          QUESTION, isEqualTo: questionNumber).get();
+      if (!scoreSnaps.docs.isEmpty) {
+        var scoreVal = scoreSnaps.docs.single.data()['score'];
+        var name = player.data()['name'];
+        scores[scoreVal].add(name);
+      }
     });
     return scores;
+  }
+
+  void deleteScore(DocumentReference playerRef, int questionNr) async {
+    QuerySnapshot score = await playerRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: questionNr).get();
+    score.docs.single.reference.delete();
   }
 }

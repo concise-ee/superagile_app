@@ -5,23 +5,23 @@ import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/utils/labels.dart';
 
-class CongratulationPage extends StatefulWidget {
+class CongratulationsPage extends StatefulWidget {
   final int _questionNr;
   final DocumentReference _playerRef;
   final DocumentReference _gameRef;
 
-  CongratulationPage(this._questionNr, this._playerRef, this._gameRef);
+  CongratulationsPage(this._questionNr, this._playerRef, this._gameRef);
 
   @override
-  _CongratulationPage createState() => _CongratulationPage(this._questionNr, this._playerRef, this._gameRef);
+  _CongratulationsPage createState() => _CongratulationsPage(this._questionNr, this._playerRef, this._gameRef);
 }
 
-class _CongratulationPage extends State<CongratulationPage> {
+class _CongratulationsPage extends State<CongratulationsPage> {
   final int questionNr;
   final DocumentReference playerRef;
   final DocumentReference gameRef;
 
-  _CongratulationPage(this.questionNr, this.playerRef, this.gameRef);
+  _CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,12 @@ class _CongratulationPage extends State<CongratulationPage> {
               alignment: Alignment.bottomLeft,
               child: PlayButton(
                 onPressed: () {
-                  return GameQuestionPage(questionNr + 1, playerRef, gameRef);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return GameQuestionPage(questionNr + 1, playerRef, gameRef);
+                    }),
+                  );
                 },
               ),
             ))
