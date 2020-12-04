@@ -82,7 +82,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                           TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
               BorderedText(gamePin),
               if (isHost) buildText(CODE_SHARE_CALL),
-              buildText('Paragraph'),
+              buildText(LEARN_MORE),
               if (isHost) buildText(PLAY_BUTTON_CALL),
               if (isHost) buildStartGameButton(),
               buildPlayerCount(),
