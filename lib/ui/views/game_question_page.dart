@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question.dart';
 import 'package:superagile_app/entities/question_scores.dart';
-import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
@@ -94,7 +93,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void saveScoreAndWaitForNextPage(String buttonValue) async {
-    await gameService.saveOrSetScore(playerRef, gameRef, Score(questionNr, int.parse(buttonValue)));
+    await gameService.saveOrSetScore(playerRef, gameRef, questionNr, int.parse(buttonValue));
   }
 
   Widget _buildBody(BuildContext context) {

@@ -92,13 +92,13 @@ class GameRepository {
 
   Future<Map<int, List<String>>> buildScores(QuerySnapshot querySnapshot, int questionNumber) async {
     Map<int, List<String>> scores = {0: [], 1: [], 2: [], 3: []};
-    await Future.forEach(querySnapshot.docs, (player) async {
-      QuerySnapshot scoreSnaps = await player.reference.collection(SCORES_SUB_COLLECTION).where(
+    await Future.forEach(querySnapshot.docs, (playerSnap) async {
+      QuerySnapshot scoreSnaps = await playerSnap.reference.collection(SCORES_SUB_COLLECTION).where(
           QUESTION, isEqualTo: questionNumber).get();
       if (!scoreSnaps.docs.isEmpty) {
-        var scoreVal = scoreSnaps.docs.single.data()['score'];
-        var name = player.data()['name'];
-        scores[scoreVal].add(name);
+        var score = Score.fromSnapshot(scoreSnaps.docs.single);
+        var player = Player.fromSnapshot(playerSnap);
+        scores[score.score].add(player.name);
       }
     });
     return scores;

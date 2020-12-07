@@ -72,9 +72,10 @@ class GameService {
     return player.role == Role.HOST;
   }
 
-  Future<DocumentReference> saveOrSetScore(DocumentReference playerRef, DocumentReference gameRef, Score score) async {
-    QuestionScores scores = await _gameRepository.findScoresForQuestion(gameRef, score.question);
+  Future<DocumentReference> saveOrSetScore(DocumentReference playerRef, DocumentReference gameRef, int questionNr, int buttonValue) async {
+    QuestionScores scores = await _gameRepository.findScoresForQuestion(gameRef, questionNr);
     Player player = await _gameRepository.findGamePlayerByRef(playerRef);
+    var score = Score(questionNr, buttonValue, playerRef.id);
     if (hasPlayerAnswered(scores, player)) {
       return _gameRepository.setScore(playerRef, score);
     }
