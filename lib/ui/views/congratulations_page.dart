@@ -46,7 +46,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                     child: Container(
                         child: Padding(
                   padding: EdgeInsets.all(50.0),
-                  child: Text(TEAMS_RESULTS + questionNr.toString() + ':',
+                  child: Text('${TEAMS_RESULTS} ${questionNr.toString()}:',
                       style: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 1.5),
                       textAlign: TextAlign.center),
                 ))),

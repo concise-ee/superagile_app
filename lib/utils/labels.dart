@@ -24,5 +24,5 @@ const CODE_SHARE_CALL = '*Share this code with your team.';
 const CONGRATS = 'CONGRATULATIONS!';
 const GREAT_MINDS = 'Great minds think alike!';
 const GO_TO_NEXT_QUESTION = '* Click the play button to go to the next question';
-const TEAMS_RESULTS = 'Your team´s results for question ';
+const TEAMS_RESULTS = 'Your team´s results for question';
 const LEARN_MORE = 'learn more';
