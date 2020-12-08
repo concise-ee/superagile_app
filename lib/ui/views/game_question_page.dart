@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/player.dart';
-import 'package:superagile_app/entities/question.dart';
+import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/question_service.dart';
@@ -30,6 +30,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   final DocumentReference playerRef;
   final DocumentReference gameRef;
   Question question;
+  int pressedButton;
   List<StreamSubscription<QuerySnapshot>> playerQuestionStreams = [];
 
   _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
@@ -217,33 +218,42 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Expanded(
-              child: AgileButton(
-                buttonTitle: ZERO,
+              child: RaisedButton(
+                child: Text(ZERO, style: TextStyle(color: ZERO == pressedButton.toString() ? Colors.black : Colors.yellowAccent),),
+                color: ZERO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
+                focusColor: Color.fromARGB(1, 0, 0, 255),
                 onPressed: () {
+                  setState(() { pressedButton = int.parse(ZERO);});
                   saveScoreAndWaitForNextPage(ZERO);
                 },
               ),
             ),
             Expanded(
-              child: AgileButton(
-                buttonTitle: ONE,
+              child: RaisedButton(
+                child: Text(ONE, style: TextStyle(color: ONE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+                color: ONE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
                 onPressed: () {
+                  setState(() { pressedButton = int.parse(ONE);});
                   saveScoreAndWaitForNextPage(ONE);
                 },
               ),
             ),
             Expanded(
-              child: AgileButton(
-                buttonTitle: TWO,
+              child: RaisedButton(
+                child: Text(TWO, style: TextStyle(color: TWO == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+                color: TWO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
                 onPressed: () {
+                  setState(() { pressedButton = int.parse(TWO);});
                   saveScoreAndWaitForNextPage(TWO);
                 },
               ),
             ),
             Expanded(
-              child: AgileButton(
-                buttonTitle: THREE,
+              child: RaisedButton(
+                child: Text(THREE,  style: TextStyle(color: THREE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+                color: THREE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
                 onPressed: () {
+                  setState(() { pressedButton = int.parse(THREE);});
                   saveScoreAndWaitForNextPage(THREE);
                 },
               ),

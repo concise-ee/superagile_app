@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:superagile_app/entities/question.dart';
+import 'package:superagile_app/entities/question_template.dart';
 
 const QUESTIONS_COLLECTION = 'questions';
 const QUESTION_DOC_REFERENCE = 'Z0n947Uqvg2R3gH74kyc';

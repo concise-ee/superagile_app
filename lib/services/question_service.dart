@@ -1,4 +1,4 @@
-import 'package:superagile_app/entities/question.dart';
+import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/repositories/question_repository.dart';
 
 class QuestionService {
