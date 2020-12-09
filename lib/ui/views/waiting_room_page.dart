@@ -51,7 +51,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(1, gameRef, playerRef);
+            return GameQuestionPage(1, playerRef, gameRef);
           }),
         );
       }
