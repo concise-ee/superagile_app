@@ -27,6 +27,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Timer timer;
   bool isHost = false;
   String gamePin = '';
+  StreamSubscription<DocumentSnapshot> gameStream;
 
   _WaitingRoomPageState(this.gameRef, this.playerRef);
 
@@ -37,13 +38,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     }
   }
 
-  void loadGame() async {
-    Game game = await gameService.findActiveGameByRef(gameRef);
-    setState(() {
-      gamePin = game.pin.toString();
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -52,6 +46,30 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     });
     loadIsHost();
     loadGame();
+    gameStream = gameService.getGameStream(gameRef).listen((event) async {
+      if (Game.fromSnapshot(event).gameState == 'question1') {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return GameQuestionPage(1, gameRef, playerRef);
+          }),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    gameStream.cancel();
+    super.dispose();
+  }
+
+
+  void loadGame() async {
+    Game game = await gameService.findActiveGameByRef(gameRef);
+    setState(() {
+      gamePin = game.pin.toString();
+    });
   }
 
   void loadIsHost() async {
@@ -130,6 +148,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildStartGameButton() {
     return PlayButton(onPressed: () {
+      gameService.changeGameState(gameRef, 'question1');
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {

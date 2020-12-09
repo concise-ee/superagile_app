@@ -70,7 +70,7 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var pin = await _gameService.generateAvailable4DigitPin();
-                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true));
+                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
                       var playerRef = await _gameService.addGamePlayer(gameRef,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, true));
                       Navigator.push(
@@ -93,7 +93,7 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var pin = await _gameService.generateAvailable4DigitPin();
-                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true));
+                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
                       var playerRef = await _gameService.addGamePlayer(gameRef,
                           Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, false));
                       Navigator.push(

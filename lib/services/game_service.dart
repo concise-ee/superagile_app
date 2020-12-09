@@ -97,6 +97,10 @@ class GameService {
     return _gameRepository.getScoresStream(playerRef);
   }
 
+  Stream<DocumentSnapshot> getGameStream(DocumentReference gameRef) {
+    return _gameRepository.getGameStream(gameRef);
+  }
+
   Future<Game> findActiveGameByRef(DocumentReference gameRef) {
     return _gameRepository.findActiveGameByRef(gameRef);
   }
@@ -116,4 +120,7 @@ class GameService {
     _gameRepository.deleteScore(playerRef, questionNr);
   }
 
+  void changeGameState(DocumentReference gameRef, String gameState) {
+    _gameRepository.changeGameState(gameRef, gameState);
+  }
 }

@@ -19,6 +19,10 @@ class GameRepository {
     return _repository.snapshots();
   }
 
+  Stream<DocumentSnapshot> getGameStream(DocumentReference gameRef) {
+    return gameRef.snapshots();
+  }
+
   Stream<QuerySnapshot> getScoresStream(DocumentReference playerRef) {
     return playerRef.collection(SCORES_SUB_COLLECTION).snapshots();
   }
@@ -107,5 +111,11 @@ class GameRepository {
   void deleteScore(DocumentReference playerRef, int questionNr) async {
     QuerySnapshot score = await playerRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: questionNr).get();
     score.docs.single.reference.delete();
+  }
+
+  void changeGameState(DocumentReference gameRef, String gameState) async {
+    Game game = await findActiveGameByRef(gameRef);
+    game.gameState = gameState;
+    gameRef.set(game.toJson());
   }
 }
