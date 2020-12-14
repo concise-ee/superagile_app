@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/player.dart';
-import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/entities/question_scores.dart';
+import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/question_service.dart';
-import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
+import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class GameQuestionPage extends StatefulWidget {
@@ -32,6 +32,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Question question;
   int pressedButton;
   List<StreamSubscription<QuerySnapshot>> playerQuestionStreams = [];
+  StreamSubscription<DocumentSnapshot> gameStream;
+  bool isHost = false;
 
   _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
 
@@ -45,7 +47,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   void initState() {
     super.initState();
-    listenForScoreUpdatesToGoResultsPage();
+    loadIsHostAndSetupListeners();
   }
 
   @override
@@ -53,28 +55,61 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     playerQuestionStreams.forEach((stream) {
       stream.cancel();
     });
+    gameStream.cancel();
     super.dispose();
   }
 
-  void listenForScoreUpdatesToGoResultsPage() async {
+  void loadIsHostAndSetupListeners() async {
+    await loadIsHost();
+    listenForUpdateToGoToQuestionResultsPage();
+  }
+
+  Future<void> loadIsHost() async {
+    bool host = await gameService.isPlayerHosting(playerRef);
+    setState(() {
+      isHost = host;
+    });
+  }
+
+  void listenForUpdateToGoToQuestionResultsPage() async {
+    listenGameStateChanges();
+    listenEveryGamePlayerScoreChanges();
+  }
+
+  void listenGameStateChanges() async {
+    gameStream = gameService.getGameStream(gameRef).listen((data) async {
+      String gameState = await gameService.getGameState(gameRef);
+      if (!isHost && gameState.contains(GameState.QUESTION_RESULTS)) {
+        navigateToQuestionResultsPage();
+      }
+    });
+  }
+
+  Future listenEveryGamePlayerScoreChanges() async {
     List<Player> players = await gameService.findGamePlayers(gameRef);
     for (var player in players) {
-      StreamSubscription<QuerySnapshot> stream =
-      gameService.getScoresStream(player.reference).listen((event) async {
+      StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
         QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
         int answeredPlayersCount = gameService.getAnsweredPlayersCount(questionScores);
 
         if (players.length == answeredPlayersCount) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, playerRef: playerRef);
-            }),
-          );
+          if (isHost) {
+            await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
+            navigateToQuestionResultsPage();
+          }
         }
       });
       playerQuestionStreams.add(stream);
     }
+  }
+
+  void navigateToQuestionResultsPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, playerRef: playerRef);
+      }),
+    );
   }
 
   @override
@@ -219,41 +254,55 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           children: [
             Expanded(
               child: RaisedButton(
-                child: Text(ZERO, style: TextStyle(color: ZERO == pressedButton.toString() ? Colors.black : Colors.yellowAccent),),
+                child: Text(
+                  ZERO,
+                  style: TextStyle(color: ZERO == pressedButton.toString() ? Colors.black : Colors.yellowAccent),
+                ),
                 color: ZERO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
                 focusColor: Color.fromARGB(1, 0, 0, 255),
                 onPressed: () {
-                  setState(() { pressedButton = int.parse(ZERO);});
+                  setState(() {
+                    pressedButton = int.parse(ZERO);
+                  });
                   saveScoreAndWaitForNextPage(ZERO);
                 },
               ),
             ),
             Expanded(
               child: RaisedButton(
-                child: Text(ONE, style: TextStyle(color: ONE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+                child: Text(ONE,
+                    style: TextStyle(color: ONE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
                 color: ONE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
                 onPressed: () {
-                  setState(() { pressedButton = int.parse(ONE);});
+                  setState(() {
+                    pressedButton = int.parse(ONE);
+                  });
                   saveScoreAndWaitForNextPage(ONE);
                 },
               ),
             ),
             Expanded(
               child: RaisedButton(
-                child: Text(TWO, style: TextStyle(color: TWO == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+                child: Text(TWO,
+                    style: TextStyle(color: TWO == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
                 color: TWO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
                 onPressed: () {
-                  setState(() { pressedButton = int.parse(TWO);});
+                  setState(() {
+                    pressedButton = int.parse(TWO);
+                  });
                   saveScoreAndWaitForNextPage(TWO);
                 },
               ),
             ),
             Expanded(
               child: RaisedButton(
-                child: Text(THREE,  style: TextStyle(color: THREE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+                child: Text(THREE,
+                    style: TextStyle(color: THREE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
                 color: THREE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
                 onPressed: () {
-                  setState(() { pressedButton = int.parse(THREE);});
+                  setState(() {
+                    pressedButton = int.parse(THREE);
+                  });
                   saveScoreAndWaitForNextPage(THREE);
                 },
               ),

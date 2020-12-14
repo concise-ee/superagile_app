@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
+import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
+
+const String QUESTION_1 = '${GameState.QUESTION}_1';
 
 class WaitingRoomPage extends StatefulWidget {
   final DocumentReference _gameRef;
@@ -16,8 +19,7 @@ class WaitingRoomPage extends StatefulWidget {
   WaitingRoomPage(this._gameRef, this._playerRef);
 
   @override
-  _WaitingRoomPageState createState() =>
-      _WaitingRoomPageState(this._gameRef, this._playerRef);
+  _WaitingRoomPageState createState() => _WaitingRoomPageState(this._gameRef, this._playerRef);
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
@@ -25,9 +27,9 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final DocumentReference gameRef;
   final DocumentReference playerRef;
   Timer timer;
-  bool isHost = false;
   String gamePin = '';
   StreamSubscription<DocumentSnapshot> gameStream;
+  bool isHost = false;
 
   _WaitingRoomPageState(this.gameRef, this.playerRef);
 
@@ -39,15 +41,25 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   @override
+  void dispose() {
+    gameStream.cancel();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       gameService.sendLastActive(playerRef);
     });
-    loadIsHost();
     loadGame();
+    loadIsHostAndSetupListener();
+  }
+
+  void loadIsHostAndSetupListener() async {
+    await loadIsHost();
     gameStream = gameService.getGameStream(gameRef).listen((event) async {
-      if (Game.fromSnapshot(event).gameState == 'question1') {
+      if (Game.fromSnapshot(event).gameState == QUESTION_1) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -58,24 +70,17 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     });
   }
 
-  @override
-  void dispose() {
-    gameStream.cancel();
-    super.dispose();
+  Future<void> loadIsHost() async {
+    bool host = await gameService.isPlayerHosting(playerRef);
+    setState(() {
+      isHost = host;
+    });
   }
-
 
   void loadGame() async {
     Game game = await gameService.findActiveGameByRef(gameRef);
     setState(() {
       gamePin = game.pin.toString();
-    });
-  }
-
-  void loadIsHost() async {
-    bool host = await gameService.isPlayerHosting(playerRef);
-    setState(() {
-      isHost = host;
     });
   }
 
@@ -95,14 +100,12 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
               ),
               Container(
                   child: Text(WAITING_ROOM,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
+                      textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
               BorderedText(gamePin),
               if (isHost) buildText(CODE_SHARE_CALL),
               buildText(LEARN_MORE),
               if (isHost) buildText(PLAY_BUTTON_CALL),
-              buildStartGameButton(), // todo: 'if (isHost)' removed until player and host are synced
+              if (isHost) buildStartGameButton(),
               buildPlayerCount(),
               Container(child: buildActivePlayersWidget()),
             ],
@@ -118,9 +121,8 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           var players = gameService.findActivePlayers(snapshot.data.docs);
           return FittedBox(
               fit: BoxFit.fitWidth,
-              child:  Text('There are ' + players.length.toString() + ' people in this game.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24)));
+              child: Text('There are ' + players.length.toString() + ' people in this game.',
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 24)));
         });
   }
 
@@ -148,28 +150,19 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildStartGameButton() {
     return PlayButton(onPressed: () {
-      gameService.changeGameState(gameRef, 'question1');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) {
-          return GameQuestionPage(1, playerRef, gameRef);
-        }),
-      );
+      gameService.changeGameState(gameRef, QUESTION_1);
     });
   }
 
   Widget buildText(String text) {
-    return Text(text,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.yellowAccent));
+    return Text(text, textAlign: TextAlign.center, style: TextStyle(color: Colors.yellowAccent));
   }
 
   Widget BorderedText(String text) {
     return Container(
       margin: const EdgeInsets.all(30.0),
       padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-          border: Border.all(width: 3.0, color: Color(0xff656565))),
+      decoration: BoxDecoration(border: Border.all(width: 3.0, color: Color(0xff656565))),
       child: Text(
         text,
         textAlign: TextAlign.center,

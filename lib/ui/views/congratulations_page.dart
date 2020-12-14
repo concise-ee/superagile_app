@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
+import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class CongratulationsPage extends StatefulWidget {
@@ -20,8 +24,51 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   final int questionNr;
   final DocumentReference playerRef;
   final DocumentReference gameRef;
+  final GameService gameService = GameService();
+  StreamSubscription<DocumentSnapshot> gameStream;
+  bool isHost = false;
 
   _CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
+
+  @override
+  void initState() {
+    super.initState();
+    loadIsHostAndSetupListener();
+  }
+
+  @override
+  void dispose() {
+    gameStream.cancel();
+    super.dispose();
+  }
+
+  void loadIsHostAndSetupListener() async {
+    await loadIsHost();
+    if (!isHost) {
+      listenForUpdateToGoToNextQuestion();
+    }
+  }
+
+  void listenForUpdateToGoToNextQuestion() async {
+    gameStream = gameService.getGameStream(gameRef).listen((data) async {
+      String gameState = await gameService.getGameState(gameRef);
+      if (!isHost && gameState.contains(GameState.QUESTION)) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return GameQuestionPage(parseSequenceNumberFromGameState(gameState), playerRef, gameRef);
+          }),
+        );
+      }
+    });
+  }
+
+  Future<void> loadIsHost() async {
+    bool host = await gameService.isPlayerHosting(playerRef);
+    setState(() {
+      isHost = host;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,24 +148,26 @@ class _CongratulationsPage extends State<CongratulationsPage> {
             )
           ],
         ),
-        Row(
-          children: [
-            Expanded(
-                child: Align(
-              alignment: Alignment.bottomLeft,
-              child: PlayButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return GameQuestionPage(questionNr + 1, playerRef, gameRef);
-                    }),
-                  );
-                },
-              ),
-            ))
-          ],
-        )
+        if (isHost)
+          Row(
+            children: [
+              Expanded(
+                  child: Align(
+                alignment: Alignment.bottomLeft,
+                child: PlayButton(
+                  onPressed: () {
+                    gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return GameQuestionPage(questionNr + 1, playerRef, gameRef);
+                      }),
+                    );
+                  },
+                ),
+              ))
+            ],
+          )
       ],
     );
   }

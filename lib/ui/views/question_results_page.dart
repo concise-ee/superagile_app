@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,6 +8,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/question_answers_section.dart';
 import 'package:superagile_app/ui/views/congratulations_page.dart';
+import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
@@ -27,9 +30,65 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final int questionNr;
   final DocumentReference playerRef;
   final DocumentReference gameRef;
+  StreamSubscription<DocumentSnapshot> gameStream;
+  bool isHost = false;
 
   _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef) {
     loadQuestionScores();
+  }
+
+  @override
+  void setState(state) {
+    if (mounted) {
+      super.setState(state);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadIsHostAndSetupListener();
+  }
+
+  @override
+  void dispose() {
+    gameStream.cancel();
+    super.dispose();
+  }
+
+  void loadIsHostAndSetupListener() async {
+    await loadIsHost();
+    listenForUpdateToSwitchPage();
+  }
+
+  void listenForUpdateToSwitchPage() async {
+    gameStream = gameService.getGameStream(gameRef).listen((data) async {
+      String gameState = await gameService.getGameState(gameRef);
+      int newQuestionNr = parseSequenceNumberFromGameState(gameState);
+      if (!isHost && gameState.contains(GameState.QUESTION)) {
+        await gameService.deleteOldScore(playerRef, questionNr);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return GameQuestionPage(newQuestionNr, playerRef, gameRef);
+          }),
+        );
+      } else if (!isHost && gameState.contains(GameState.CONGRATULATIONS)) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return CongratulationsPage(newQuestionNr, playerRef, gameRef);
+          }),
+        );
+      }
+    });
+  }
+
+  Future<void> loadIsHost() async {
+    bool host = await gameService.isPlayerHosting(playerRef);
+    setState(() {
+      isHost = host;
+    });
   }
 
   @override
@@ -56,7 +115,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
                 children: [
                   Text(areVotedScoresSame() ? '' : SAME_ANSWER, textAlign: TextAlign.center),
                   Spacer(flex: 1),
-                  buildBackOrNextButton()
+                  if (isHost) buildBackOrNextButton()
                 ],
               ),
             )
@@ -75,8 +134,9 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     if (areVotedScoresSame()) {
       return AgileButton(
         buttonTitle: CONTINUE,
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await gameService.changeGameState(gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
               return CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
@@ -89,7 +149,8 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       buttonTitle: CHANGE_ANSWER,
       onPressed: () async {
         await gameService.deleteOldScore(playerRef, questionNr);
-        Navigator.push(
+        await gameService.changeGameState(gameRef, '${GameState.QUESTION}_$questionNr');
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
             return GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);

@@ -72,7 +72,8 @@ class GameService {
     return player.role == Role.HOST;
   }
 
-  Future<DocumentReference> saveOrSetScore(DocumentReference playerRef, DocumentReference gameRef, int questionNr, int buttonValue) async {
+  Future<DocumentReference> saveOrSetScore(
+      DocumentReference playerRef, DocumentReference gameRef, int questionNr, int buttonValue) async {
     QuestionScores scores = await _gameRepository.findScoresForQuestion(gameRef, questionNr);
     Player player = await _gameRepository.findGamePlayerByRef(playerRef);
     var score = Score(questionNr, buttonValue, playerRef.id);
@@ -83,10 +84,10 @@ class GameService {
   }
 
   bool hasPlayerAnswered(QuestionScores scores, Player player) {
-    return scores.answered0.contains(player.name)
-      || scores.answered1.contains(player.name)
-      || scores.answered2.contains(player.name)
-      || scores.answered3.contains(player.name);
+    return scores.answered0.contains(player.name) ||
+        scores.answered1.contains(player.name) ||
+        scores.answered2.contains(player.name) ||
+        scores.answered3.contains(player.name);
   }
 
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
@@ -120,7 +121,12 @@ class GameService {
     _gameRepository.deleteScore(playerRef, questionNr);
   }
 
-  void changeGameState(DocumentReference gameRef, String gameState) {
-    _gameRepository.changeGameState(gameRef, gameState);
+  Future<void> changeGameState(DocumentReference gameRef, String gameState) async {
+    return await _gameRepository.changeGameState(gameRef, gameState);
+  }
+
+  Future<String> getGameState(DocumentReference gameRef) async {
+    Game game = await findActiveGameByRef(gameRef);
+    return await game.gameState;
   }
 }
