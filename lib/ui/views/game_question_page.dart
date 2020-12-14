@@ -85,7 +85,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     });
   }
 
-  Future listenEveryGamePlayerScoreChanges() async {
+  void listenEveryGamePlayerScoreChanges() async {
     List<Player> players = await gameService.findGamePlayers(gameRef);
     for (var player in players) {
       StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
