@@ -84,12 +84,13 @@ class GameRepository {
     QuerySnapshot playersSnap =
         await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
     var scores = await buildScores(playersSnap, questionNumber);
-    return new QuestionScores(scores[0], scores[1], scores[2], scores[3]);
+    return new QuestionScores(
+        scores[null], scores[0], scores[1], scores[2], scores[3]);
   }
 
   Future<Map<int, List<String>>> buildScores(
       QuerySnapshot querySnapshot, int questionNumber) async {
-    Map<int, List<String>> scores = {0: [], 1: [], 2: [], 3: []};
+    Map<int, List<String>> scores = {null: [], 0: [], 1: [], 2: [], 3: []};
     await Future.forEach(querySnapshot.docs, (playerSnap) async {
       QuerySnapshot scoreSnaps = await playerSnap.reference
           .collection(SCORES_SUB_COLLECTION)

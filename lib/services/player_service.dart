@@ -38,4 +38,8 @@ class PlayerService {
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
     return _playerRepository.getGamePlayersStream(gameRef);
   }
+
+  Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
+    return await _playerRepository.findGamePlayerByRef(playerRef);
+  }
 }

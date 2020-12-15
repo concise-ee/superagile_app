@@ -6,9 +6,12 @@ import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
+import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
+
+const String QUESTION_1 = '${GameState.QUESTION}_1';
 
 class WaitingRoomPage extends StatefulWidget {
   final DocumentReference _gameRef;
@@ -27,9 +30,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final DocumentReference gameRef;
   final DocumentReference playerRef;
   Timer timer;
-  bool isHost = false;
   String gamePin = '';
   StreamSubscription<DocumentSnapshot> gameStream;
+  bool isHost;
+  bool isLoading = true;
 
   _WaitingRoomPageState(this.gameRef, this.playerRef);
 
@@ -46,10 +50,27 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       _playerService.sendLastActive(playerRef);
     });
-    loadIsHost();
-    loadGame();
+    loadDataAndSetupListener();
+  }
+
+  void loadDataAndSetupListener() async {
+    await loadData();
+    listenForUpdateToGoToQuestionPage();
+  }
+
+  Future<void> loadData() async {
+    Game game = await gameService.findActiveGameByRef(gameRef);
+    bool host = await _playerService.isPlayerHosting(playerRef);
+    setState(() {
+      gamePin = game.pin.toString();
+      isHost = host;
+      isLoading = false;
+    });
+  }
+
+  void listenForUpdateToGoToQuestionPage() {
     gameStream = gameService.getGameStream(gameRef).listen((event) async {
-      if (Game.fromSnapshot(event).gameState == 'question1') {
+      if (Game.fromSnapshot(event).gameState == QUESTION_1) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -89,25 +110,28 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       },
       child: Scaffold(
           appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-          body: ListView(
-            children: [
-              Align(
-                alignment: Alignment.center,
-              ),
-              Container(
-                  child: Text(WAITING_ROOM,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
-              BorderedText(gamePin),
-              if (isHost) buildText(CODE_SHARE_CALL),
-              buildText(LEARN_MORE),
-              if (isHost) buildText(PLAY_BUTTON_CALL),
-              buildStartGameButton(), // todo: 'if (isHost)' removed until player and host are synced
-              buildPlayerCount(),
-              Container(child: buildActivePlayersWidget()),
-            ],
-          )),
+          body: isLoading ? CircularProgressIndicator() : buildBody()),
+    );
+  }
+
+  ListView buildBody() {
+    return ListView(
+      children: [
+        Align(
+          alignment: Alignment.center,
+        ),
+        Container(
+            child: Text(WAITING_ROOM,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
+        BorderedText(gamePin),
+        if (isHost) buildText(CODE_SHARE_CALL),
+        buildText(LEARN_MORE),
+        if (isHost) buildText(PLAY_BUTTON_CALL),
+        if (isHost) buildStartGameButton(),
+        buildPlayerCount(),
+        Container(child: buildActivePlayersWidget()),
+      ],
     );
   }
 
@@ -152,13 +176,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildStartGameButton() {
     return PlayButton(onPressed: () {
-      gameService.changeGameState(gameRef, 'question1');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) {
-          return GameQuestionPage(1, playerRef, gameRef);
-        }),
-      );
+      gameService.changeGameState(gameRef, QUESTION_1);
     });
   }
 

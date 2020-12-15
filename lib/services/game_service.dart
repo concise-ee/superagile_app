@@ -47,11 +47,12 @@ class GameService {
   }
 
   Future<DocumentReference> saveOrSetScore(DocumentReference playerRef,
-      DocumentReference gameRef, int questionNr, int buttonValue) async {
+      DocumentReference gameRef, int questionNr, String buttonValue) async {
     QuestionScores scores =
         await _gameRepository.findScoresForQuestion(gameRef, questionNr);
     Player player = await _playerRepository.findGamePlayerByRef(playerRef);
-    var score = Score(questionNr, buttonValue, playerRef.id);
+    var score = Score(questionNr,
+        buttonValue != null ? int.parse(buttonValue) : null, playerRef.id);
     if (hasPlayerAnswered(scores, player)) {
       return _gameRepository.setScore(playerRef, score);
     }
@@ -83,7 +84,8 @@ class GameService {
   }
 
   int getAnsweredPlayersCount(QuestionScores questionScores) {
-    return questionScores.answered0.length +
+    return questionScores.answeredNull.length +
+        questionScores.answered0.length +
         questionScores.answered1.length +
         questionScores.answered2.length +
         questionScores.answered3.length;
@@ -93,7 +95,13 @@ class GameService {
     _gameRepository.deleteScore(playerRef, questionNr);
   }
 
-  void changeGameState(DocumentReference gameRef, String gameState) {
-    _gameRepository.changeGameState(gameRef, gameState);
+  Future<void> changeGameState(
+      DocumentReference gameRef, String gameState) async {
+    return await _gameRepository.changeGameState(gameRef, gameState);
+  }
+
+  Future<String> getGameState(DocumentReference gameRef) async {
+    Game game = await findActiveGameByRef(gameRef);
+    return await game.gameState;
   }
 }
