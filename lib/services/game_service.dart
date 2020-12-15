@@ -72,11 +72,15 @@ class GameService {
     return player.role == Role.HOST;
   }
 
+  Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
+    return await _gameRepository.findGamePlayerByRef(playerRef);
+  }
+
   Future<DocumentReference> saveOrSetScore(
-      DocumentReference playerRef, DocumentReference gameRef, int questionNr, int buttonValue) async {
+      DocumentReference playerRef, DocumentReference gameRef, int questionNr, String buttonValue) async {
     QuestionScores scores = await _gameRepository.findScoresForQuestion(gameRef, questionNr);
     Player player = await _gameRepository.findGamePlayerByRef(playerRef);
-    var score = Score(questionNr, buttonValue, playerRef.id);
+    var score = Score(questionNr, buttonValue != null ? int.parse(buttonValue) : null, playerRef.id);
     if (hasPlayerAnswered(scores, player)) {
       return _gameRepository.setScore(playerRef, score);
     }
@@ -111,7 +115,8 @@ class GameService {
   }
 
   int getAnsweredPlayersCount(QuestionScores questionScores) {
-    return questionScores.answered0.length +
+    return questionScores.answeredNull.length +
+        questionScores.answered0.length +
         questionScores.answered1.length +
         questionScores.answered2.length +
         questionScores.answered3.length;

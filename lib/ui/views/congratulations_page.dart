@@ -26,14 +26,15 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   final DocumentReference gameRef;
   final GameService gameService = GameService();
   StreamSubscription<DocumentSnapshot> gameStream;
-  bool isHost = false;
+  bool isHost;
+  bool isLoading = true;
 
   _CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
 
   @override
   void initState() {
     super.initState();
-    loadIsHostAndSetupListener();
+    loadDataAndSetupListener();
   }
 
   @override
@@ -42,8 +43,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     super.dispose();
   }
 
-  void loadIsHostAndSetupListener() async {
-    await loadIsHost();
+  void loadDataAndSetupListener() async {
+    await loadData();
     if (!isHost) {
       listenForUpdateToGoToNextQuestion();
     }
@@ -63,10 +64,11 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     });
   }
 
-  Future<void> loadIsHost() async {
+  Future<void> loadData() async {
     bool host = await gameService.isPlayerHosting(playerRef);
     setState(() {
       isHost = host;
+      isLoading = false;
     });
   }
 
@@ -74,11 +76,11 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-      body: _buildBody(context),
+      body: isLoading ? CircularProgressIndicator() : buildBody(context),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Column(
       children: [
         Expanded(

@@ -77,8 +77,8 @@ class GameRepository {
   }
 
   Future<DocumentReference> setScore(DocumentReference playerRef, Score score) async {
-    QuerySnapshot scoreToUpdate = await playerRef.collection(SCORES_SUB_COLLECTION)
-        .where(QUESTION, isEqualTo: score.question).get();
+    QuerySnapshot scoreToUpdate =
+        await playerRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: score.question).get();
     scoreToUpdate.docs.single.reference.set(score.toJson());
     return scoreToUpdate.docs.single.reference;
   }
@@ -91,14 +91,14 @@ class GameRepository {
   Future<QuestionScores> findScoresForQuestion(DocumentReference gameRef, int questionNumber) async {
     QuerySnapshot playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
     var scores = await buildScores(playersSnap, questionNumber);
-    return new QuestionScores(scores[0], scores[1], scores[2], scores[3]);
+    return new QuestionScores(scores[null], scores[0], scores[1], scores[2], scores[3]);
   }
 
   Future<Map<int, List<String>>> buildScores(QuerySnapshot querySnapshot, int questionNumber) async {
-    Map<int, List<String>> scores = {0: [], 1: [], 2: [], 3: []};
+    Map<int, List<String>> scores = {null: [], 0: [], 1: [], 2: [], 3: []};
     await Future.forEach(querySnapshot.docs, (playerSnap) async {
-      QuerySnapshot scoreSnaps = await playerSnap.reference.collection(SCORES_SUB_COLLECTION).where(
-          QUESTION, isEqualTo: questionNumber).get();
+      QuerySnapshot scoreSnaps =
+          await playerSnap.reference.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: questionNumber).get();
       if (!scoreSnaps.docs.isEmpty) {
         var score = Score.fromSnapshot(scoreSnaps.docs.single);
         var player = Player.fromSnapshot(playerSnap);
@@ -109,7 +109,8 @@ class GameRepository {
   }
 
   void deleteScore(DocumentReference playerRef, int questionNr) async {
-    QuerySnapshot score = await playerRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: questionNr).get();
+    QuerySnapshot score =
+        await playerRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: questionNr).get();
     score.docs.single.reference.delete();
   }
 

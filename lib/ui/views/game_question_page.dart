@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
@@ -24,6 +25,7 @@ class GameQuestionPage extends StatefulWidget {
 }
 
 class _GameQuestionPage extends State<GameQuestionPage> {
+  static const int HOST_SKIP_VALUE = -1;
   final QuestionService questionService = QuestionService();
   final GameService gameService = GameService();
   final int questionNr;
@@ -33,7 +35,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   int pressedButton;
   List<StreamSubscription<QuerySnapshot>> playerQuestionStreams = [];
   StreamSubscription<DocumentSnapshot> gameStream;
-  bool isHost = false;
+  Player currentPlayer;
+  bool isLoading = true;
 
   _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
 
@@ -47,7 +50,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   void initState() {
     super.initState();
-    loadIsHostAndSetupListeners();
+    loadDataAndSetupListeners();
   }
 
   @override
@@ -59,15 +62,18 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     super.dispose();
   }
 
-  void loadIsHostAndSetupListeners() async {
-    await loadIsHost();
+  void loadDataAndSetupListeners() async {
+    await loadData();
     listenForUpdateToGoToQuestionResultsPage();
   }
 
-  Future<void> loadIsHost() async {
-    bool host = await gameService.isPlayerHosting(playerRef);
+  Future<void> loadData() async {
+    Player player = await gameService.findGamePlayerByRef(playerRef);
+    final Question questionByNumber = await questionService.findQuestionByNumber(questionNr);
     setState(() {
-      isHost = host;
+      currentPlayer = player;
+      question = questionByNumber;
+      isLoading = false;
     });
   }
 
@@ -79,7 +85,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   void listenGameStateChanges() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
-      if (!isHost && gameState.contains(GameState.QUESTION_RESULTS)) {
+      if (currentPlayer.role != Role.HOST && gameState.contains(GameState.QUESTION_RESULTS)) {
         navigateToQuestionResultsPage();
       }
     });
@@ -90,13 +96,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     for (var player in players) {
       StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
         QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
-        int answeredPlayersCount = gameService.getAnsweredPlayersCount(questionScores);
+        int answeredPlayerCount = gameService.getAnsweredPlayersCount(questionScores);
 
-        if (players.length == answeredPlayersCount) {
-          if (isHost) {
-            await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
-            navigateToQuestionResultsPage();
-          }
+        if (currentPlayer.role == Role.HOST && players.length == answeredPlayerCount) {
+          await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
+          navigateToQuestionResultsPage();
         }
       });
       playerQuestionStreams.add(stream);
@@ -114,25 +118,17 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    loadQuestionContentByNumber();
     return Scaffold(
       appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-      body: _buildBody(context),
+      body: isLoading ? CircularProgressIndicator() : buildBody(context),
     );
   }
 
-  void loadQuestionContentByNumber() async {
-    final Question questionByNumber = await questionService.findQuestionByNumber(questionNr);
-    setState(() {
-      question = questionByNumber;
-    });
-  }
-
   void saveScoreAndWaitForNextPage(String buttonValue) async {
-    await gameService.saveOrSetScore(playerRef, gameRef, questionNr, int.parse(buttonValue));
+    await gameService.saveOrSetScore(playerRef, gameRef, questionNr, buttonValue);
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Column(
       children: [
         Expanded(
@@ -161,7 +157,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             child: Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  question != null ? question.question : '',
+                                  question.question,
                                   style: TextStyle(color: Colors.white, fontSize: 18, height: 1.2, letterSpacing: 1.5),
                                 )),
                           ),
@@ -176,7 +172,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question != null ? question.zeroMeaning : '',
+                                question.zeroMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -188,7 +184,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question != null ? question.oneMeaning : '',
+                                question.oneMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -200,7 +196,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question != null ? question.twoMeaning : '',
+                                question.twoMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -212,7 +208,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question != null ? question.threeMeaning : '',
+                                question.threeMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -229,7 +225,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                                 bottom: 25,
                               ),
                               child: Text(
-                                question != null ? question.shortDesc : '',
+                                question.shortDesc,
                                 style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.5),
                                 textAlign: TextAlign.center,
                               ))),
@@ -242,72 +238,90 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                         child: Padding(
                             padding: EdgeInsets.all(5),
                             child: Text(
-                              question != null ? question.longDesc : '',
+                              question.longDesc,
                               style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                             )),
                       ),
                     ),
                   ],
                 ))),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: RaisedButton(
-                child: Text(
-                  ZERO,
-                  style: TextStyle(color: ZERO == pressedButton.toString() ? Colors.black : Colors.yellowAccent),
-                ),
-                color: ZERO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-                focusColor: Color.fromARGB(1, 0, 0, 255),
-                onPressed: () {
-                  setState(() {
-                    pressedButton = int.parse(ZERO);
-                  });
-                  saveScoreAndWaitForNextPage(ZERO);
-                },
-              ),
+        if (currentPlayer.role != Role.HOST || (currentPlayer.role == Role.HOST && currentPlayer.isPlayingAlong))
+          renderScoreButtons()
+        else
+          renderContinueButton(),
+      ],
+    );
+  }
+
+  Row renderScoreButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: RaisedButton(
+            child: Text(
+              ZERO,
+              style: TextStyle(color: ZERO == pressedButton.toString() ? Colors.black : Colors.yellowAccent),
             ),
-            Expanded(
-              child: RaisedButton(
-                child: Text(ONE,
-                    style: TextStyle(color: ONE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
-                color: ONE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-                onPressed: () {
-                  setState(() {
-                    pressedButton = int.parse(ONE);
-                  });
-                  saveScoreAndWaitForNextPage(ONE);
-                },
-              ),
+            color: ZERO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
+            onPressed: () {
+              setState(() => pressedButton = int.parse(ZERO));
+              saveScoreAndWaitForNextPage(ZERO);
+            },
+          ),
+        ),
+        Expanded(
+          child: RaisedButton(
+            child: Text(ONE,
+                style: TextStyle(color: ONE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+            color: ONE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
+            onPressed: () {
+              setState(() => pressedButton = int.parse(ONE));
+              saveScoreAndWaitForNextPage(ONE);
+            },
+          ),
+        ),
+        Expanded(
+          child: RaisedButton(
+            child: Text(TWO,
+                style: TextStyle(color: TWO == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+            color: TWO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
+            onPressed: () {
+              setState(() => pressedButton = int.parse(TWO));
+              saveScoreAndWaitForNextPage(TWO);
+            },
+          ),
+        ),
+        Expanded(
+          child: RaisedButton(
+            child: Text(THREE,
+                style: TextStyle(color: THREE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+            color: THREE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
+            onPressed: () {
+              setState(() => pressedButton = int.parse(THREE));
+              saveScoreAndWaitForNextPage(THREE);
+            },
+          ),
+        )
+      ],
+    );
+  }
+
+  Row renderContinueButton() {
+    return Row(
+      children: [
+        Expanded(
+          child: RaisedButton(
+            child: Text(
+              CONTINUE,
+              style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? Colors.black : Colors.yellowAccent),
             ),
-            Expanded(
-              child: RaisedButton(
-                child: Text(TWO,
-                    style: TextStyle(color: TWO == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
-                color: TWO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-                onPressed: () {
-                  setState(() {
-                    pressedButton = int.parse(TWO);
-                  });
-                  saveScoreAndWaitForNextPage(TWO);
-                },
-              ),
-            ),
-            Expanded(
-              child: RaisedButton(
-                child: Text(THREE,
-                    style: TextStyle(color: THREE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
-                color: THREE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-                onPressed: () {
-                  setState(() {
-                    pressedButton = int.parse(THREE);
-                  });
-                  saveScoreAndWaitForNextPage(THREE);
-                },
-              ),
-            )
-          ],
+            color: pressedButton == HOST_SKIP_VALUE ? Colors.yellowAccent : Colors.black,
+            onPressed: () {
+              setState(() => pressedButton = HOST_SKIP_VALUE);
+              saveScoreAndWaitForNextPage(null);
+            },
+          ),
         )
       ],
     );

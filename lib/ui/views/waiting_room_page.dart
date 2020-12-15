@@ -29,7 +29,8 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Timer timer;
   String gamePin = '';
   StreamSubscription<DocumentSnapshot> gameStream;
-  bool isHost = false;
+  bool isHost;
+  bool isLoading = true;
 
   _WaitingRoomPageState(this.gameRef, this.playerRef);
 
@@ -52,12 +53,25 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       gameService.sendLastActive(playerRef);
     });
-    loadGame();
-    loadIsHostAndSetupListener();
+    loadDataAndSetupListener();
   }
 
-  void loadIsHostAndSetupListener() async {
-    await loadIsHost();
+  void loadDataAndSetupListener() async {
+    await loadData();
+    listenForUpdateToGoToQuestionPage();
+  }
+
+  Future<void> loadData() async {
+    Game game = await gameService.findActiveGameByRef(gameRef);
+    bool host = await gameService.isPlayerHosting(playerRef);
+    setState(() {
+      gamePin = game.pin.toString();
+      isHost = host;
+      isLoading = false;
+    });
+  }
+
+  void listenForUpdateToGoToQuestionPage() {
     gameStream = gameService.getGameStream(gameRef).listen((event) async {
       if (Game.fromSnapshot(event).gameState == QUESTION_1) {
         Navigator.pushReplacement(
@@ -70,20 +84,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     });
   }
 
-  Future<void> loadIsHost() async {
-    bool host = await gameService.isPlayerHosting(playerRef);
-    setState(() {
-      isHost = host;
-    });
-  }
-
-  void loadGame() async {
-    Game game = await gameService.findActiveGameByRef(gameRef);
-    setState(() {
-      gamePin = game.pin.toString();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -92,24 +92,27 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         return true;
       },
       child: Scaffold(
-          appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-          body: ListView(
-            children: [
-              Align(
-                alignment: Alignment.center,
-              ),
-              Container(
-                  child: Text(WAITING_ROOM,
-                      textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
-              BorderedText(gamePin),
-              if (isHost) buildText(CODE_SHARE_CALL),
-              buildText(LEARN_MORE),
-              if (isHost) buildText(PLAY_BUTTON_CALL),
-              if (isHost) buildStartGameButton(),
-              buildPlayerCount(),
-              Container(child: buildActivePlayersWidget()),
-            ],
-          )),
+          appBar: AppBar(title: Text(HASH_SUPERAGILE)), body: isLoading ? CircularProgressIndicator() : buildBody()),
+    );
+  }
+
+  ListView buildBody() {
+    return ListView(
+      children: [
+        Align(
+          alignment: Alignment.center,
+        ),
+        Container(
+            child: Text(WAITING_ROOM,
+                textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
+        BorderedText(gamePin),
+        if (isHost) buildText(CODE_SHARE_CALL),
+        buildText(LEARN_MORE),
+        if (isHost) buildText(PLAY_BUTTON_CALL),
+        if (isHost) buildStartGameButton(),
+        buildPlayerCount(),
+        Container(child: buildActivePlayersWidget()),
+      ],
     );
   }
 

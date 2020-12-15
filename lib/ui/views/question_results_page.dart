@@ -26,16 +26,15 @@ class QuestionResultsPage extends StatefulWidget {
 
 class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final GameService gameService = GameService();
-  QuestionScores questionScores = new QuestionScores([], [], [], []);
+  QuestionScores questionScores = new QuestionScores([], [], [], [], []);
   final int questionNr;
   final DocumentReference playerRef;
   final DocumentReference gameRef;
   StreamSubscription<DocumentSnapshot> gameStream;
-  bool isHost = false;
+  bool isHost;
+  bool isLoading = true;
 
-  _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef) {
-    loadQuestionScores();
-  }
+  _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef);
 
   @override
   void setState(state) {
@@ -47,7 +46,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   @override
   void initState() {
     super.initState();
-    loadIsHostAndSetupListener();
+    loadDataAndSetupListener();
   }
 
   @override
@@ -56,8 +55,8 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     super.dispose();
   }
 
-  void loadIsHostAndSetupListener() async {
-    await loadIsHost();
+  void loadDataAndSetupListener() async {
+    await loadData();
     listenForUpdateToSwitchPage();
   }
 
@@ -84,10 +83,13 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     });
   }
 
-  Future<void> loadIsHost() async {
+  Future<void> loadData() async {
     bool host = await gameService.isPlayerHosting(playerRef);
+    var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
     setState(() {
       isHost = host;
+      questionScores = scores;
+      isLoading = false;
     });
   }
 
@@ -95,39 +97,36 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-        body: Column(
-          children: [
-            Expanded(
-                child: SingleChildScrollView(
-                    child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                QuestionAnswersSection(answerNumber: 3, playerNames: questionScores.answered3),
-                QuestionAnswersSection(answerNumber: 2, playerNames: questionScores.answered2),
-                QuestionAnswersSection(answerNumber: 1, playerNames: questionScores.answered1),
-                QuestionAnswersSection(answerNumber: 0, playerNames: questionScores.answered0),
-              ],
-            ))),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-              height: 160.0,
-              child: Column(
-                children: [
-                  Text(areVotedScoresSame() ? '' : SAME_ANSWER, textAlign: TextAlign.center),
-                  Spacer(flex: 1),
-                  if (isHost) buildBackOrNextButton()
-                ],
-              ),
-            )
-          ],
-        ));
+        body: isLoading ? CircularProgressIndicator() : buildBody(context));
   }
 
-  void loadQuestionScores() async {
-    var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
-    setState(() {
-      questionScores = scores;
-    });
+  Widget buildBody(context) {
+    return Column(
+      children: [
+        Expanded(
+            child: SingleChildScrollView(
+                child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            QuestionAnswersSection(answerNumber: 3, playerNames: questionScores.answered3),
+            QuestionAnswersSection(answerNumber: 2, playerNames: questionScores.answered2),
+            QuestionAnswersSection(answerNumber: 1, playerNames: questionScores.answered1),
+            QuestionAnswersSection(answerNumber: 0, playerNames: questionScores.answered0),
+          ],
+        ))),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+          height: 160.0,
+          child: Column(
+            children: [
+              Text(areVotedScoresSame() ? '' : SAME_ANSWER, textAlign: TextAlign.center),
+              Spacer(flex: 1),
+              if (isHost) buildBackOrNextButton()
+            ],
+          ),
+        )
+      ],
+    );
   }
 
   Widget buildBackOrNextButton() {
