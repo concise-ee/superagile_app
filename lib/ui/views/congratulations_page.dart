@@ -156,11 +156,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 alignment: Alignment.center,
                 child: Padding(
                     padding: EdgeInsets.all(12.0),
-                    child: Text(GO_TO_NEXT_QUESTION,
-                        style: TextStyle(
-                            color: Colors.yellowAccent,
-                            fontSize: 14,
-                            letterSpacing: 1.5),
+                    child: Text(isHost ? GO_TO_NEXT_QUESTION : WAIT_FOR_NEXT_QUESTION,
+                        style: TextStyle(color: Colors.yellowAccent, fontSize: 14, letterSpacing: 1.5),
                         textAlign: TextAlign.center)),
               ),
             )
