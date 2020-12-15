@@ -13,7 +13,8 @@ const PLAYERS_SUB_COLLECTION = 'players';
 const SCORES_SUB_COLLECTION = 'scores';
 
 class GameRepository {
-  final CollectionReference _repository = FirebaseFirestore.instance.collection(GAMES_COLLECTION);
+  final CollectionReference _repository =
+      FirebaseFirestore.instance.collection(GAMES_COLLECTION);
 
   Stream<QuerySnapshot> getGamesStream() {
     return _repository.snapshots();
@@ -27,21 +28,23 @@ class GameRepository {
     return playerRef.collection(SCORES_SUB_COLLECTION).snapshots();
   }
 
-  Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
-    return gameRef.collection(PLAYERS_SUB_COLLECTION).snapshots();
-  }
-
   Future<DocumentReference> addGame(Game game) {
     return _repository.add(game.toJson());
   }
 
   Future<Game> findActiveGameByPin(int pin) async {
-    var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
+    var snapshot = await _repository
+        .where(PIN, isEqualTo: pin)
+        .where(IS_ACTIVE, isEqualTo: true)
+        .get();
     return Game.fromSnapshot(snapshot.docs.single);
   }
 
   Future<DocumentReference> findActiveGameRefByPin(int pin) async {
-    var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
+    var snapshot = await _repository
+        .where(PIN, isEqualTo: pin)
+        .where(IS_ACTIVE, isEqualTo: true)
+        .get();
     return snapshot.docs.single.reference;
   }
 
@@ -51,54 +54,47 @@ class GameRepository {
   }
 
   Future<Game> findActiveGameByPinNullable(int pin) async {
-    var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
+    var snapshot = await _repository
+        .where(PIN, isEqualTo: pin)
+        .where(IS_ACTIVE, isEqualTo: true)
+        .get();
     if (snapshot.docs.isEmpty) {
       return null;
     }
     return Game.fromSnapshot(snapshot.docs.single);
   }
 
-  Future<List<Player>> findGamePlayers(DocumentReference gameRef) async {
-    var playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
-    return playersSnap.docs.map((snap) => Player.fromSnapshot(snap)).toList();
-  }
-
-  Future<DocumentReference> addGamePlayer(DocumentReference gameRef, Player player) {
-    var players = gameRef.collection(PLAYERS_SUB_COLLECTION);
-    return players.add(player.toJson());
-  }
-
-  void updateGamePlayer(Player player) async {
-    player.reference.update(player.toJson());
-  }
-
-  Future<DocumentReference> saveScore(DocumentReference playerRef, Score score) {
+  Future<DocumentReference> saveScore(
+      DocumentReference playerRef, Score score) {
     return playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
   }
 
-  Future<DocumentReference> setScore(DocumentReference playerRef, Score score) async {
-    QuerySnapshot scoreToUpdate = await playerRef.collection(SCORES_SUB_COLLECTION)
-        .where(QUESTION, isEqualTo: score.question).get();
+  Future<DocumentReference> setScore(
+      DocumentReference playerRef, Score score) async {
+    QuerySnapshot scoreToUpdate = await playerRef
+        .collection(SCORES_SUB_COLLECTION)
+        .where(QUESTION, isEqualTo: score.question)
+        .get();
     scoreToUpdate.docs.single.reference.set(score.toJson());
     return scoreToUpdate.docs.single.reference;
   }
 
-  Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
-    var playerSnap = await playerRef.get();
-    return Player.fromSnapshot(playerSnap);
-  }
-
-  Future<QuestionScores> findScoresForQuestion(DocumentReference gameRef, int questionNumber) async {
-    QuerySnapshot playersSnap = await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
+  Future<QuestionScores> findScoresForQuestion(
+      DocumentReference gameRef, int questionNumber) async {
+    QuerySnapshot playersSnap =
+        await gameRef.collection(PLAYERS_SUB_COLLECTION).get();
     var scores = await buildScores(playersSnap, questionNumber);
     return new QuestionScores(scores[0], scores[1], scores[2], scores[3]);
   }
 
-  Future<Map<int, List<String>>> buildScores(QuerySnapshot querySnapshot, int questionNumber) async {
+  Future<Map<int, List<String>>> buildScores(
+      QuerySnapshot querySnapshot, int questionNumber) async {
     Map<int, List<String>> scores = {0: [], 1: [], 2: [], 3: []};
     await Future.forEach(querySnapshot.docs, (playerSnap) async {
-      QuerySnapshot scoreSnaps = await playerSnap.reference.collection(SCORES_SUB_COLLECTION).where(
-          QUESTION, isEqualTo: questionNumber).get();
+      QuerySnapshot scoreSnaps = await playerSnap.reference
+          .collection(SCORES_SUB_COLLECTION)
+          .where(QUESTION, isEqualTo: questionNumber)
+          .get();
       if (!scoreSnaps.docs.isEmpty) {
         var score = Score.fromSnapshot(scoreSnaps.docs.single);
         var player = Player.fromSnapshot(playerSnap);
@@ -109,7 +105,10 @@ class GameRepository {
   }
 
   void deleteScore(DocumentReference playerRef, int questionNr) async {
-    QuerySnapshot score = await playerRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: questionNr).get();
+    QuerySnapshot score = await playerRef
+        .collection(SCORES_SUB_COLLECTION)
+        .where(QUESTION, isEqualTo: questionNr)
+        .get();
     score.docs.single.reference.delete();
   }
 

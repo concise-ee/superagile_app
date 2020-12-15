@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/services/game_service.dart';
+import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/utils/labels.dart';
 
@@ -22,6 +23,7 @@ class WaitingRoomPage extends StatefulWidget {
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final GameService gameService = GameService();
+  final PlayerService _playerService = PlayerService();
   final DocumentReference gameRef;
   final DocumentReference playerRef;
   Timer timer;
@@ -42,7 +44,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   void initState() {
     super.initState();
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-      gameService.sendLastActive(playerRef);
+      _playerService.sendLastActive(playerRef);
     });
     loadIsHost();
     loadGame();
@@ -64,7 +66,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     super.dispose();
   }
 
-
   void loadGame() async {
     Game game = await gameService.findActiveGameByRef(gameRef);
     setState(() {
@@ -73,7 +74,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   void loadIsHost() async {
-    bool host = await gameService.isPlayerHosting(playerRef);
+    bool host = await _playerService.isPlayerHosting(playerRef);
     setState(() {
       isHost = host;
     });
@@ -112,24 +113,27 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildPlayerCount() {
     return StreamBuilder<QuerySnapshot>(
-        stream: gameService.getGamePlayersStream(gameRef),
+        stream: _playerService.getGamePlayersStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var players = gameService.findActivePlayers(snapshot.data.docs);
+          var players = _playerService.findActivePlayers(snapshot.data.docs);
           return FittedBox(
               fit: BoxFit.fitWidth,
-              child:  Text('There are ' + players.length.toString() + ' people in this game.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24)));
+              child: Text(
+                  'There are ' +
+                      players.length.toString() +
+                      ' people in this game.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 24)));
         });
   }
 
   Widget buildActivePlayersWidget() {
     return StreamBuilder<QuerySnapshot>(
-        stream: gameService.getGamePlayersStream(gameRef),
+        stream: _playerService.getGamePlayersStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var players = gameService.findActivePlayers(snapshot.data.docs);
+          var players = _playerService.findActivePlayers(snapshot.data.docs);
           return ListView.builder(
             shrinkWrap: true,
             itemCount: players.length,

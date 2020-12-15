@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
+import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -16,6 +17,7 @@ class HostStartPage extends StatefulWidget {
 
 class _HostStartPageState extends State<HostStartPage> {
   final GameService _gameService = GameService();
+  final PlayerService _playerService = PlayerService();
   final _nameController = TextEditingController();
 
   @override
@@ -46,7 +48,10 @@ class _HostStartPageState extends State<HostStartPage> {
                         alignment: Alignment.center,
                         child: Text(
                           HOST_OR_JOIN,
-                          style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              letterSpacing: 1.5),
                           textAlign: TextAlign.center,
                         ))),
                 Flexible(
@@ -56,7 +61,10 @@ class _HostStartPageState extends State<HostStartPage> {
                         alignment: Alignment.center,
                         child: Text(
                           DECISION_CANT_BE_CHANGED,
-                          style: TextStyle(color: Colors.white, fontSize: 12, letterSpacing: 1.5),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              letterSpacing: 1.5),
                           textAlign: TextAlign.center,
                         ))),
                 Spacer(
@@ -70,9 +78,12 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var pin = await _gameService.generateAvailable4DigitPin();
-                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-                      var playerRef = await _gameService.addGamePlayer(gameRef,
-                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, true));
+                      var gameRef = await _gameService
+                          .addGame(Game(pin, loggedInUserUid, true, null));
+                      var playerRef = await _playerService.addGamePlayer(
+                          gameRef,
+                          Player(_nameController.text, loggedInUserUid,
+                              DateTime.now().toString(), Role.HOST, true));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
@@ -93,9 +104,12 @@ class _HostStartPageState extends State<HostStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var pin = await _gameService.generateAvailable4DigitPin();
-                      var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-                      var playerRef = await _gameService.addGamePlayer(gameRef,
-                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, false));
+                      var gameRef = await _gameService
+                          .addGame(Game(pin, loggedInUserUid, true, null));
+                      var playerRef = await _playerService.addGamePlayer(
+                          gameRef,
+                          Player(_nameController.text, loggedInUserUid,
+                              DateTime.now().toString(), Role.HOST, false));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
