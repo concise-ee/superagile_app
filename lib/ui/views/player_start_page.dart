@@ -38,13 +38,10 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                 RaisedButton(
                     onPressed: () async {
                       FocusScope.of(context).unfocus();
-                      var gameRef = await _gameService.findActiveGameRefByPin(
-                          int.parse(_pinController.text));
                       var loggedInUserUid = await signInAnonymously();
-                      var playerRef = await _playerService.addGamePlayer(
-                          gameRef,
-                          Player(_nameController.text, loggedInUserUid,
-                              DateTime.now().toString(), Role.PLAYER, true));
+                      var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+                      var playerRef = await _playerService.addGamePlayer(gameRef,
+                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
