@@ -12,7 +12,7 @@ class PlayButton extends StatelessWidget {
     return FittedBox(
         fit: BoxFit.fitWidth,
         child: IconButton(
-        icon: Icon(Icons.play_arrow),
+          icon: Icon(Icons.play_arrow),
           padding: EdgeInsets.symmetric(horizontal: 200.0),
           color: Colors.yellowAccent,
           iconSize: 300.0,

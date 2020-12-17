@@ -10,8 +10,7 @@ class PlayerService {
     return snaps
         .map((playerSnap) => Player.fromSnapshot(playerSnap))
         .where((player) => player.isPlayingAlong == true)
-        .where((player) => DateTime.parse(player.lastActive)
-            .isAfter(DateTime.now().subtract(Duration(seconds: 11))))
+        .where((player) => DateTime.parse(player.lastActive).isAfter(DateTime.now().subtract(Duration(seconds: 11))))
         .toList();
   }
 
@@ -21,8 +20,7 @@ class PlayerService {
     _playerRepository.updateGamePlayer(player);
   }
 
-  Future<DocumentReference> addGamePlayer(
-      DocumentReference reference, Player player) {
+  Future<DocumentReference> addGamePlayer(DocumentReference reference, Player player) {
     return _playerRepository.addGamePlayer(reference, player);
   }
 

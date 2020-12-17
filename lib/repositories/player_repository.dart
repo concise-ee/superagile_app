@@ -13,8 +13,7 @@ class PlayerRepository {
     return playersSnap.docs.map((snap) => Player.fromSnapshot(snap)).toList();
   }
 
-  Future<DocumentReference> addGamePlayer(
-      DocumentReference gameRef, Player player) {
+  Future<DocumentReference> addGamePlayer(DocumentReference gameRef, Player player) {
     var players = gameRef.collection(PLAYERS_SUB_COLLECTION);
     return players.add(player.toJson());
   }
