@@ -19,14 +19,10 @@ class QuestionResultsPage extends StatefulWidget {
   final DocumentReference gameRef;
   final DocumentReference playerRef;
 
-  QuestionResultsPage(
-      {@required this.questionNr,
-      @required this.playerRef,
-      @required this.gameRef});
+  QuestionResultsPage({@required this.questionNr, @required this.playerRef, @required this.gameRef});
 
   @override
-  _QuestionResultsPageState createState() =>
-      _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef);
+  _QuestionResultsPageState createState() => _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef);
 }
 
 class _QuestionResultsPageState extends State<QuestionResultsPage> {
@@ -91,8 +87,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   Future<void> loadData() async {
     bool host = await playerService.isPlayerHosting(playerRef);
-    var scores =
-        await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
+    var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
     setState(() {
       isHost = host;
       questionScores = scores;
@@ -104,7 +99,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-        body: isLoading ? CircularProgressIndicator() : buildBody(context));
+        body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context));
   }
 
   Widget buildBody(context) {
@@ -115,14 +110,10 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
                 child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            QuestionAnswersSection(
-                answerNumber: 3, playerNames: questionScores.answered3),
-            QuestionAnswersSection(
-                answerNumber: 2, playerNames: questionScores.answered2),
-            QuestionAnswersSection(
-                answerNumber: 1, playerNames: questionScores.answered1),
-            QuestionAnswersSection(
-                answerNumber: 0, playerNames: questionScores.answered0),
+            QuestionAnswersSection(answerNumber: 3, playerNames: questionScores.answered3),
+            QuestionAnswersSection(answerNumber: 2, playerNames: questionScores.answered2),
+            QuestionAnswersSection(answerNumber: 1, playerNames: questionScores.answered1),
+            QuestionAnswersSection(answerNumber: 0, playerNames: questionScores.answered0),
           ],
         ))),
         Container(
@@ -130,8 +121,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
           height: 160.0,
           child: Column(
             children: [
-              Text(areVotedScoresSame() ? '' : SAME_ANSWER,
-                  textAlign: TextAlign.center),
+              Text(areVotedScoresSame() ? '' : SAME_ANSWER, textAlign: TextAlign.center),
               Spacer(flex: 1),
               if (isHost) buildBackOrNextButton()
             ],
@@ -146,13 +136,11 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       return AgileButton(
         buttonTitle: CONTINUE,
         onPressed: () async {
-          await gameService.changeGameState(
-              gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
+          await gameService.changeGameState(gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
-              return CongratulationsPage(
-                  this.questionNr, this.playerRef, this.gameRef);
+              return CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
             }),
           );
         },
@@ -162,13 +150,11 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       buttonTitle: CHANGE_ANSWER,
       onPressed: () async {
         await gameService.deleteOldScore(playerRef, questionNr);
-        await gameService.changeGameState(
-            gameRef, '${GameState.QUESTION}_$questionNr');
+        await gameService.changeGameState(gameRef, '${GameState.QUESTION}_$questionNr');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(
-                this.questionNr, this.playerRef, this.gameRef);
+            return GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
           }),
         );
       },

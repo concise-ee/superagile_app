@@ -18,8 +18,7 @@ class CongratulationsPage extends StatefulWidget {
   CongratulationsPage(this._questionNr, this._playerRef, this._gameRef);
 
   @override
-  _CongratulationsPage createState() =>
-      _CongratulationsPage(this._questionNr, this._playerRef, this._gameRef);
+  _CongratulationsPage createState() => _CongratulationsPage(this._questionNr, this._playerRef, this._gameRef);
 }
 
 class _CongratulationsPage extends State<CongratulationsPage> {
@@ -60,8 +59,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(parseSequenceNumberFromGameState(gameState),
-                playerRef, gameRef);
+            return GameQuestionPage(parseSequenceNumberFromGameState(gameState), playerRef, gameRef);
           }),
         );
       }
@@ -80,7 +78,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-      body: isLoading ? CircularProgressIndicator() : buildBody(context),
+      body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
     );
   }
 
@@ -100,10 +98,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                         child: Padding(
                   padding: EdgeInsets.all(50.0),
                   child: Text('${TEAMS_RESULTS} ${questionNr.toString()}:',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          letterSpacing: 1.5),
+                      style: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 1.5),
                       textAlign: TextAlign.center),
                 ))),
               ],
@@ -123,10 +118,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                       child: Text(
                         CONGRATS,
                         style: TextStyle(
-                            color: Colors.yellowAccent,
-                            fontSize: 28,
-                            letterSpacing: 3,
-                            fontWeight: FontWeight.bold),
+                            color: Colors.yellowAccent, fontSize: 28, letterSpacing: 3, fontWeight: FontWeight.bold),
                       )),
                 ))
           ],
@@ -140,10 +132,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                     padding: EdgeInsets.all(12.0),
                     child: Text(
                       GREAT_MINDS,
-                      style: TextStyle(
-                          color: Colors.yellowAccent,
-                          fontSize: 22,
-                          letterSpacing: 1.5),
+                      style: TextStyle(color: Colors.yellowAccent, fontSize: 22, letterSpacing: 1.5),
                     )),
               ),
             )
@@ -171,13 +160,11 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 alignment: Alignment.bottomLeft,
                 child: PlayButton(
                   onPressed: () {
-                    gameService.changeGameState(
-                        gameRef, '${GameState.QUESTION}_${questionNr + 1}');
+                    gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return GameQuestionPage(
-                            questionNr + 1, playerRef, gameRef);
+                        return GameQuestionPage(questionNr + 1, playerRef, gameRef);
                       }),
                     );
                   },

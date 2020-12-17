@@ -20,8 +20,7 @@ class WaitingRoomPage extends StatefulWidget {
   WaitingRoomPage(this._gameRef, this._playerRef);
 
   @override
-  _WaitingRoomPageState createState() =>
-      _WaitingRoomPageState(this._gameRef, this._playerRef);
+  _WaitingRoomPageState createState() => _WaitingRoomPageState(this._gameRef, this._playerRef);
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
@@ -110,7 +109,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       },
       child: Scaffold(
           appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-          body: isLoading ? CircularProgressIndicator() : buildBody()),
+          body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody()),
     );
   }
 
@@ -122,8 +121,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         ),
         Container(
             child: Text(WAITING_ROOM,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
+                textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
         BorderedText(gamePin),
         if (isHost) buildText(CODE_SHARE_CALL),
         buildText(LEARN_MORE),
@@ -143,12 +141,8 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           var players = _playerService.findActivePlayers(snapshot.data.docs);
           return FittedBox(
               fit: BoxFit.fitWidth,
-              child: Text(
-                  'There are ' +
-                      players.length.toString() +
-                      ' people in this game.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24)));
+              child: Text('There are ' + players.length.toString() + ' people in this game.',
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 24)));
         });
   }
 
@@ -181,17 +175,14 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   Widget buildText(String text) {
-    return Text(text,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.yellowAccent));
+    return Text(text, textAlign: TextAlign.center, style: TextStyle(color: Colors.yellowAccent));
   }
 
   Widget BorderedText(String text) {
     return Container(
       margin: const EdgeInsets.all(30.0),
       padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-          border: Border.all(width: 3.0, color: Color(0xff656565))),
+      decoration: BoxDecoration(border: Border.all(width: 3.0, color: Color(0xff656565))),
       child: Text(
         text,
         textAlign: TextAlign.center,

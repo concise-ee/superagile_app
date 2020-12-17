@@ -22,8 +22,7 @@ class GameQuestionPage extends StatefulWidget {
   GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
 
   @override
-  _GameQuestionPage createState() =>
-      _GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
+  _GameQuestionPage createState() => _GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
 }
 
 class _GameQuestionPage extends State<GameQuestionPage> {
@@ -72,8 +71,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   Future<void> loadData() async {
     Player player = await playerService.findGamePlayerByRef(playerRef);
-    final Question questionByNumber =
-        await questionService.findQuestionByNumber(questionNr);
+    final Question questionByNumber = await questionService.findQuestionByNumber(questionNr);
     setState(() {
       currentPlayer = player;
       question = questionByNumber;
@@ -89,8 +87,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   void listenGameStateChanges() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
-      if (currentPlayer.role != Role.HOST &&
-          gameState.contains(GameState.QUESTION_RESULTS)) {
+      if (currentPlayer.role != Role.HOST && gameState.contains(GameState.QUESTION_RESULTS)) {
         navigateToQuestionResultsPage();
       }
     });
@@ -99,17 +96,12 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   void listenEveryGamePlayerScoreChanges() async {
     List<Player> players = await playerService.findGamePlayers(gameRef);
     for (var player in players) {
-      StreamSubscription<QuerySnapshot> stream =
-          gameService.getScoresStream(player.reference).listen((data) async {
-        QuestionScores questionScores =
-            await gameService.findScoresForQuestion(gameRef, questionNr);
-        int answeredPlayerCount =
-            gameService.getAnsweredPlayersCount(questionScores);
+      StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
+        QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
+        int answeredPlayerCount = gameService.getAnsweredPlayersCount(questionScores);
 
-        if (currentPlayer.role == Role.HOST &&
-            players.length == answeredPlayerCount) {
-          await gameService.changeGameState(
-              gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
+        if (currentPlayer.role == Role.HOST && players.length == answeredPlayerCount) {
+          await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
           navigateToQuestionResultsPage();
         }
       });
@@ -121,8 +113,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
-        return QuestionResultsPage(
-            questionNr: questionNr, gameRef: gameRef, playerRef: playerRef);
+        return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, playerRef: playerRef);
       }),
     );
   }
@@ -131,13 +122,12 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-      body: isLoading ? CircularProgressIndicator() : buildBody(context),
+      body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
     );
   }
 
   void saveScoreAndWaitForNextPage(String buttonValue) async {
-    await gameService.saveOrSetScore(
-        playerRef, gameRef, questionNr, buttonValue);
+    await gameService.saveOrSetScore(playerRef, gameRef, questionNr, buttonValue);
   }
 
   Widget buildBody(BuildContext context) {
@@ -160,10 +150,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                                   padding: EdgeInsets.all(12.0),
                                   child: Text(
                                     questionNr.toString(),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 90,
-                                        letterSpacing: 1.5),
+                                    style: TextStyle(color: Colors.white, fontSize: 90, letterSpacing: 1.5),
                                   )),
                             )),
                         Expanded(
@@ -173,11 +160,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   question.question,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      height: 1.2,
-                                      letterSpacing: 1.5),
+                                  style: TextStyle(color: Colors.white, fontSize: 18, height: 1.2, letterSpacing: 1.5),
                                 )),
                           ),
                         ),
@@ -192,10 +175,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 question.zeroMeaning,
-                                style: TextStyle(
-                                    color: Colors.yellowAccent,
-                                    fontSize: 18,
-                                    letterSpacing: 1.5),
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
                     Flexible(
@@ -207,10 +187,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 question.oneMeaning,
-                                style: TextStyle(
-                                    color: Colors.yellowAccent,
-                                    fontSize: 18,
-                                    letterSpacing: 1.5),
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
                     Flexible(
@@ -222,10 +199,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 question.twoMeaning,
-                                style: TextStyle(
-                                    color: Colors.yellowAccent,
-                                    fontSize: 18,
-                                    letterSpacing: 1.5),
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
                     Flexible(
@@ -237,10 +211,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 question.threeMeaning,
-                                style: TextStyle(
-                                    color: Colors.yellowAccent,
-                                    fontSize: 18,
-                                    letterSpacing: 1.5),
+                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
                     Flexible(
@@ -257,10 +228,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               ),
                               child: Text(
                                 question.shortDesc,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    letterSpacing: 1.5),
+                                style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.5),
                                 textAlign: TextAlign.center,
                               ))),
                     ),
@@ -273,17 +241,13 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             padding: EdgeInsets.all(5),
                             child: Text(
                               question.longDesc,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  letterSpacing: 1.5),
+                              style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                             )),
                       ),
                     ),
                   ],
                 ))),
-        if (currentPlayer.role != Role.HOST ||
-            (currentPlayer.role == Role.HOST && currentPlayer.isPlayingAlong))
+        if (currentPlayer.role != Role.HOST || (currentPlayer.role == Role.HOST && currentPlayer.isPlayingAlong))
           renderScoreButtons()
         else
           renderContinueButton(),
@@ -299,14 +263,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           child: RaisedButton(
             child: Text(
               ZERO,
-              style: TextStyle(
-                  color: ZERO == pressedButton.toString()
-                      ? Colors.black
-                      : Colors.yellowAccent),
+              style: TextStyle(color: ZERO == pressedButton.toString() ? Colors.black : Colors.yellowAccent),
             ),
-            color: ZERO == pressedButton.toString()
-                ? Colors.yellowAccent
-                : Colors.black,
+            color: ZERO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
             onPressed: () {
               setState(() => pressedButton = int.parse(ZERO));
               saveScoreAndWaitForNextPage(ZERO);
@@ -316,13 +275,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         Expanded(
           child: RaisedButton(
             child: Text(ONE,
-                style: TextStyle(
-                    color: ONE == pressedButton.toString()
-                        ? Colors.black
-                        : Colors.yellowAccent)),
-            color: ONE == pressedButton.toString()
-                ? Colors.yellowAccent
-                : Colors.black,
+                style: TextStyle(color: ONE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+            color: ONE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
             onPressed: () {
               setState(() => pressedButton = int.parse(ONE));
               saveScoreAndWaitForNextPage(ONE);
@@ -332,13 +286,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         Expanded(
           child: RaisedButton(
             child: Text(TWO,
-                style: TextStyle(
-                    color: TWO == pressedButton.toString()
-                        ? Colors.black
-                        : Colors.yellowAccent)),
-            color: TWO == pressedButton.toString()
-                ? Colors.yellowAccent
-                : Colors.black,
+                style: TextStyle(color: TWO == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+            color: TWO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
             onPressed: () {
               setState(() => pressedButton = int.parse(TWO));
               saveScoreAndWaitForNextPage(TWO);
@@ -348,13 +297,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         Expanded(
           child: RaisedButton(
             child: Text(THREE,
-                style: TextStyle(
-                    color: THREE == pressedButton.toString()
-                        ? Colors.black
-                        : Colors.yellowAccent)),
-            color: THREE == pressedButton.toString()
-                ? Colors.yellowAccent
-                : Colors.black,
+                style: TextStyle(color: THREE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
+            color: THREE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
             onPressed: () {
               setState(() => pressedButton = int.parse(THREE));
               saveScoreAndWaitForNextPage(THREE);
@@ -372,14 +316,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           child: RaisedButton(
             child: Text(
               CONTINUE,
-              style: TextStyle(
-                  color: pressedButton == HOST_SKIP_VALUE
-                      ? Colors.black
-                      : Colors.yellowAccent),
+              style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? Colors.black : Colors.yellowAccent),
             ),
-            color: pressedButton == HOST_SKIP_VALUE
-                ? Colors.yellowAccent
-                : Colors.black,
+            color: pressedButton == HOST_SKIP_VALUE ? Colors.yellowAccent : Colors.black,
             onPressed: () {
               setState(() => pressedButton = HOST_SKIP_VALUE);
               saveScoreAndWaitForNextPage(null);
