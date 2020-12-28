@@ -98,8 +98,8 @@ class GameRepository {
   }
 
   Future<void> setAgreedScores(DocumentReference gameRef, int agreedScore, int questionNr) async {
-    DocumentSnapshot agreedScoreToUpdate = await gameRef.get();
-    Game game = Game.fromSnapshot(agreedScoreToUpdate);
+    DocumentSnapshot gameSnap = await gameRef.get();
+    Game game = Game.fromSnapshot(gameSnap);
     game.agreedScores[questionNr.toString()] = agreedScore;
     return gameRef.set(game.toJson());
   }
