@@ -98,6 +98,15 @@ class GameService {
 
   Future<String> getGameState(DocumentReference gameRef) async {
     Game game = await findActiveGameByRef(gameRef);
-    return await game.gameState;
+    return game.gameState;
+  }
+
+  Future<void> setAgreedScore(DocumentReference gameRef, int agreedScore, int questionNr) {
+    return _gameRepository.setAgreedScores(gameRef, agreedScore, questionNr);
+  }
+
+  Future<int> getAgreedTotalScore(DocumentReference gameRef) async {
+    Game game = await findActiveGameByRef(gameRef);
+    return game.agreedScores.values.reduce((sum, value) => sum + value);
   }
 }

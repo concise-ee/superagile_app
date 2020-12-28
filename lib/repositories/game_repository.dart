@@ -96,4 +96,11 @@ class GameRepository {
     game.gameState = gameState;
     gameRef.set(game.toJson());
   }
+
+  Future<void> setAgreedScores(DocumentReference gameRef, int agreedScore, int questionNr) async {
+    DocumentSnapshot agreedScoreToUpdate = await gameRef.get();
+    Game game = Game.fromSnapshot(agreedScoreToUpdate);
+    game.agreedScores[questionNr.toString()] = agreedScore;
+    return gameRef.set(game.toJson());
+  }
 }

@@ -136,6 +136,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       return AgileButton(
         buttonTitle: CONTINUE,
         onPressed: () async {
+          await gameService.setAgreedScore(gameRef, getAgreedScore(), questionNr);
           await gameService.changeGameState(gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
           Navigator.pushReplacement(
             context,
@@ -173,5 +174,13 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       return true;
     }
     return false;
+  }
+
+  int getAgreedScore() {
+    if (questionScores.answered0.isNotEmpty) return 0;
+    if (questionScores.answered1.isNotEmpty) return 1;
+    if (questionScores.answered2.isNotEmpty) return 2;
+    if (questionScores.answered3.isNotEmpty) return 3;
+    throw ('No agreed score found.');
   }
 }

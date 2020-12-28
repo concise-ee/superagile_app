@@ -5,6 +5,7 @@ const IS_ACTIVE = 'isActive';
 const HOST_UID = 'hostUid';
 const CREATED_AT = 'createdAt';
 const GAME_STATE = 'gameState';
+const AGREED_SCORES = 'agreedScores';
 
 class Game {
   int pin;
@@ -12,6 +13,7 @@ class Game {
   String hostUid;
   DateTime createdAt = DateTime.now();
   String gameState;
+  Map<String, int> agreedScores = {};
   DocumentReference reference;
 
   Game(this.pin, this.hostUid, this.isActive, this.gameState);
@@ -25,6 +27,7 @@ class Game {
   factory Game.fromJson(Map<String, dynamic> json) {
     var game = Game(json[PIN], json[HOST_UID], json[IS_ACTIVE], json[GAME_STATE]);
     game.createdAt = DateTime.parse(json[CREATED_AT]);
+    game.agreedScores = Map<String, int>.from(json[AGREED_SCORES]);
     return game;
   }
 
@@ -34,7 +37,8 @@ class Game {
       IS_ACTIVE: isActive,
       HOST_UID: hostUid,
       CREATED_AT: createdAt.toString(),
-      GAME_STATE: gameState
+      GAME_STATE: gameState,
+      AGREED_SCORES: agreedScores
     };
   }
 
