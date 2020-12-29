@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 const PIN = 'pin';
@@ -27,7 +29,7 @@ class Game {
   factory Game.fromJson(Map<String, dynamic> json) {
     var game = Game(json[PIN], json[HOST_UID], json[IS_ACTIVE], json[GAME_STATE]);
     game.createdAt = DateTime.parse(json[CREATED_AT]);
-    game.agreedScores = Map<String, int>.from(json[AGREED_SCORES]);
+    game.agreedScores = SplayTreeMap<String, int>.from(json[AGREED_SCORES]);
     return game;
   }
 

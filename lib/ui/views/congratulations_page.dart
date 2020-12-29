@@ -12,6 +12,8 @@ import 'package:superagile_app/utils/labels.dart';
 
 import 'final_page.dart';
 
+const NUMBER_OF_GAME_QUESTIONS = 13;
+
 class CongratulationsPage extends StatefulWidget {
   final int _questionNr;
   final DocumentReference _playerRef;
@@ -168,7 +170,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 alignment: Alignment.bottomLeft,
                 child: PlayButton(
                   onPressed: () {
-                    if (questionNr == 2) {
+                    if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
                       gameService.changeGameState(gameRef, GameState.FINAL);
                       return Navigator.pushReplacement(
                         context,
