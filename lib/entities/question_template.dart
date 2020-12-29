@@ -8,7 +8,7 @@ const SHORT_DESC = 'short_description';
 const LONG_DESC = 'long_description';
 const QUESTION = 'question';
 
-class Question {
+class QuestionTemplate {
   String zeroMeaning;
   String oneMeaning;
   String twoMeaning;
@@ -19,17 +19,17 @@ class Question {
 
   DocumentReference reference;
 
-  Question(this.zeroMeaning, this.oneMeaning, this.twoMeaning, this.threeMeaning, this.shortDesc, this.longDesc,
+  QuestionTemplate(this.zeroMeaning, this.oneMeaning, this.twoMeaning, this.threeMeaning, this.shortDesc, this.longDesc,
       this.question);
 
-  factory Question.fromSnapshot(DocumentSnapshot snapshot) {
-    var newQuestion = Question.fromJson(snapshot.data());
+  factory QuestionTemplate.fromSnapshot(DocumentSnapshot snapshot) {
+    var newQuestion = QuestionTemplate.fromJson(snapshot.data());
     newQuestion.reference = snapshot.reference;
     return newQuestion;
   }
 
-  factory Question.fromJson(Map<String, dynamic> json) {
-    return Question(json[ZERO_MEANING], json[ONE_MEANING], json[TWO_MEANING], json[THREE_MEANING], json[SHORT_DESC],
+  factory QuestionTemplate.fromJson(Map<String, dynamic> json) {
+    return QuestionTemplate(json[ZERO_MEANING], json[ONE_MEANING], json[TWO_MEANING], json[THREE_MEANING], json[SHORT_DESC],
         json[LONG_DESC], json[QUESTION]);
   }
 

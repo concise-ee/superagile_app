@@ -33,7 +33,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   final int questionNr;
   final DocumentReference playerRef;
   final DocumentReference gameRef;
-  Question question;
+  QuestionTemplate questionTemplate;
   int pressedButton;
   List<StreamSubscription<QuerySnapshot>> playerQuestionStreams = [];
   StreamSubscription<DocumentSnapshot> gameStream;
@@ -71,10 +71,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   Future<void> loadData() async {
     Player player = await playerService.findGamePlayerByRef(playerRef);
-    final Question questionByNumber = await questionService.findQuestionByNumber(questionNr);
+    final QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     setState(() {
       currentPlayer = player;
-      question = questionByNumber;
+      questionTemplate = questionByNumber;
       isLoading = false;
     });
   }
@@ -159,7 +159,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             child: Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  question.question,
+                                  questionTemplate.question,
                                   style: TextStyle(color: Colors.white, fontSize: 18, height: 1.2, letterSpacing: 1.5),
                                 )),
                           ),
@@ -174,7 +174,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question.zeroMeaning,
+                                questionTemplate.zeroMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -186,7 +186,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question.oneMeaning,
+                                questionTemplate.oneMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -198,7 +198,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question.twoMeaning,
+                                questionTemplate.twoMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -210,7 +210,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Padding(
                               padding: EdgeInsets.all(5.0),
                               child: Text(
-                                question.threeMeaning,
+                                questionTemplate.threeMeaning,
                                 style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
                               )),
                         )),
@@ -227,7 +227,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                                 bottom: 25,
                               ),
                               child: Text(
-                                question.shortDesc,
+                                questionTemplate.shortDesc,
                                 style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.5),
                                 textAlign: TextAlign.center,
                               ))),
@@ -240,7 +240,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                         child: Padding(
                             padding: EdgeInsets.all(5),
                             child: Text(
-                              question.longDesc,
+                              questionTemplate.longDesc,
                               style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                             )),
                       ),
