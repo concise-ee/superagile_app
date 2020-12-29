@@ -29,3 +29,4 @@ const WAIT_FOR_NEXT_QUESTION = '* Wait for host to continue with next question';
 const TEAMS_RESULTS = 'Your team´s results for question';
 const OVERALL_SCORE = 'Your team´s #superagile score is';
 const LEARN_MORE = 'learn more';
+const BACK_TO_BEGINNING = 'Back to the beginning';

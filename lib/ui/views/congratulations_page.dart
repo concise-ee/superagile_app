@@ -49,9 +49,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
 
   void loadDataAndSetupListener() async {
     await loadData();
-    if (!isHost) {
-      listenForUpdateToGoToNextQuestion();
-    }
+    listenForUpdateToGoToNextQuestion();
   }
 
   void listenForUpdateToGoToNextQuestion() async {

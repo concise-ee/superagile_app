@@ -7,6 +7,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/globals.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';

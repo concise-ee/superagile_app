@@ -2,6 +2,7 @@ class GameState {
   static const String QUESTION = 'question';
   static const String QUESTION_RESULTS = 'results';
   static const String CONGRATULATIONS = 'congratulations';
+  static const String FINAL = 'final';
 }
 
 const String STATE_NUMBER_DELIMITER = '_';
