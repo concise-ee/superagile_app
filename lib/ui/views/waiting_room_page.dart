@@ -46,7 +46,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) {
+    activityTimer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       _playerService.sendLastActive(playerRef);
     });
     loadDataAndSetupListener();
@@ -104,7 +104,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        timer.cancel();
+        activityTimer.cancel();
         return true;
       },
       child: Scaffold(

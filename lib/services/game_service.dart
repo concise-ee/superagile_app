@@ -105,8 +105,8 @@ class GameService {
     return _gameRepository.setAgreedScores(gameRef, agreedScore, questionNr);
   }
 
-  Future<int> getAgreedTotalScore(DocumentReference gameRef) async {
+  Future<Map<String, int>> getAgreedScores(DocumentReference gameRef) async {
     Game game = await findActiveGameByRef(gameRef);
-    return game.agreedScores.values.reduce((sum, value) => sum + value);
+    return game.agreedScores;
   }
 }

@@ -10,6 +10,8 @@ import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
+import 'final_page.dart';
+
 class CongratulationsPage extends StatefulWidget {
   final int _questionNr;
   final DocumentReference _playerRef;
@@ -60,6 +62,14 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           context,
           MaterialPageRoute(builder: (context) {
             return GameQuestionPage(parseSequenceNumberFromGameState(gameState), playerRef, gameRef);
+          }),
+        );
+      }
+      if (!isHost && gameState == GameState.FINAL) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return FinalPage(playerRef, gameRef);
           }),
         );
       }
@@ -160,6 +170,15 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 alignment: Alignment.bottomLeft,
                 child: PlayButton(
                   onPressed: () {
+                    if (questionNr == 2) {
+                      gameService.changeGameState(gameRef, GameState.FINAL);
+                      return Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return FinalPage(playerRef, gameRef);
+                        }),
+                      );
+                    }
                     gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
                     Navigator.push(
                       context,
