@@ -47,7 +47,6 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       if (playerRef != null) {
                         Game game = await _gameService.findActiveGameByRef(gameRef);
                         return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
-                        // return joinStartedGame(playerRef, gameRef);
                       }
                       return joinWaitingRoomAsNewPlayer(gameRef, loggedInUserUid);
                     },
