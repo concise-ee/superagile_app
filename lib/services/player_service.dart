@@ -40,4 +40,8 @@ class PlayerService {
   Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
     return await _playerRepository.findGamePlayerByRef(playerRef);
   }
+
+  Future<DocumentReference> findPlayerRefByName(DocumentReference gameRef, String name) {
+    return _playerRepository.findPlayerRefByName(gameRef, name);
+  }
 }

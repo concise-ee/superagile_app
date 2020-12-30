@@ -30,3 +30,5 @@ const TEAMS_RESULTS = 'Your team´s results for question';
 const OVERALL_SCORE = 'Your team´s #superagile score is';
 const LEARN_MORE = 'learn more';
 const BACK_TO_BEGINNING = 'Back to the beginning';
+const RECONNECT = 'Reconnect';
+const RECONNECT_TO_EXISTING_GAME = 'Reconnect to existing game';

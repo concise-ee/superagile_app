@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/views/waiting_room_page.dart';
+import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class PlayerStartPage extends StatefulWidget {
@@ -40,17 +43,27 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
                       var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-                      var playerRef = await _playerService.addGamePlayer(gameRef,
-                          Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return WaitingRoomPage(gameRef, playerRef);
-                        }),
-                      );
+                      var playerRef = await _playerService.findPlayerRefByName(gameRef, _nameController.text);
+                      if (playerRef != null) {
+                        Game game = await _gameService.findActiveGameByRef(gameRef);
+                        return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
+                        // return joinStartedGame(playerRef, gameRef);
+                      }
+                      return joinWaitingRoomAsNewPlayer(gameRef, loggedInUserUid);
                     },
                     child: Text(PLAY)),
               ],
             )));
+  }
+
+  Future<WaitingRoomPage> joinWaitingRoomAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
+    DocumentReference playerRef = await _playerService.addGamePlayer(
+        gameRef, Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
+    return Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return WaitingRoomPage(gameRef, playerRef);
+      }),
+    );
   }
 }

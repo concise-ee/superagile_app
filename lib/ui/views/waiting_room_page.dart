@@ -47,6 +47,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   @override
   void initState() {
     super.initState();
+    _playerService.sendLastActive(playerRef);
     activityTimer = Timer.periodic(Duration(seconds: 10), (Timer t) {
       _playerService.sendLastActive(playerRef);
     });

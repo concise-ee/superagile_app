@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/player.dart';
 
 const PLAYERS_SUB_COLLECTION = 'players';
+const NAME = 'name';
 
 class PlayerRepository {
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
@@ -25,5 +26,13 @@ class PlayerRepository {
   Future<Player> findGamePlayerByRef(DocumentReference playerRef) async {
     var playerSnap = await playerRef.get();
     return Player.fromSnapshot(playerSnap);
+  }
+
+  Future<DocumentReference> findPlayerRefByName(DocumentReference gameRef, String name) async {
+    var player = await gameRef.collection(PLAYERS_SUB_COLLECTION).where(NAME, isEqualTo: name).get();
+    if (player.docs.isEmpty) {
+      return null;
+    }
+    return player.docs.single.reference;
   }
 }
