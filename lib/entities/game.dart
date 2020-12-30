@@ -29,7 +29,8 @@ class Game {
   factory Game.fromJson(Map<String, dynamic> json) {
     var game = Game(json[PIN], json[HOST_UID], json[IS_ACTIVE], json[GAME_STATE]);
     game.createdAt = DateTime.parse(json[CREATED_AT]);
-    game.agreedScores = SplayTreeMap<String, int>.from(json[AGREED_SCORES]);
+    game.agreedScores =
+        SplayTreeMap<String, int>.from(json[AGREED_SCORES], (a, b) => int.parse(a).compareTo(int.parse(b)));
     return game;
   }
 
