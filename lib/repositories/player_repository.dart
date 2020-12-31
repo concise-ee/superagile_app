@@ -3,8 +3,11 @@ import 'package:superagile_app/entities/player.dart';
 
 const PLAYERS_SUB_COLLECTION = 'players';
 const NAME = 'name';
+const PLAYER_REF_ID = 'playerRefId';
 
 class PlayerRepository {
+  final CollectionReference _repository = FirebaseFirestore.instance.collection(PLAYERS_SUB_COLLECTION);
+
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {
     return gameRef.collection(PLAYERS_SUB_COLLECTION).snapshots();
   }
@@ -14,9 +17,13 @@ class PlayerRepository {
     return playersSnap.docs.map((snap) => Player.fromSnapshot(snap)).toList();
   }
 
-  Future<DocumentReference> addGamePlayer(DocumentReference gameRef, Player player) {
-    var players = gameRef.collection(PLAYERS_SUB_COLLECTION);
-    return players.add(player.toJson());
+  Future<DocumentReference> addGamePlayer(DocumentReference gameRef, Player player) async {
+    String generatedRefId = generateDocRefId();
+    var playerJson = player.toJson();
+    playerJson[PLAYER_REF_ID] = generatedRefId;
+    DocumentReference doc = gameRef.collection(PLAYERS_SUB_COLLECTION).doc(generatedRefId);
+    await doc.set(playerJson);
+    return doc;
   }
 
   void updateGamePlayer(Player player) async {
@@ -34,5 +41,9 @@ class PlayerRepository {
       return null;
     }
     return player.docs.single.reference;
+  }
+
+  String generateDocRefId() {
+    return _repository.doc().id;
   }
 }

@@ -68,14 +68,14 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       int newQuestionNr = parseSequenceNumberFromGameState(gameState);
       if (!isHost && gameState.contains(GameState.QUESTION)) {
         await gameService.deleteOldScore(playerRef, questionNr);
-        Navigator.pushReplacement(
+        return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
             return GameQuestionPage(newQuestionNr, playerRef, gameRef);
           }),
         );
       } else if (!isHost && gameState.contains(GameState.CONGRATULATIONS)) {
-        Navigator.pushReplacement(
+        return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
             return CongratulationsPage(newQuestionNr, playerRef, gameRef);

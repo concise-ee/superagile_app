@@ -26,7 +26,7 @@ class WaitingRoomPage extends StatefulWidget {
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final GameService gameService = GameService();
-  final PlayerService _playerService = PlayerService();
+  final PlayerService playerService = PlayerService();
   final DocumentReference gameRef;
   final DocumentReference playerRef;
   Timer timer;
@@ -47,9 +47,9 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   @override
   void initState() {
     super.initState();
-    _playerService.sendLastActive(playerRef);
+    playerService.sendLastActive(playerRef);
     activityTimer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-      _playerService.sendLastActive(playerRef);
+      playerService.sendLastActive(playerRef);
     });
     loadDataAndSetupListener();
   }
@@ -61,7 +61,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Future<void> loadData() async {
     Game game = await gameService.findActiveGameByRef(gameRef);
-    bool host = await _playerService.isPlayerHosting(playerRef);
+    bool host = await playerService.isPlayerHosting(playerRef);
     setState(() {
       gamePin = game.pin.toString();
       isHost = host;
@@ -96,7 +96,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   void loadIsHost() async {
-    bool host = await _playerService.isPlayerHosting(playerRef);
+    bool host = await playerService.isPlayerHosting(playerRef);
     setState(() {
       isHost = host;
     });
@@ -137,10 +137,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildPlayerCount() {
     return StreamBuilder<QuerySnapshot>(
-        stream: _playerService.getGamePlayersStream(gameRef),
+        stream: playerService.getGamePlayersStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var players = _playerService.findActivePlayers(snapshot.data.docs);
+          var players = playerService.findActivePlayers(snapshot.data.docs);
           return FittedBox(
               fit: BoxFit.fitWidth,
               child: Text('There are ' + players.length.toString() + ' people in this game.',
@@ -150,10 +150,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildActivePlayersWidget() {
     return StreamBuilder<QuerySnapshot>(
-        stream: _playerService.getGamePlayersStream(gameRef),
+        stream: playerService.getGamePlayersStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var players = _playerService.findActivePlayers(snapshot.data.docs);
+          var players = playerService.findActivePlayers(snapshot.data.docs);
           return ListView.builder(
             shrinkWrap: true,
             itemCount: players.length,

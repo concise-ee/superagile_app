@@ -6,7 +6,6 @@ import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/security_service.dart';
-import 'package:superagile_app/ui/views/waiting_room_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
@@ -45,24 +44,24 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                       var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
                       var playerRef = await _playerService.findPlayerRefByName(gameRef, _nameController.text);
                       if (playerRef != null) {
-                        Game game = await _gameService.findActiveGameByRef(gameRef);
-                        return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
+                        bool isPlayerActive = await _playerService.checkIfPlayerIsActive(playerRef);
+                        if (!isPlayerActive) {
+                          Game game = await _gameService.findActiveGameByRef(gameRef);
+                          return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
+                        }
+                        throw ('Cannot use active player name');
                       }
-                      return joinWaitingRoomAsNewPlayer(gameRef, loggedInUserUid);
+                      return joinAsNewPlayer(gameRef, loggedInUserUid);
                     },
                     child: Text(PLAY)),
               ],
             )));
   }
 
-  Future<WaitingRoomPage> joinWaitingRoomAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
+  Future<MaterialPageRoute<dynamic>> joinAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
     DocumentReference playerRef = await _playerService.addGamePlayer(
         gameRef, Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
-    return Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return WaitingRoomPage(gameRef, playerRef);
-      }),
-    );
+    Game game = await _gameService.findActiveGameByRef(gameRef);
+    return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
   }
 }
