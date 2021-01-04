@@ -282,84 +282,36 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                   ],
                 ))),
         if (currentPlayer.role == Role.PLAYER || (currentPlayer.role == Role.HOST && currentPlayer.isPlayingAlong))
-          renderScoreButtons()
+          Row(
+            children: [
+              renderScoreButton(ZERO),
+              renderScoreButton(ONE),
+              renderScoreButton(TWO),
+              renderScoreButton(THREE)
+            ],
+          )
         else
           renderContinueButton(),
       ],
     );
   }
 
-  Row renderScoreButtons() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 50,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
-              child: Text(
-                ZERO,
-                style: TextStyle(color: ZERO == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24),
-              ),
-              color: ZERO == pressedButton.toString() ? accentColor : primaryColor,
-              onPressed: () {
-                setState(() => pressedButton = int.parse(ZERO));
-                saveScoreAndWaitForNextPage(ZERO);
-              },
-            ),
-          ),
+  Expanded renderScoreButton(String value) {
+    return Expanded(
+      child: Container(
+        height: 50,
+        child: RaisedButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
+          child: Text(value,
+              style: TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
+          color: value == pressedButton.toString() ? accentColor : primaryColor,
+          onPressed: () {
+            setState(() => pressedButton = int.parse(value));
+            saveScoreAndWaitForNextPage(value);
+          },
         ),
-        Expanded(
-          child: Container(
-            height: 50,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
-              child: Text(ONE,
-                  style: TextStyle(color: ONE == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
-              color: ONE == pressedButton.toString() ? accentColor : primaryColor,
-              onPressed: () {
-                setState(() => pressedButton = int.parse(ONE));
-                saveScoreAndWaitForNextPage(ONE);
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: 50,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
-              child: Text(TWO,
-                  style: TextStyle(color: TWO == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
-              color: TWO == pressedButton.toString() ? accentColor : primaryColor,
-              onPressed: () {
-                setState(() => pressedButton = int.parse(TWO));
-                saveScoreAndWaitForNextPage(TWO);
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: 50,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
-              child: Text(THREE,
-                  style:
-                      TextStyle(color: THREE == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
-              color: THREE == pressedButton.toString() ? accentColor : primaryColor,
-              onPressed: () {
-                setState(() => pressedButton = int.parse(THREE));
-                saveScoreAndWaitForNextPage(THREE);
-              },
-            ),
-          ),
-        )
-      ],
+      ),
     );
   }
 
