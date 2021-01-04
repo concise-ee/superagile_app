@@ -12,6 +12,7 @@ import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/globals.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/list_utils.dart';
@@ -290,52 +291,72 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   Row renderScoreButtons() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: RaisedButton(
-            child: Text(
-              ZERO,
-              style: TextStyle(color: ZERO == pressedButton.toString() ? Colors.black : Colors.yellowAccent),
+          child: Container(
+            height: 50,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
+              child: Text(
+                ZERO,
+                style: TextStyle(color: ZERO == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24),
+              ),
+              color: ZERO == pressedButton.toString() ? accentColor : primaryColor,
+              onPressed: () {
+                setState(() => pressedButton = int.parse(ZERO));
+                saveScoreAndWaitForNextPage(ZERO);
+              },
             ),
-            color: ZERO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-            onPressed: () {
-              setState(() => pressedButton = int.parse(ZERO));
-              saveScoreAndWaitForNextPage(ZERO);
-            },
           ),
         ),
         Expanded(
-          child: RaisedButton(
-            child: Text(ONE,
-                style: TextStyle(color: ONE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
-            color: ONE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-            onPressed: () {
-              setState(() => pressedButton = int.parse(ONE));
-              saveScoreAndWaitForNextPage(ONE);
-            },
+          child: Container(
+            height: 50,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
+              child: Text(ONE,
+                  style: TextStyle(color: ONE == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
+              color: ONE == pressedButton.toString() ? accentColor : primaryColor,
+              onPressed: () {
+                setState(() => pressedButton = int.parse(ONE));
+                saveScoreAndWaitForNextPage(ONE);
+              },
+            ),
           ),
         ),
         Expanded(
-          child: RaisedButton(
-            child: Text(TWO,
-                style: TextStyle(color: TWO == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
-            color: TWO == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-            onPressed: () {
-              setState(() => pressedButton = int.parse(TWO));
-              saveScoreAndWaitForNextPage(TWO);
-            },
+          child: Container(
+            height: 50,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
+              child: Text(TWO,
+                  style: TextStyle(color: TWO == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
+              color: TWO == pressedButton.toString() ? accentColor : primaryColor,
+              onPressed: () {
+                setState(() => pressedButton = int.parse(TWO));
+                saveScoreAndWaitForNextPage(TWO);
+              },
+            ),
           ),
         ),
         Expanded(
-          child: RaisedButton(
-            child: Text(THREE,
-                style: TextStyle(color: THREE == pressedButton.toString() ? Colors.black : Colors.yellowAccent)),
-            color: THREE == pressedButton.toString() ? Colors.yellowAccent : Colors.black,
-            onPressed: () {
-              setState(() => pressedButton = int.parse(THREE));
-              saveScoreAndWaitForNextPage(THREE);
-            },
+          child: Container(
+            height: 50,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
+              child: Text(THREE,
+                  style:
+                      TextStyle(color: THREE == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
+              color: THREE == pressedButton.toString() ? accentColor : primaryColor,
+              onPressed: () {
+                setState(() => pressedButton = int.parse(THREE));
+                saveScoreAndWaitForNextPage(THREE);
+              },
+            ),
           ),
         )
       ],
@@ -346,16 +367,21 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     return Row(
       children: [
         Expanded(
-          child: RaisedButton(
-            child: Text(
-              CONTINUE,
-              style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? Colors.black : Colors.yellowAccent),
+          child: Container(
+            height: 50,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
+              child: Text(
+                CONTINUE,
+                style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: 24),
+              ),
+              color: pressedButton == HOST_SKIP_VALUE ? accentColor : primaryColor,
+              onPressed: () {
+                setState(() => pressedButton = HOST_SKIP_VALUE);
+                saveScoreAndWaitForNextPage(null);
+              },
             ),
-            color: pressedButton == HOST_SKIP_VALUE ? Colors.yellowAccent : Colors.black,
-            onPressed: () {
-              setState(() => pressedButton = HOST_SKIP_VALUE);
-              saveScoreAndWaitForNextPage(null);
-            },
           ),
         )
       ],

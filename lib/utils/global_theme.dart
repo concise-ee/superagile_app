@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-final primaryColor = Color.fromRGBO(13, 13, 13, 1);
-final accentColor = Colors.yellow[500];
+final primaryColor = Color.fromRGBO(51, 51, 51, 1);
+final accentColor = Color.fromRGBO(255, 255, 0, 1);
 
 ThemeData setTheme() {
   return ThemeData(
