@@ -3,7 +3,7 @@ import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/repositories/player_repository.dart';
 
-const ACTIVITY_INTERVAL = 11;
+const ACTIVITY_INTERVAL = 15;
 
 class PlayerService {
   final PlayerRepository _playerRepository = PlayerRepository();

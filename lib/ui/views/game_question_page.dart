@@ -12,7 +12,9 @@ import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/globals.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/utils/list_utils.dart';
 
 class GameQuestionPage extends StatefulWidget {
   final int _questionNr;
@@ -35,8 +37,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   final DocumentReference gameRef;
   QuestionTemplate questionTemplate;
   int pressedButton;
-  List<StreamSubscription<QuerySnapshot>> playerQuestionStreams = [];
+  List<StreamSubscription<QuerySnapshot>> playerScoreStreams = [];
   StreamSubscription<DocumentSnapshot> gameStream;
+  StreamSubscription<QuerySnapshot> playersStream;
   Player currentPlayer;
   bool isLoading = true;
 
@@ -52,15 +55,24 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   void initState() {
     super.initState();
+    if (activityTimer == null) {
+      playerService.sendLastActive(playerRef);
+      activityTimer = Timer.periodic(Duration(seconds: 10), (Timer t) {
+        playerService.sendLastActive(playerRef);
+      });
+    }
     loadDataAndSetupListeners();
   }
 
   @override
   void dispose() {
-    playerQuestionStreams.forEach((stream) {
-      stream.cancel();
-    });
-    gameStream.cancel();
+    cancelPlayersScoreStreams();
+    if (gameStream != null) {
+      gameStream.cancel();
+    }
+    if (playersStream != null) {
+      playersStream.cancel();
+    }
     super.dispose();
   }
 
@@ -80,42 +92,63 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void listenForUpdateToGoToQuestionResultsPage() async {
-    listenGameStateChanges();
-    listenEveryGamePlayerScoreChanges();
+    if (currentPlayer.role == Role.PLAYER) {
+      listenGameStateChanges();
+    } else if (currentPlayer.role == Role.HOST) {
+      listenEveryActivePlayerScoreChanges();
+    }
   }
 
   void listenGameStateChanges() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
-      if (currentPlayer.role != Role.HOST && gameState.contains(GameState.QUESTION_RESULTS)) {
-        navigateToQuestionResultsPage();
+      if (gameState.contains(GameState.QUESTION_RESULTS)) {
+        return navigateToQuestionResultsPage();
       }
     });
   }
 
-  void listenEveryGamePlayerScoreChanges() async {
-    List<Player> players = await playerService.findGamePlayers(gameRef);
-    for (var player in players) {
+  void listenEveryActivePlayerScoreChanges() async {
+    List<Player> activePlayers = await playerService.findActiveGamePlayers(gameRef);
+    setupActivePlayersScoreStreams(activePlayers);
+    playersStream = playerService.getGamePlayersStream(gameRef).listen((data) async {
+      List<Player> newActivePlayers = await playerService.findActiveGamePlayers(gameRef);
+      if (!areEqualByName(activePlayers, newActivePlayers)) {
+        cancelPlayersScoreStreams();
+        activePlayers = newActivePlayers;
+        setupActivePlayersScoreStreams(activePlayers);
+      }
+    });
+  }
+
+  void setupActivePlayersScoreStreams(List<Player> activePlayers) {
+    for (var player in activePlayers) {
       StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
         QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
         int answeredPlayerCount = gameService.getAnsweredPlayersCount(questionScores);
-
-        if (currentPlayer.role == Role.HOST && players.length == answeredPlayerCount) {
+        if (activePlayers.length == answeredPlayerCount) {
           await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
-          navigateToQuestionResultsPage();
+          return navigateToQuestionResultsPage();
         }
       });
-      playerQuestionStreams.add(stream);
+      playerScoreStreams.add(stream);
     }
   }
 
-  void navigateToQuestionResultsPage() {
-    Navigator.pushReplacement(
+  Future<MaterialPageRoute<QuestionResultsPage>> navigateToQuestionResultsPage() {
+    return Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
         return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, playerRef: playerRef);
       }),
     );
+  }
+
+  void cancelPlayersScoreStreams() {
+    playerScoreStreams.forEach((stream) {
+      stream.cancel();
+    });
+    playerScoreStreams.clear();
   }
 
   @override
@@ -247,7 +280,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                     ),
                   ],
                 ))),
-        if (currentPlayer.role != Role.HOST || (currentPlayer.role == Role.HOST && currentPlayer.isPlayingAlong))
+        if (currentPlayer.role == Role.PLAYER || (currentPlayer.role == Role.HOST && currentPlayer.isPlayingAlong))
           renderScoreButtons()
         else
           renderContinueButton(),

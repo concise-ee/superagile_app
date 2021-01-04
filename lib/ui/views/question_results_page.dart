@@ -53,13 +53,17 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   @override
   void dispose() {
-    gameStream.cancel();
+    if (gameStream != null) {
+      gameStream.cancel();
+    }
     super.dispose();
   }
 
   void loadDataAndSetupListener() async {
     await loadData();
-    listenForUpdateToSwitchPage();
+    if (mounted) {
+      listenForUpdateToSwitchPage();
+    }
   }
 
   void listenForUpdateToSwitchPage() async {
