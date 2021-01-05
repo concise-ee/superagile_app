@@ -60,8 +60,8 @@ class _FinalPage extends State<FinalPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: 20),
-              child: Text('${OVERALL_SCORE}: ${agreedScores.values.reduce((sum, value) => sum + value)}',
+              padding: EdgeInsets.only(bottom: 20, top: 20),
+              child: Text('${OVERALL_SCORE}: ${calculateOverallScore()}',
                   style: TextStyle(color: Colors.yellow, fontSize: 24, letterSpacing: 1.5),
                   textAlign: TextAlign.center),
             ),
@@ -69,6 +69,7 @@ class _FinalPage extends State<FinalPage> {
           ],
         ))),
         Container(
+          padding: EdgeInsets.only(bottom: 5),
           child: AgileButton(
             onPressed: () {
               activityTimer.cancel();
@@ -84,6 +85,13 @@ class _FinalPage extends State<FinalPage> {
         )
       ],
     );
+  }
+
+  String calculateOverallScore() {
+    if (agreedScores.values.contains(null)) {
+      return 'none';
+    }
+    return agreedScores.values.reduce((sum, value) => sum + value).toString();
   }
 
   Widget buildSeparateScore() {

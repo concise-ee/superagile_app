@@ -31,6 +31,7 @@ class _HostStartPageState extends State<HostStartPage> {
         body: Container(
             padding: EdgeInsets.all(25),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Align(
                   alignment: Alignment.center,
@@ -40,6 +41,7 @@ class _HostStartPageState extends State<HostStartPage> {
                   decoration: InputDecoration(hintText: ENTER_NAME),
                 ),
                 if (reconnectToExistingGame) ...[
+                  SizedBox(height: 25),
                   TextField(controller: _pinController, decoration: InputDecoration(hintText: ENTER_PIN))
                 ],
                 SwitchListTile(

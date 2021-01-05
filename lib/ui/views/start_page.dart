@@ -24,9 +24,6 @@ class _StartPageState extends State<StartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Align(
-              alignment: Alignment.center,
-            ),
             Spacer(
               flex: 2,
             ),

@@ -120,18 +120,36 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
             QuestionAnswersSection(answerNumber: 0, playerNames: questionScores.answered0),
           ],
         ))),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-          height: 160.0,
-          child: Column(
-            children: [
-              Text(areVotedScoresSame() ? '' : SAME_ANSWER, textAlign: TextAlign.center),
-              Spacer(flex: 1),
-              if (isHost) buildBackOrNextButton()
-            ],
-          ),
-        )
+        if (isHost) buildHostContainer() else buildPlayerContainer()
       ],
+    );
+  }
+
+  Container buildHostContainer() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+      height: !areVotedScoresSame() ? 160 : 100,
+      child: Column(
+        children: [
+          if (!areVotedScoresSame()) ...[
+            Text(SAME_ANSWER, textAlign: TextAlign.center),
+            Spacer(flex: 1),
+          ],
+          buildBackOrNextButton()
+        ],
+      ),
+    );
+  }
+
+  Container buildPlayerContainer() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+      height: !areVotedScoresSame() ? 80 : 0,
+      child: Column(
+        children: [
+          Text(SAME_ANSWER, textAlign: TextAlign.center),
+        ],
+      ),
     );
   }
 
