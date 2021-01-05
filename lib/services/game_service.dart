@@ -109,4 +109,9 @@ class GameService {
     Game game = await findActiveGameByRef(gameRef);
     return game.agreedScores;
   }
+
+  Future<int> getAgreedScoreForQuestion(DocumentReference gameRef, int questionNr) async {
+    Map<String, int> agreedScores = await getAgreedScores(gameRef);
+    return agreedScores[questionNr.toString()];
+  }
 }

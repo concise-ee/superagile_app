@@ -89,7 +89,7 @@ class _FinalPage extends State<FinalPage> {
 
   String calculateOverallScore() {
     if (agreedScores.values.contains(null)) {
-      return 'none';
+      return NO_SCORE;
     }
     return agreedScores.values.reduce((sum, value) => sum + value).toString();
   }

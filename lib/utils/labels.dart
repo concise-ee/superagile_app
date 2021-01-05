@@ -32,3 +32,4 @@ const LEARN_MORE = 'learn more';
 const BACK_TO_BEGINNING = 'Back to the beginning';
 const RECONNECT = 'Reconnect';
 const RECONNECT_TO_EXISTING_GAME = 'Reconnect to existing game';
+const NO_SCORE = 'none';

@@ -34,6 +34,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   StreamSubscription<DocumentSnapshot> gameStream;
   bool isHost;
   bool isLoading = true;
+  String agreedScore;
 
   _CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
 
@@ -77,11 +78,19 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<void> loadData() async {
-    bool host = await playerService.isPlayerHosting(playerRef);
+    bool isHost = await playerService.isPlayerHosting(playerRef);
+    String agreedScore = await getAgreedScore();
     setState(() {
-      isHost = host;
-      isLoading = false;
+      this.isHost = isHost;
+      this.agreedScore = agreedScore;
+      this.isLoading = false;
     });
+  }
+
+  Future<String> getAgreedScore() async {
+    int agreedScore = await gameService.getAgreedScoreForQuestion(gameRef, questionNr);
+    if (agreedScore == null) return NO_SCORE;
+    return agreedScore.toString();
   }
 
   @override
@@ -107,7 +116,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                     child: Container(
                         child: Padding(
                   padding: EdgeInsets.all(50.0),
-                  child: Text('${TEAMS_RESULTS} ${questionNr.toString()}:',
+                  child: Text('${TEAMS_RESULTS} ${questionNr.toString()}: ${agreedScore}',
                       style: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 1.5),
                       textAlign: TextAlign.center),
                 ))),
