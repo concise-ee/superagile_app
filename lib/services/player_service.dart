@@ -40,7 +40,6 @@ class PlayerService {
     List<Player> players = await _playerRepository.findGamePlayers(gameRef);
     players.sort((a, b) => (a.name).compareTo(b.name));
     return players
-        .where((player) => player.isPlayingAlong == true)
         .where((player) =>
             DateTime.parse(player.lastActive).isAfter(DateTime.now().subtract(Duration(seconds: ACTIVITY_INTERVAL))))
         .toList();

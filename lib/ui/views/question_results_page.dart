@@ -185,6 +185,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     if (questionScores.answered1.isNotEmpty) return 1;
     if (questionScores.answered2.isNotEmpty) return 2;
     if (questionScores.answered3.isNotEmpty) return 3;
+    if (questionScores.answeredNull.isNotEmpty) return null;
     throw ('No agreed score found.');
   }
 }
