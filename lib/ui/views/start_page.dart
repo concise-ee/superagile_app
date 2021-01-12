@@ -12,10 +12,13 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(HASH_SUPERAGILE)),
+    return new WillPopScope(
+        onWillPop: () async => false,
+    child:
+      Scaffold(
+      appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
       body: _buildBody(context),
-    );
+    ));
   }
 
   Widget _buildBody(BuildContext context) {

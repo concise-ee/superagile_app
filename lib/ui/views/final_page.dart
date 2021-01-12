@@ -43,11 +43,47 @@ class _FinalPage extends State<FinalPage> {
     });
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: Text(ARE_YOU_SURE),
+        content: Text(EXIT_TO_START_PAGE),
+        actions: [
+          new AgileButton(
+            onPressed: () {
+              activityTimer.cancel();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return StartPage();
+                }),
+              );
+            },
+            buttonTitle: YES,
+          ),
+          new AgileButton(
+            buttonTitle: NO,
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          ),
+          SizedBox(height: 16),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-      body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
+    return new WillPopScope(
+        onWillPop: () => _onBackPressed(),
+      child: new Scaffold(
+        appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
+        body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
+      ),
     );
   }
 

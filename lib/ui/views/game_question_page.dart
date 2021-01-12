@@ -10,7 +10,9 @@ import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
+import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
+import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/globals.dart';
@@ -152,12 +154,47 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     playerScoreStreams.clear();
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: Text(ARE_YOU_SURE),
+        content: Text(EXIT_TO_START_PAGE),
+        actions: [
+          new AgileButton(
+            onPressed: () {
+              activityTimer.cancel();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return StartPage();
+                }),
+              );
+            },
+            buttonTitle: YES,
+          ),
+          new AgileButton(
+            buttonTitle: NO,
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          ),
+          SizedBox(height: 16),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(HASH_SUPERAGILE)),
+    return new WillPopScope(
+        onWillPop: () => _onBackPressed(),
+    child:
+      Scaffold(
+      appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
       body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
-    );
+    ));
   }
 
   void saveScoreAndWaitForNextPage(String buttonValue) async {

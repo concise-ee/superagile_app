@@ -33,3 +33,7 @@ const BACK_TO_BEGINNING = 'Back to the beginning';
 const RECONNECT = 'Reconnect';
 const RECONNECT_TO_EXISTING_GAME = 'Reconnect to existing game';
 const NO_SCORE = 'none';
+const EXIT_TO_START_PAGE = 'Do you want to exit to the start page?';
+const ARE_YOU_SURE = 'Are you sure?';
+const YES = 'Yes';
+const NO = 'No';

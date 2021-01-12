@@ -26,7 +26,8 @@ class _HostStartPageState extends State<HostStartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      Scaffold(
         appBar: AppBar(title: Text(HASH_SUPERAGILE)),
         body: Container(
             padding: EdgeInsets.all(25),
