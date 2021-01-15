@@ -136,7 +136,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         false;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -146,7 +145,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody()),
     );
   }
-
 
   ListView buildBody() {
     return ListView(
@@ -159,7 +157,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                 textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
         BorderedText(gamePin),
         if (isHost) buildText(CODE_SHARE_CALL),
-        buildText(LEARN_MORE),
+        buildText(WAIT_FOR_TEAM),
         if (isHost) buildText(PLAY_BUTTON_CALL),
         if (isHost) buildStartGameButton(),
         buildPlayerCount(),
