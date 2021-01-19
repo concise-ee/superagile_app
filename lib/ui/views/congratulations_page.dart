@@ -125,7 +125,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         ],
       ),
     ) ??
-        false;
+    null;
   }
 
   @override
