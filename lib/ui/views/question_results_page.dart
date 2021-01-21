@@ -37,6 +37,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   StreamSubscription<DocumentSnapshot> gameStream;
   bool isHost;
   bool isLoading = true;
+  int gamePin;
 
   _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef);
 
@@ -94,10 +95,12 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Future<void> loadData() async {
     bool host = await playerService.isPlayerHosting(playerRef);
     var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
+    var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       isHost = host;
       questionScores = scores;
       isLoading = false;
+      gamePin = pin;
     });
   }
 
@@ -146,6 +149,24 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Widget buildBody(context) {
     return Column(
       children: [
+        Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: Container(
+                      padding: EdgeInsets.all(25),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        '${GAME_PIN} ${this.gamePin}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      )
+                  )
+              )
+            ]
+        ),
         Expanded(
             child: SingleChildScrollView(
                 child: Column(

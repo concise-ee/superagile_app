@@ -42,6 +42,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   bool isLoading = true;
   String agreedScore;
   QuestionTemplate questionByNumber;
+  int gamePin;
 
   _CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
 
@@ -88,11 +89,13 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     bool isHost = await playerService.isPlayerHosting(playerRef);
     String agreedScore = await getAgreedScore();
     QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
+    var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       this.isHost = isHost;
       this.agreedScore = agreedScore;
       this.isLoading = false;
       this.questionByNumber = questionByNumber;
+      this.gamePin = pin;
     });
   }
 
@@ -148,6 +151,24 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
+        Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: Container(
+                      padding: EdgeInsets.all(25),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        '${GAME_PIN} ${this.gamePin}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      )
+                  )
+              )
+            ]
+        ),
         Expanded(
             child: Column(
           mainAxisSize: MainAxisSize.min,

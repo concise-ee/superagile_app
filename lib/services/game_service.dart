@@ -114,4 +114,9 @@ class GameService {
     Map<String, int> agreedScores = await getAgreedScores(gameRef);
     return agreedScores[questionNr.toString()];
   }
+
+  Future<int> getGamePinByRef(DocumentReference gameRef) async {
+    Game game = await findActiveGameByRef(gameRef);
+    return game.pin;
+  }
 }

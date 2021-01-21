@@ -26,6 +26,7 @@ class _FinalPage extends State<FinalPage> {
   final PlayerService playerService = PlayerService();
   Map<String, int> agreedScores;
   bool isLoading = true;
+  int gamePin;
 
   _FinalPage(this.playerRef, this.gameRef);
 
@@ -37,9 +38,11 @@ class _FinalPage extends State<FinalPage> {
 
   void loadData() async {
     var totalScore = await gameService.getAgreedScores(gameRef);
+    var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       agreedScores = totalScore;
       isLoading = false;
+      gamePin = pin;
     });
   }
 
@@ -90,6 +93,24 @@ class _FinalPage extends State<FinalPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
+        Row(
+            children: [
+              Flexible(
+                  flex: 1,
+                  child: Container(
+                      padding: EdgeInsets.all(25),
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        '${GAME_PIN} ${this.gamePin}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      )
+                  )
+              )
+            ]
+        ),
         Expanded(
             child: SingleChildScrollView(
                 child: Column(

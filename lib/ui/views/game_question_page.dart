@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
@@ -47,6 +48,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   StreamSubscription<QuerySnapshot> playersStream;
   Player currentPlayer;
   bool isLoading = true;
+  int gamePin;
 
   _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
 
@@ -90,10 +92,12 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     Player player = await playerService.findGamePlayerByRef(playerRef);
     final QuestionTemplate questionByNumber =
         await questionService.findQuestionByNumber(questionNr);
+    var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       currentPlayer = player;
       questionTemplate = questionByNumber;
       isLoading = false;
+      gamePin = pin;
     });
   }
 
@@ -226,6 +230,23 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              '${GAME_PIN} ${this.gamePin}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                              ),
+                            )
+                          )
+                        )
+                      ]
+                    ),
                     Row(
                       children: [
                         Flexible(
