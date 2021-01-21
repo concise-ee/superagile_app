@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
@@ -34,10 +36,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   final DocumentReference gameRef;
   final GameService gameService = GameService();
   final PlayerService playerService = PlayerService();
+  final QuestionService questionService = QuestionService();
   StreamSubscription<DocumentSnapshot> gameStream;
   bool isHost;
   bool isLoading = true;
   String agreedScore;
+  QuestionTemplate questionByNumber;
 
   _CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
 
@@ -83,10 +87,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Future<void> loadData() async {
     bool isHost = await playerService.isPlayerHosting(playerRef);
     String agreedScore = await getAgreedScore();
+    QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     setState(() {
       this.isHost = isHost;
       this.agreedScore = agreedScore;
       this.isLoading = false;
+      this.questionByNumber = questionByNumber;
     });
   }
 
@@ -154,7 +160,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                     child: Container(
                         child: Padding(
                   padding: EdgeInsets.all(50.0),
-                  child: Text('${TEAMS_RESULTS} ${questionNr.toString()}: ${agreedScore}',
+                  child: Text('${TEAMS_RESULTS} ${questionByNumber.topicName}: ${agreedScore}',
                       style: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 1.5),
                       textAlign: TextAlign.center),
                 ))),
