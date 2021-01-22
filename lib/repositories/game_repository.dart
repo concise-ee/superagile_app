@@ -59,15 +59,8 @@ class GameRepository {
     return Game.fromSnapshot(snapshot.docs.single);
   }
 
-  Future<DocumentReference> saveScore(DocumentReference playerRef, Score score) {
-    return playerRef.collection(SCORES_SUB_COLLECTION).add(score.toJson());
-  }
-
-  Future<DocumentReference> setScore(DocumentReference playerRef, Score score) async {
-    QuerySnapshot scoreToUpdate =
-        await playerRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: score.question).get();
-    scoreToUpdate.docs.single.reference.set(score.toJson());
-    return scoreToUpdate.docs.single.reference;
+  Future<void> setScore(DocumentReference playerRef, Score score) {
+    return playerRef.collection(SCORES_SUB_COLLECTION).doc('${score.question}').set(score.toJson());
   }
 
   Future<QuestionScores> findScoresForQuestion(DocumentReference gameRef, int questionNumber) async {

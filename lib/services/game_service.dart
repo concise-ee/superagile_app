@@ -2,11 +2,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/game.dart';
-import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/repositories/game_repository.dart';
-import 'package:superagile_app/repositories/player_repository.dart';
 
 final _random = Random();
 
@@ -14,7 +12,6 @@ int _generate4DigitPin() => _random.nextInt(9000) + 1000;
 
 class GameService {
   final GameRepository _gameRepository = GameRepository();
-  final PlayerRepository _playerRepository = PlayerRepository();
 
   Future<int> generateAvailable4DigitPin() async {
     var pin = _generate4DigitPin();
@@ -46,22 +43,10 @@ class GameService {
     return _gameRepository.findActiveGameRefByPin(pin);
   }
 
-  Future<DocumentReference> saveOrSetScore(
+  Future<void> setScore(
       DocumentReference playerRef, DocumentReference gameRef, int questionNr, String buttonValue) async {
-    QuestionScores scores = await _gameRepository.findScoresForQuestion(gameRef, questionNr);
-    Player player = await _playerRepository.findGamePlayerByRef(playerRef);
     var score = Score(questionNr, buttonValue != null ? int.parse(buttonValue) : null, playerRef.id);
-    if (hasPlayerAnswered(scores, player)) {
-      return _gameRepository.setScore(playerRef, score);
-    }
-    return _gameRepository.saveScore(playerRef, score);
-  }
-
-  bool hasPlayerAnswered(QuestionScores scores, Player player) {
-    return scores.answered0.contains(player.name) ||
-        scores.answered1.contains(player.name) ||
-        scores.answered2.contains(player.name) ||
-        scores.answered3.contains(player.name);
+    return _gameRepository.setScore(playerRef, score);
   }
 
   Stream<QuerySnapshot> getScoresStream(DocumentReference playerRef) {
