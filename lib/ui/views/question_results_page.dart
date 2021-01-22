@@ -106,33 +106,33 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: Text(ARE_YOU_SURE),
-        content: Text(EXIT_TO_START_PAGE),
-        actions: [
-          new AgileButton(
-            onPressed: () {
-              activityTimer.cancel();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return StartPage();
-                }),
-              );
-            },
-            buttonTitle: YES,
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: Text(ARE_YOU_SURE),
+            content: Text(EXIT_TO_START_PAGE),
+            actions: [
+              new AgileButton(
+                onPressed: () {
+                  activityTimer.cancel();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return StartPage();
+                    }),
+                  );
+                },
+                buttonTitle: YES,
+              ),
+              new AgileButton(
+                buttonTitle: NO,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              SizedBox(height: 16),
+            ],
           ),
-          new AgileButton(
-            buttonTitle: NO,
-            onPressed: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          SizedBox(height: 16),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
@@ -140,33 +140,28 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Widget build(BuildContext context) {
     return new WillPopScope(
         onWillPop: () => _onBackPressed(),
-    child:
-      Scaffold(
-        appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
-        body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context)));
+        child: Scaffold(
+            appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
+            body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context)));
   }
 
   Widget buildBody(context) {
     return Column(
       children: [
-        Row(
-            children: [
-              Flexible(
-                  flex: 1,
-                  child: Container(
-                      padding: EdgeInsets.all(25),
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        '${GAME_PIN} ${this.gamePin}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      )
-                  )
-              )
-            ]
-        ),
+        Row(children: [
+          Flexible(
+              flex: 1,
+              child: Container(
+                  padding: EdgeInsets.all(25),
+                  alignment: Alignment.topRight,
+                  child: Text(
+                    '${GAME_PIN} ${this.gamePin}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  )))
+        ]),
         Expanded(
             child: SingleChildScrollView(
                 child: Column(

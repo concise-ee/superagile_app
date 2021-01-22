@@ -31,8 +31,8 @@ class QuestionTemplate {
   }
 
   factory QuestionTemplate.fromJson(Map<String, dynamic> json) {
-    return QuestionTemplate(json[ZERO_MEANING], json[ONE_MEANING], json[TWO_MEANING], json[THREE_MEANING], json[SHORT_DESC],
-        json[LONG_DESC], json[QUESTION], json[TOPIC_NAME]);
+    return QuestionTemplate(json[ZERO_MEANING], json[ONE_MEANING], json[TWO_MEANING], json[THREE_MEANING],
+        json[SHORT_DESC], json[LONG_DESC], json[QUESTION], json[TOPIC_NAME]);
   }
 
   @override

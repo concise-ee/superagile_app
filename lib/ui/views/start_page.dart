@@ -14,11 +14,10 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return new WillPopScope(
         onWillPop: () async => false,
-    child:
-      Scaffold(
-      appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
-      body: _buildBody(context),
-    ));
+        child: Scaffold(
+          appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
+          body: _buildBody(context),
+        ));
   }
 
   Widget _buildBody(BuildContext context) {

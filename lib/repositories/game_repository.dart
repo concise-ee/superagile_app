@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
@@ -112,33 +111,33 @@ class GameRepository {
 
   Future<bool> onBackPressed(BuildContext context) {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: Text(ARE_YOU_SURE),
-        content: Text(EXIT_TO_START_PAGE),
-        actions: [
-          new AgileButton(
-            onPressed: () {
-              activityTimer.cancel();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return StartPage();
-                }),
-              );
-            },
-            buttonTitle: YES,
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: Text(ARE_YOU_SURE),
+            content: Text(EXIT_TO_START_PAGE),
+            actions: [
+              new AgileButton(
+                onPressed: () {
+                  activityTimer.cancel();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return StartPage();
+                    }),
+                  );
+                },
+                buttonTitle: YES,
+              ),
+              new AgileButton(
+                buttonTitle: NO,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              SizedBox(height: 16),
+            ],
           ),
-          new AgileButton(
-            buttonTitle: NO,
-            onPressed: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          SizedBox(height: 16),
-        ],
-      ),
-    ) ??
+        ) ??
         null;
   }
 }
