@@ -1,13 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/score.dart';
-import 'package:superagile_app/ui/components/agile_button.dart';
-import 'package:superagile_app/ui/views/start_page.dart';
-import 'package:superagile_app/utils/globals.dart';
-import 'package:superagile_app/utils/labels.dart';
 
 const PIN = 'pin';
 const IS_ACTIVE = 'isActive';
@@ -100,37 +95,5 @@ class GameRepository {
     Game game = Game.fromSnapshot(gameSnap);
     game.agreedScores[questionNr.toString()] = agreedScore;
     return gameRef.set(game.toJson());
-  }
-
-  Future<bool> onBackPressed(BuildContext context) {
-    return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: Text(ARE_YOU_SURE),
-            content: Text(EXIT_TO_START_PAGE),
-            actions: [
-              new AgileButton(
-                onPressed: () {
-                  activityTimer.cancel();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return StartPage();
-                    }),
-                  );
-                },
-                buttonTitle: YES,
-              ),
-              new AgileButton(
-                buttonTitle: NO,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              SizedBox(height: 16),
-            ],
-          ),
-        ) ??
-        null;
   }
 }
