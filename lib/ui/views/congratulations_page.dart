@@ -8,6 +8,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
+import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
@@ -142,20 +143,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
             child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                    child: Container(
-                        child: Padding(
-                  padding: EdgeInsets.all(50.0),
-                  child: Text('${TEAMS_RESULTS} ${questionByNumber.topicName}: ${agreedScore}',
-                      style: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 1.5),
-                      textAlign: TextAlign.center),
-                ))),
-              ],
-            ),
+            Row(children: [GamePin(gamePin: this.gamePin)]),
           ],
         )),
         Row(

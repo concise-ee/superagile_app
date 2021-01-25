@@ -8,6 +8,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
+import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/question_answers_section.dart';
 import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
@@ -122,20 +123,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Widget buildBody(context) {
     return Column(
       children: [
-        Row(children: [
-          Flexible(
-              flex: 1,
-              child: Container(
-                  padding: EdgeInsets.all(25),
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    '${GAME_PIN} ${this.gamePin}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  )))
-        ]),
+        Row(children: [GamePin(gamePin: this.gamePin)]),
         Expanded(
             child: SingleChildScrollView(
                 child: Column(

@@ -11,6 +11,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
+import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
@@ -45,6 +46,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Player currentPlayer;
   bool isLoading = true;
   int gamePin;
+
   _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
 
   @override
@@ -179,25 +181,13 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
+        Row(children: [GamePin(gamePin: this.gamePin)]),
         Expanded(
             child: SingleChildScrollView(
-                padding: EdgeInsets.all(25),
+                padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(children: [
-                      Flexible(
-                          flex: 1,
-                          child: Container(
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                '${GAME_PIN} ${this.gamePin}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
-                              )))
-                    ]),
                     Row(
                       children: [
                         Flexible(
