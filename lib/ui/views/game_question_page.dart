@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
-import 'package:superagile_app/entities/role.dart';
+import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
@@ -43,7 +43,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   List<StreamSubscription<QuerySnapshot>> playerScoreStreams = [];
   StreamSubscription<DocumentSnapshot> gameStream;
   StreamSubscription<QuerySnapshot> playersStream;
-  Player currentPlayer;
+  UserRole userRole;
+  bool isPlayingAlong;
   bool isLoading = true;
   int gamePin;
 
@@ -90,7 +91,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     final QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
-      currentPlayer = player;
+      userRole = player.role;
+      isPlayingAlong = player.isPlayingAlong;
       questionTemplate = questionByNumber;
       isLoading = false;
       gamePin = pin;
@@ -98,9 +100,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void listenForUpdateToGoToQuestionResultsPage() async {
-    if (currentPlayer.role == Role.PLAYER) {
+    if (userRole == UserRole.PLAYER) {
       listenGameStateChanges();
-    } else if (currentPlayer.role == Role.HOST) {
+    } else if (userRole == UserRole.HOST) {
       listenEveryActivePlayerScoreChanges();
     }
   }
@@ -296,7 +298,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                     ),
                   ],
                 ))),
-        if (currentPlayer.role == Role.PLAYER || (currentPlayer.role == Role.HOST && currentPlayer.isPlayingAlong))
+        if (userRole == UserRole.PLAYER || (userRole == UserRole.HOST && isPlayingAlong))
           SafeArea(
               child: Row(
             children: [

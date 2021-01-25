@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
+import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
@@ -33,7 +35,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Timer timer;
   String gamePin = '';
   StreamSubscription<DocumentSnapshot> gameStream;
-  bool isHost;
+  UserRole userRole;
   bool isLoading = true;
 
   _WaitingRoomPageState(this.gameRef, this.playerRef);
@@ -62,10 +64,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Future<void> loadData() async {
     Game game = await gameService.findActiveGameByRef(gameRef);
-    bool host = await playerService.isPlayerHosting(playerRef);
+    Player player = await playerService.findGamePlayerByRef(playerRef);
     setState(() {
       gamePin = game.pin.toString();
-      isHost = host;
+      userRole = player.role;
       isLoading = false;
     });
   }
@@ -87,20 +89,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   void dispose() {
     gameStream.cancel();
     super.dispose();
-  }
-
-  void loadGame() async {
-    Game game = await gameService.findActiveGameByRef(gameRef);
-    setState(() {
-      gamePin = game.pin.toString();
-    });
-  }
-
-  void loadIsHost() async {
-    bool host = await playerService.isPlayerHosting(playerRef);
-    setState(() {
-      isHost = host;
-    });
   }
 
   Future<bool> _onBackPressed() {
@@ -130,10 +118,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             child: Text(WAITING_ROOM,
                 textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
         BorderedText(gamePin),
-        if (isHost) buildText(CODE_SHARE_CALL),
+        if (userRole == UserRole.HOST) buildText(CODE_SHARE_CALL),
         buildText(WAIT_FOR_TEAM),
-        if (isHost) buildText(PLAY_BUTTON_CALL),
-        if (isHost) buildStartGameButton(),
+        if (userRole == UserRole.HOST) buildText(PLAY_BUTTON_CALL),
+        if (userRole == UserRole.HOST) buildStartGameButton(),
         buildPlayerCount(),
         Container(child: buildActivePlayersWidget()),
       ],

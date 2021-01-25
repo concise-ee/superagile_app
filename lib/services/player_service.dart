@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:superagile_app/entities/player.dart';
-import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/repositories/player_repository.dart';
 
 const ACTIVITY_INTERVAL = 15;
@@ -43,11 +42,6 @@ class PlayerService {
         .where((player) =>
             DateTime.parse(player.lastActive).isAfter(DateTime.now().subtract(Duration(seconds: ACTIVITY_INTERVAL))))
         .toList();
-  }
-
-  Future<bool> isPlayerHosting(DocumentReference playerRef) async {
-    Player player = await _playerRepository.findGamePlayerByRef(playerRef);
-    return player.role == Role.HOST;
   }
 
   Stream<QuerySnapshot> getGamePlayersStream(DocumentReference gameRef) {

@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_template.dart';
+import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
@@ -37,7 +39,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   final PlayerService playerService = PlayerService();
   final QuestionService questionService = QuestionService();
   StreamSubscription<DocumentSnapshot> gameStream;
-  bool isHost;
+  UserRole userRole;
   bool isLoading = true;
   String agreedScore;
   QuestionTemplate questionByNumber;
@@ -65,7 +67,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   void listenForUpdateToGoToNextQuestion() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
-      if (!isHost && gameState.contains(GameState.QUESTION)) {
+      if (userRole == UserRole.PLAYER && gameState.contains(GameState.QUESTION)) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -73,7 +75,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           }),
         );
       }
-      if (!isHost && gameState == GameState.FINAL) {
+      if (userRole == UserRole.PLAYER && gameState == GameState.FINAL) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -85,12 +87,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<void> loadData() async {
-    bool isHost = await playerService.isPlayerHosting(playerRef);
+    Player player = await playerService.findGamePlayerByRef(playerRef);
     String agreedScore = await getAgreedScore();
     QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
-      this.isHost = isHost;
+      this.userRole = player.role;
       this.agreedScore = agreedScore;
       this.isLoading = false;
       this.questionByNumber = questionByNumber;
@@ -186,14 +188,14 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 alignment: Alignment.center,
                 child: Padding(
                     padding: EdgeInsets.all(12.0),
-                    child: Text(isHost ? GO_TO_NEXT_QUESTION : WAIT_FOR_NEXT_QUESTION,
+                    child: Text(userRole == UserRole.HOST ? GO_TO_NEXT_QUESTION : WAIT_FOR_NEXT_QUESTION,
                         style: TextStyle(color: Colors.yellowAccent, fontSize: 14, letterSpacing: 1.5),
                         textAlign: TextAlign.center)),
               ),
             )
           ],
         ),
-        if (isHost)
+        if (userRole == UserRole.HOST)
           Row(
             children: [
               Expanded(
