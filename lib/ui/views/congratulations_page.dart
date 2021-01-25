@@ -125,25 +125,25 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
-        Row(children: [
-          Flexible(
-              flex: 1,
-              child: Container(
-                  padding: EdgeInsets.all(25),
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    '${GAME_PIN} ${this.gamePin}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  )))
-        ]),
+        Row(children: [GamePin(gamePin: this.gamePin)]),
         Expanded(
             child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(children: [GamePin(gamePin: this.gamePin)]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Container(
+                        child: Padding(
+                  padding: EdgeInsets.all(50.0),
+                  child: Text('${TEAMS_RESULTS} ${questionByNumber.topicName}: ${agreedScore}',
+                      style: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 1.5),
+                      textAlign: TextAlign.center),
+                ))),
+              ],
+            ),
           ],
         )),
         Row(
