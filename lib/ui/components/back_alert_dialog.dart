@@ -6,7 +6,7 @@ import 'package:superagile_app/utils/labels.dart';
 
 import 'agile_button.dart';
 
-class DialogAlert extends StatelessWidget {
+class BackDialogAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

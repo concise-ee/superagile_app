@@ -10,7 +10,7 @@ import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
-import 'package:superagile_app/ui/components/alert_dialog.dart';
+import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
@@ -158,7 +158,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Future<bool> _onBackPressed() {
     return showDialog(
       context: context,
-      builder: (context) => DialogAlert(),
+      builder: (context) => BackDialogAlert(),
     );
   }
 
