@@ -7,10 +7,10 @@ import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/entities/role.dart';
-import 'package:superagile_app/repositories/game_repository.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
+import 'package:superagile_app/ui/components/alert_dialog.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
@@ -155,10 +155,17 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     playerScoreStreams.clear();
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => DialogAlert(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        onWillPop: () => GameRepository().onBackPressed(context),
+        onWillPop: () => _onBackPressed(),
         child: Scaffold(
           appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
           body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
