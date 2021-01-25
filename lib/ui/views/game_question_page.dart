@@ -152,39 +152,6 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     playerScoreStreams.clear();
   }
 
-  /*Future<bool> _onBackPressed() {
-    return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: Text(ARE_YOU_SURE),
-            content: Text(EXIT_TO_START_PAGE),
-            actions: [
-              new AgileButton(
-                onPressed: () {
-                  activityTimer.cancel();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return StartPage();
-                    }),
-                  );
-                },
-                buttonTitle: YES,
-              ),
-              new AgileButton(
-                buttonTitle: NO,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              SizedBox(height: 16),
-            ],
-          ),
-        ) ??
-        false;
-  }
-  */
-
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
