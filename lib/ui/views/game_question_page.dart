@@ -44,6 +44,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   StreamSubscription<QuerySnapshot> playersStream;
   Player currentPlayer;
   bool isLoading = true;
+  int gamePin;
   _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
 
   @override
@@ -85,10 +86,12 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Future<void> loadData() async {
     Player player = await playerService.findGamePlayerByRef(playerRef);
     final QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
+    var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       currentPlayer = player;
       questionTemplate = questionByNumber;
       isLoading = false;
+      gamePin = pin;
     });
   }
 
@@ -175,6 +178,19 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Row(children: [
+                      Flexible(
+                          flex: 1,
+                          child: Container(
+                              alignment: Alignment.topRight,
+                              child: Text(
+                                '${GAME_PIN} ${this.gamePin}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
+                              )))
+                    ]),
                     Row(
                       children: [
                         Flexible(
