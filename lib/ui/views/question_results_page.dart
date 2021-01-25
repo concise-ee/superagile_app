@@ -125,7 +125,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Widget buildBody(context) {
     return Column(
       children: [
-        Row(children: [GamePin(gamePin: this.gamePin)]),
+        Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
             child: SingleChildScrollView(
                 child: Column(

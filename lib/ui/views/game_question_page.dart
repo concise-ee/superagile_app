@@ -183,7 +183,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
-        Row(children: [GamePin(gamePin: this.gamePin)]),
+        Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
             child: SingleChildScrollView(
                 padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),

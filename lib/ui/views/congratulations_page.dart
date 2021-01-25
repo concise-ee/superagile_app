@@ -127,7 +127,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
-        Row(children: [GamePin(gamePin: this.gamePin)]),
+        Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
             child: Column(
           mainAxisSize: MainAxisSize.min,
