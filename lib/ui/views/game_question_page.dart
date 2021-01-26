@@ -176,8 +176,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         ));
   }
 
-  void saveScoreAndWaitForNextPage(String buttonValue) async {
-    await gameService.setScore(playerRef, gameRef, questionNr, buttonValue);
+  void saveScoreAndWaitForNextPage(String scoreValue) async {
+    await gameService.setScore(playerRef, gameRef, questionNr, scoreValue);
   }
 
   Widget buildBody(BuildContext context) {

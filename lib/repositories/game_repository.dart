@@ -55,7 +55,7 @@ class GameRepository {
   }
 
   Future<void> setScore(DocumentReference playerRef, Score score) {
-    return playerRef.collection(SCORES_SUB_COLLECTION).doc('${score.question}').set(score.toJson());
+    return playerRef.collection(SCORES_SUB_COLLECTION).doc(score.question.toString()).set(score.toJson());
   }
 
   Future<QuestionScores> findScoresForQuestion(DocumentReference gameRef, int questionNumber) async {

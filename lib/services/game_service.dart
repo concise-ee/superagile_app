@@ -44,8 +44,8 @@ class GameService {
   }
 
   Future<void> setScore(
-      DocumentReference playerRef, DocumentReference gameRef, int questionNr, String buttonValue) async {
-    var score = Score(questionNr, buttonValue != null ? int.parse(buttonValue) : null, playerRef.id);
+      DocumentReference playerRef, DocumentReference gameRef, int questionNr, String scoreValue) async {
+    var score = Score(questionNr, scoreValue != null ? int.parse(scoreValue) : null, playerRef.id);
     return _gameRepository.setScore(playerRef, score);
   }
 
