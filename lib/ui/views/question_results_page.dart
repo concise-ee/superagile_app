@@ -15,6 +15,7 @@ import 'package:superagile_app/ui/components/question_answers_section.dart';
 import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/utils/timer_utils.dart';
 
 import 'game_question_page.dart';
 
@@ -53,6 +54,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   @override
   void initState() {
     super.initState();
+    startActivityTimer(playerRef);
     loadDataAndSetupListener();
   }
 

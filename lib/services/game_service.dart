@@ -65,12 +65,12 @@ class GameService {
     return _gameRepository.findScoresForQuestion(gameReference, questionNumber);
   }
 
-  int getAnsweredPlayersCount(QuestionScores questionScores) {
-    return questionScores.answeredNull.length +
-        questionScores.answered0.length +
-        questionScores.answered1.length +
-        questionScores.answered2.length +
-        questionScores.answered3.length;
+  List<String> getAnsweredPlayerNames(QuestionScores questionScores) {
+    return questionScores.answeredNull +
+        questionScores.answered0 +
+        questionScores.answered1 +
+        questionScores.answered2 +
+        questionScores.answered3;
   }
 
   void deleteOldScore(DocumentReference playerRef, int questionNr) {

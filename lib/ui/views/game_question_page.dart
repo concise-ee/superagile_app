@@ -16,9 +16,9 @@ import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
-import 'package:superagile_app/utils/globals.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/list_utils.dart';
+import 'package:superagile_app/utils/timer_utils.dart';
 
 class GameQuestionPage extends StatefulWidget {
   final int _questionNr;
@@ -61,12 +61,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   void initState() {
     super.initState();
-    if (activityTimer == null) {
-      playerService.sendLastActive(playerRef);
-      activityTimer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-        playerService.sendLastActive(playerRef);
-      });
-    }
+    startActivityTimer(playerRef);
     loadDataAndSetupListeners();
   }
 
@@ -134,8 +129,15 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     for (var player in activePlayers) {
       StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
         QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
-        int answeredPlayerCount = gameService.getAnsweredPlayersCount(questionScores);
-        if (activePlayers.length == answeredPlayerCount) {
+        List<String> answeredPlayerNames = gameService.getAnsweredPlayerNames(questionScores);
+        List<String> activePlayerNames = activePlayers.map((e) => e.name).toList();
+        bool arePlayersSame = true;
+        for (var activePlayer in activePlayerNames) {
+          if (!answeredPlayerNames.contains(activePlayer)) {
+            arePlayersSame = false;
+          }
+        }
+        if (arePlayersSame) {
           await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
           return navigateToQuestionResultsPage();
         }

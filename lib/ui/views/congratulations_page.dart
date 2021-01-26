@@ -15,6 +15,7 @@ import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/utils/timer_utils.dart';
 
 import 'final_page.dart';
 
@@ -50,6 +51,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   @override
   void initState() {
     super.initState();
+    startActivityTimer(playerRef);
     loadDataAndSetupListener();
   }
 
