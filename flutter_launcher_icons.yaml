@@ -1,0 +1,6 @@
+# Generate icons: flutter packages pub run flutter_launcher_icons:main
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "resources/superagile_app_logo.png"
+  image_path_android: "resources/superagile_app_logo.png"
