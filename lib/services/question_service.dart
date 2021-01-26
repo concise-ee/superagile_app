@@ -7,4 +7,8 @@ class QuestionService {
   Future<QuestionTemplate> findQuestionByNumber(questionNr) {
     return _questionRepository.findQuestionByNumber(questionNr);
   }
+
+  Future<Map<int,String>> getAllQuestionTopics() {
+    return _questionRepository.getAllQuestionTopics();
+  }
 }
