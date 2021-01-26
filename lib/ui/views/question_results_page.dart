@@ -76,7 +76,9 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       String gameState = await gameService.getGameState(gameRef);
       int newQuestionNr = parseSequenceNumberFromGameState(gameState);
       if (userRole == UserRole.PLAYER && gameState.contains(GameState.QUESTION)) {
-        await gameService.deleteOldScore(playerRef, questionNr);
+        if (newQuestionNr == questionNr) {
+          await gameService.deleteOldScore(playerRef, questionNr);
+        }
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
