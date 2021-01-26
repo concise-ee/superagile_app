@@ -16,6 +16,7 @@ class BackDialogAlert extends StatelessWidget {
         AgileButton(
           onPressed: () {
             activityTimer.cancel();
+            Navigator.pop(context);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) {
@@ -28,7 +29,7 @@ class BackDialogAlert extends StatelessWidget {
         AgileButton(
           buttonTitle: NO,
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
           },
         ),
         SizedBox(height: 16),
