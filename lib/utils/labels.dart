@@ -38,3 +38,4 @@ const ARE_YOU_SURE = 'Are you sure?';
 const YES = 'Yes';
 const NO = 'No';
 const GAME_PIN = 'Game PIN:';
+const ANSWERED = 'Answered:';

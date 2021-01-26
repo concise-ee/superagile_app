@@ -57,9 +57,9 @@ class _FinalPage extends State<FinalPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
+    return WillPopScope(
       onWillPop: () => _onBackPressed(),
-      child: new Scaffold(
+      child: Scaffold(
         appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
         body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
       ),

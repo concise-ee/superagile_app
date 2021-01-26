@@ -11,6 +11,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
+import 'package:superagile_app/ui/components/button_percent_popup.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
@@ -171,7 +172,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     return new WillPopScope(
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
-          appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
+          appBar: AppBar(
+              title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false, actions: <Widget>[ButtonPercentPopup()]),
           body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
         ));
   }
