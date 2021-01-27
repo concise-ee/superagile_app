@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
@@ -31,7 +32,7 @@ class _FinalPage extends State<FinalPage> {
   Map<String, int> agreedScores;
   bool isLoading = true;
   int gamePin;
-  Map<int, String> topicNames;
+  List<QuestionTemplate> questions;
 
   _FinalPage(this.playerRef, this.gameRef);
 
@@ -44,12 +45,12 @@ class _FinalPage extends State<FinalPage> {
   void loadData() async {
     var totalScore = await gameService.getAgreedScores(gameRef);
     var pin = await gameService.getGamePinByRef(gameRef);
-    var topicNamesByNumber = await questionService.getAllQuestionTopics();
+    var questionTemplates = await questionService.getAllQuestionTemplates();
     setState(() {
       agreedScores = totalScore;
       isLoading = false;
       gamePin = pin;
-      topicNames = topicNamesByNumber;
+      questions = questionTemplates;
     });
   }
 
@@ -120,7 +121,7 @@ class _FinalPage extends State<FinalPage> {
       for (MapEntry<String, int> score in agreedScores.entries)
         Container(
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            Text('${topicNames[int.parse(score.key)]}: ${score.value}',
+            Text('${questions.firstWhere((element) => element.reference.id == score.key).topicName}: ${score.value}',
                 style: TextStyle(color: Colors.white, fontSize: 20, letterSpacing: 1.5), textAlign: TextAlign.center)
           ]),
         ),
