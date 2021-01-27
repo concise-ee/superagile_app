@@ -50,7 +50,6 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   @override
   void initState() {
     super.initState();
-    playerService.sendLastActive(playerRef);
     startActivityTimer(playerRef);
     loadDataAndSetupListener();
   }

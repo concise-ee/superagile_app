@@ -4,7 +4,7 @@ import 'package:superagile_app/services/player_service.dart';
 
 Timer activityTimer;
 const TIMER_DURATION = 10;
-var _playerService = PlayerService();
+final _playerService = PlayerService();
 
 startActivityTimer(playerRef) {
   if (activityTimer == null) {
