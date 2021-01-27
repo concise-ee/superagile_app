@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
@@ -25,6 +27,7 @@ class FinalPage extends StatefulWidget {
 class _FinalPage extends State<FinalPage> {
   final DocumentReference playerRef;
   final DocumentReference gameRef;
+  final _emailController = TextEditingController();
   final GameService gameService = GameService();
   final PlayerService playerService = PlayerService();
   final QuestionService questionService = QuestionService();
@@ -39,6 +42,30 @@ class _FinalPage extends State<FinalPage> {
   void initState() {
     super.initState();
     loadData();
+  }
+
+  void Mailer() async {
+    String username = 'noreply@concise.ee';
+    String password = 'vhuveuqwywtubdik';
+
+    final smtpServer = gmail(username, password);
+
+    //Create our Message
+    final message = Message()
+      ..from = Address(username, 'concise')
+      ..recipients.add(_emailController.text)
+      ..subject = 'Flutter Mailer Test'
+      ..text = 'Auto Mailing with Flutter with Custom Template';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
   }
 
   void loadData() async {
@@ -89,6 +116,32 @@ class _FinalPage extends State<FinalPage> {
             buildSeparateScore(),
           ],
         ))),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(hintText: 'Enter Email'),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: AgileButton(
+                  buttonTitle: 'Send results',
+                  onPressed: Mailer,
+                ),
+              ),
+            ),
+          ],
+        ),
         Container(
           padding: EdgeInsets.only(bottom: 5),
           child: AgileButton(
