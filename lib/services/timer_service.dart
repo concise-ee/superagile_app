@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:superagile_app/services/player_service.dart';
 
-import 'globals.dart';
-
+Timer activityTimer;
 const TIMER_DURATION = 10;
 var _playerService = PlayerService();
 

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/views/start_page.dart';
-import 'package:superagile_app/utils/globals.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'agile_button.dart';

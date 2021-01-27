@@ -7,10 +7,10 @@ import 'package:superagile_app/entities/player.dart';
 import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
-import 'package:superagile_app/utils/globals.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
@@ -51,9 +51,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   void initState() {
     super.initState();
     playerService.sendLastActive(playerRef);
-    activityTimer = Timer.periodic(Duration(seconds: 10), (Timer t) {
-      playerService.sendLastActive(playerRef);
-    });
+    startActivityTimer(playerRef);
     loadDataAndSetupListener();
   }
 

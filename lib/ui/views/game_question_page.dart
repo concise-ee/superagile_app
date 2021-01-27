@@ -10,6 +10,7 @@ import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/player_service.dart';
 import 'package:superagile_app/services/question_service.dart';
+import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/button_percent_popup.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
@@ -18,7 +19,6 @@ import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/list_utils.dart';
-import 'package:superagile_app/utils/timer_utils.dart';
 
 class GameQuestionPage extends StatefulWidget {
   final int _questionNr;
@@ -130,14 +130,13 @@ class _GameQuestionPage extends State<GameQuestionPage> {
       StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
         QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
         List<String> answeredPlayerNames = gameService.getAnsweredPlayerNames(questionScores);
-        List<String> activePlayerNames = activePlayers.map((e) => e.name).toList();
-        bool arePlayersSame = true;
-        for (var activePlayer in activePlayerNames) {
-          if (!answeredPlayerNames.contains(activePlayer)) {
-            arePlayersSame = false;
+        bool haveAllActivePlayersVoted = true;
+        for (var activePlayer in activePlayers) {
+          if (!answeredPlayerNames.contains(activePlayer.name)) {
+            haveAllActivePlayersVoted = false;
           }
         }
-        if (arePlayersSame) {
+        if (haveAllActivePlayersVoted) {
           await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
           return navigateToQuestionResultsPage();
         }
