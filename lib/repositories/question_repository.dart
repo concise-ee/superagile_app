@@ -13,7 +13,6 @@ class QuestionRepository {
 
   Future<List<QuestionTemplate>> getAllQuestionTemplates() async {
     var snapshot = await _repository.get();
-    List<QuestionTemplate> questions = snapshot.docs.map((snap) => QuestionTemplate.fromSnapshot(snap)).toList();
-    return questions;
+    return snapshot.docs.map((snap) => QuestionTemplate.fromSnapshot(snap)).toList();
   }
 }
