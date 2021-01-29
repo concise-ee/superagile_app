@@ -9,6 +9,7 @@ import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
+import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
@@ -39,6 +40,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   final GameService gameService = GameService();
   final ParticipantService participantService = ParticipantService();
   final QuestionService questionService = QuestionService();
+  final ScoreService scoreService = ScoreService();
   StreamSubscription<DocumentSnapshot> gameStream;
   Role role;
   bool isLoading = true;
@@ -103,7 +105,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<String> getAgreedScore() async {
-    int agreedScore = await gameService.getAgreedScoreForQuestion(gameRef, questionNr);
+    int agreedScore = await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
     if (agreedScore == null) return NO_SCORE;
     return agreedScore.toString();
   }

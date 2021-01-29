@@ -8,6 +8,7 @@ import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
+import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
@@ -32,6 +33,7 @@ class _FinalPage extends State<FinalPage> {
   final GameService gameService = GameService();
   final ParticipantService participantService = ParticipantService();
   final QuestionService questionService = QuestionService();
+  final ScoreService scoreService = ScoreService();
   Map<String, int> agreedScores;
   bool isLoading = true;
   int gamePin;
@@ -70,7 +72,7 @@ class _FinalPage extends State<FinalPage> {
   }
 
   void loadData() async {
-    var totalScore = await gameService.getAgreedScores(gameRef);
+    var totalScore = await scoreService.getAgreedScores(gameRef);
     var pin = await gameService.getGamePinByRef(gameRef);
     var questionTemplates = await questionService.getAllQuestionTemplates();
     setState(() {

@@ -10,6 +10,7 @@ import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
+import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/button_percent_popup.dart';
@@ -36,6 +37,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   final QuestionService questionService = QuestionService();
   final GameService gameService = GameService();
   final ParticipantService participantService = ParticipantService();
+  final ScoreService scoreService = ScoreService();
   final int questionNr;
   final DocumentReference participantRef;
   final DocumentReference gameRef;
@@ -128,9 +130,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   void setupActiveParticipantsScoreStreams(List<Participant> activeParticipants) {
     for (var participant in activeParticipants) {
       StreamSubscription<QuerySnapshot> stream =
-          gameService.getScoresStream(participant.reference).listen((data) async {
-        QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
-        List<String> answeredParticipantNames = gameService.getAnsweredParticipantNames(questionScores);
+          scoreService.getScoresStream(participant.reference).listen((data) async {
+        QuestionScores questionScores = await scoreService.findScoresForQuestion(gameRef, questionNr);
+        List<String> answeredParticipantNames = scoreService.getAnsweredParticipantNames(questionScores);
         bool haveAllActiveParticipantsVoted = true;
         for (var activeParticipant in activeParticipants) {
           if (!answeredParticipantNames.contains(activeParticipant.name)) {
@@ -181,7 +183,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void saveScoreAndWaitForNextPage(String scoreValue) async {
-    await gameService.setScore(participantRef, gameRef, questionNr, scoreValue);
+    await scoreService.setScore(participantRef, gameRef, questionNr, scoreValue);
   }
 
   Widget buildBody(BuildContext context) {

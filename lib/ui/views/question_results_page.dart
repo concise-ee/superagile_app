@@ -8,6 +8,7 @@ import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
+import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
@@ -34,6 +35,7 @@ class QuestionResultsPage extends StatefulWidget {
 class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final GameService gameService = GameService();
   final ParticipantService participantService = ParticipantService();
+  final ScoreService scoreService = ScoreService();
   QuestionScores questionScores = new QuestionScores([], [], [], [], []);
   final int questionNr;
   final DocumentReference participantRef;
@@ -80,7 +82,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       int newQuestionNr = parseSequenceNumberFromGameState(gameState);
       if (role == Role.PLAYER && gameState.contains(GameState.QUESTION)) {
         if (newQuestionNr == questionNr) {
-          await gameService.deleteOldScore(participantRef, questionNr);
+          await scoreService.deleteOldScore(participantRef, questionNr);
         }
         return Navigator.pushReplacement(
           context,
@@ -101,7 +103,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   Future<void> loadData() async {
     Participant participant = await participantService.findGameParticipantByRef(participantRef);
-    var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
+    var scores = await scoreService.findScoresForQuestion(this.gameRef, this.questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       role = participant.role;
@@ -180,7 +182,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       return AgileButton(
         buttonTitle: CONTINUE,
         onPressed: () async {
-          await gameService.setAgreedScore(gameRef, getAgreedScore(), questionNr);
+          await scoreService.setAgreedScore(gameRef, getAgreedScore(), questionNr);
           await gameService.changeGameState(gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
           Navigator.pushReplacement(
             context,
@@ -194,7 +196,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     return AgileButton(
       buttonTitle: CHANGE_ANSWER,
       onPressed: () async {
-        await gameService.deleteOldScore(participantRef, questionNr);
+        await scoreService.deleteOldScore(participantRef, questionNr);
         await gameService.changeGameState(gameRef, '${GameState.QUESTION}_$questionNr');
         Navigator.pushReplacement(
           context,
