@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class QuestionAnswersSection extends StatelessWidget {
-  QuestionAnswersSection({@required this.answerNumber, @required this.playerNames});
+  QuestionAnswersSection({@required this.answerNumber, @required this.participantNames});
 
   final int answerNumber;
-  final List<String> playerNames;
+  final List<String> participantNames;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class QuestionAnswersSection extends StatelessWidget {
             style: TextStyle(color: Colors.white, fontSize: 100, fontWeight: FontWeight.w600),
           ),
           Column(
-              children: playerNames
+              children: participantNames
                   .map((item) =>
                       new Text(item, style: TextStyle(color: Colors.white, fontSize: 14, height: 3, letterSpacing: 2)))
                   .toList()),

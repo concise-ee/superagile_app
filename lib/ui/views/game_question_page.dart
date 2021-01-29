@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
-import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
@@ -22,34 +22,34 @@ import 'package:superagile_app/utils/list_utils.dart';
 
 class GameQuestionPage extends StatefulWidget {
   final int _questionNr;
-  final DocumentReference _playerRef;
+  final DocumentReference _participantRef;
   final DocumentReference _gameRef;
 
-  GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
+  GameQuestionPage(this._questionNr, this._participantRef, this._gameRef);
 
   @override
-  _GameQuestionPage createState() => _GameQuestionPage(this._questionNr, this._playerRef, this._gameRef);
+  _GameQuestionPage createState() => _GameQuestionPage(this._questionNr, this._participantRef, this._gameRef);
 }
 
 class _GameQuestionPage extends State<GameQuestionPage> {
   static const int HOST_SKIP_VALUE = -1;
   final QuestionService questionService = QuestionService();
   final GameService gameService = GameService();
-  final PlayerService playerService = PlayerService();
+  final ParticipantService participantService = ParticipantService();
   final int questionNr;
-  final DocumentReference playerRef;
+  final DocumentReference participantRef;
   final DocumentReference gameRef;
   QuestionTemplate questionTemplate;
   int pressedButton;
-  List<StreamSubscription<QuerySnapshot>> playerScoreStreams = [];
+  List<StreamSubscription<QuerySnapshot>> participantScoreStreams = [];
   StreamSubscription<DocumentSnapshot> gameStream;
-  StreamSubscription<QuerySnapshot> playersStream;
+  StreamSubscription<QuerySnapshot> participantsStream;
   UserRole userRole;
   bool isPlayingAlong;
   bool isLoading = true;
   int gamePin;
 
-  _GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
+  _GameQuestionPage(this.questionNr, this.participantRef, this.gameRef);
 
   @override
   void setState(state) {
@@ -61,18 +61,18 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   void initState() {
     super.initState();
-    startActivityTimer(playerRef);
+    startActivityTimer(participantRef);
     loadDataAndSetupListeners();
   }
 
   @override
   void dispose() {
-    cancelPlayersScoreStreams();
+    cancelParticipantsScoreStreams();
     if (gameStream != null) {
       gameStream.cancel();
     }
-    if (playersStream != null) {
-      playersStream.cancel();
+    if (participantsStream != null) {
+      participantsStream.cancel();
     }
     super.dispose();
   }
@@ -83,12 +83,12 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   Future<void> loadData() async {
-    Player player = await playerService.findGamePlayerByRef(playerRef);
+    Participant participant = await participantService.findGameParticipantByRef(participantRef);
     final QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
-      userRole = player.role;
-      isPlayingAlong = player.isPlayingAlong;
+      userRole = participant.role;
+      isPlayingAlong = participant.isPlayingAlong;
       questionTemplate = questionByNumber;
       isLoading = false;
       gamePin = pin;
@@ -99,7 +99,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     if (userRole == UserRole.PLAYER) {
       listenGameStateChanges();
     } else if (userRole == UserRole.HOST) {
-      listenEveryActivePlayerScoreChanges();
+      listenEveryActiveParticipantScoreChanges();
     }
   }
 
@@ -112,36 +112,37 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     });
   }
 
-  void listenEveryActivePlayerScoreChanges() async {
-    List<Player> activePlayers = await playerService.findActiveGamePlayers(gameRef);
-    setupActivePlayersScoreStreams(activePlayers);
-    playersStream = playerService.getGamePlayersStream(gameRef).listen((data) async {
-      List<Player> newActivePlayers = await playerService.findActiveGamePlayers(gameRef);
-      if (!areEqualByName(activePlayers, newActivePlayers)) {
-        cancelPlayersScoreStreams();
-        activePlayers = newActivePlayers;
-        setupActivePlayersScoreStreams(activePlayers);
+  void listenEveryActiveParticipantScoreChanges() async {
+    List<Participant> activeParticipants = await participantService.findActiveGameParticipants(gameRef);
+    setupActiveParticipantsScoreStreams(activeParticipants);
+    participantsStream = participantService.getParticipantsStream(gameRef).listen((data) async {
+      List<Participant> newActiveParticipants = await participantService.findActiveGameParticipants(gameRef);
+      if (!areEqualByName(activeParticipants, newActiveParticipants)) {
+        cancelParticipantsScoreStreams();
+        activeParticipants = newActiveParticipants;
+        setupActiveParticipantsScoreStreams(activeParticipants);
       }
     });
   }
 
-  void setupActivePlayersScoreStreams(List<Player> activePlayers) {
-    for (var player in activePlayers) {
-      StreamSubscription<QuerySnapshot> stream = gameService.getScoresStream(player.reference).listen((data) async {
+  void setupActiveParticipantsScoreStreams(List<Participant> activeParticipants) {
+    for (var participant in activeParticipants) {
+      StreamSubscription<QuerySnapshot> stream =
+          gameService.getScoresStream(participant.reference).listen((data) async {
         QuestionScores questionScores = await gameService.findScoresForQuestion(gameRef, questionNr);
-        List<String> answeredPlayerNames = gameService.getAnsweredPlayerNames(questionScores);
-        bool haveAllActivePlayersVoted = true;
-        for (var activePlayer in activePlayers) {
-          if (!answeredPlayerNames.contains(activePlayer.name)) {
-            haveAllActivePlayersVoted = false;
+        List<String> answeredParticipantNames = gameService.getAnsweredParticipantNames(questionScores);
+        bool haveAllActiveParticipantsVoted = true;
+        for (var activeParticipant in activeParticipants) {
+          if (!answeredParticipantNames.contains(activeParticipant.name)) {
+            haveAllActiveParticipantsVoted = false;
           }
         }
-        if (haveAllActivePlayersVoted) {
+        if (haveAllActiveParticipantsVoted) {
           await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
           return navigateToQuestionResultsPage();
         }
       });
-      playerScoreStreams.add(stream);
+      participantScoreStreams.add(stream);
     }
   }
 
@@ -149,16 +150,16 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     return Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
-        return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, playerRef: playerRef);
+        return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, participantRef: participantRef);
       }),
     );
   }
 
-  void cancelPlayersScoreStreams() {
-    playerScoreStreams.forEach((stream) {
+  void cancelParticipantsScoreStreams() {
+    participantScoreStreams.forEach((stream) {
       stream.cancel();
     });
-    playerScoreStreams.clear();
+    participantScoreStreams.clear();
   }
 
   Future<bool> _onBackPressed() {
@@ -180,7 +181,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void saveScoreAndWaitForNextPage(String scoreValue) async {
-    await gameService.setScore(playerRef, gameRef, questionNr, scoreValue);
+    await gameService.setScore(participantRef, gameRef, questionNr, scoreValue);
   }
 
   Widget buildBody(BuildContext context) {

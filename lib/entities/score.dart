@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 const QUESTION = 'question';
 const SCORE = 'score';
-const PLAYER_REF_ID = 'playerRefId';
+const PARTICIPANT_REF_ID = 'participantRefId';
 
 class Score {
   int question;
   int score;
-  String playerRefId;
+  String participantRefId;
   DocumentReference reference;
 
-  Score(this.question, this.score, this.playerRefId);
+  Score(this.question, this.score, this.participantRefId);
 
   factory Score.fromSnapshot(DocumentSnapshot snapshot) {
     var newScore = Score.fromJson(snapshot.data());
@@ -19,19 +19,19 @@ class Score {
   }
 
   factory Score.fromJson(Map<String, dynamic> json) {
-    return Score(json[QUESTION], json[SCORE], json[PLAYER_REF_ID]);
+    return Score(json[QUESTION], json[SCORE], json[PARTICIPANT_REF_ID]);
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       QUESTION: question,
       SCORE: score,
-      PLAYER_REF_ID: playerRefId,
+      PARTICIPANT_REF_ID: participantRefId,
     };
   }
 
   @override
   String toString() {
-    return 'Score{$QUESTION: $question, $SCORE: $score, $PLAYER_REF_ID: $playerRefId}';
+    return '${runtimeType}{$QUESTION: $question, $SCORE: $score, $PARTICIPANT_REF_ID: $participantRefId}';
   }
 }

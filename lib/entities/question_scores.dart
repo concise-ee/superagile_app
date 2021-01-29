@@ -9,6 +9,6 @@ class QuestionScores {
 
   @override
   String toString() {
-    return 'QuestionScores{answeredNull: $answeredNull, answered0: $answered0, answered1: $answered1, answered2: $answered2, answered3: $answered3}';
+    return '${runtimeType}{answeredNull: $answeredNull, answered0: $answered0, answered1: $answered1, answered2: $answered2, answered3: $answered3}';
   }
 }

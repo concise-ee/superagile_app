@@ -1,11 +1,11 @@
-import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/participant.dart';
 
-bool areEqualByName(List<Player> activePlayers, List<Player> newActivePlayers) {
-  if (activePlayers.length != newActivePlayers.length) {
+bool areEqualByName(List<Participant> activeParticipants, List<Participant> newActiveParticipants) {
+  if (activeParticipants.length != newActiveParticipants.length) {
     return false;
   }
-  for (int i = 0; i < activePlayers.length; i++) {
-    if (activePlayers[i].name != newActivePlayers[i].name) {
+  for (int i = 0; i < activeParticipants.length; i++) {
+    if (activeParticipants[i].name != newActiveParticipants[i].name) {
       return false;
     }
   }

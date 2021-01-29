@@ -20,25 +20,25 @@ const String STATE_NUMBER_DELIMITER = '_';
 int parseSequenceNumberFromGameState(String gameState) => int.parse(gameState.split(STATE_NUMBER_DELIMITER).last);
 
 Future<MaterialPageRoute<dynamic>> joinCreatedGameAsExistingUser(
-    String gameState, DocumentReference playerRef, DocumentReference gameRef, BuildContext context) {
+    String gameState, DocumentReference participantRef, DocumentReference gameRef, BuildContext context) {
   return Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: (context) {
       if (gameState == GameState.WAITING_ROOM) {
-        return WaitingRoomPage(gameRef, playerRef);
+        return WaitingRoomPage(gameRef, participantRef);
       }
       if (gameState.contains(GameState.QUESTION)) {
-        return GameQuestionPage(parseSequenceNumberFromGameState(gameState), playerRef, gameRef);
+        return GameQuestionPage(parseSequenceNumberFromGameState(gameState), participantRef, gameRef);
       }
       if (gameState.contains(GameState.QUESTION_RESULTS)) {
         return QuestionResultsPage(
-            questionNr: parseSequenceNumberFromGameState(gameState), gameRef: gameRef, playerRef: playerRef);
+            questionNr: parseSequenceNumberFromGameState(gameState), gameRef: gameRef, participantRef: participantRef);
       }
       if (gameState.contains(GameState.CONGRATULATIONS)) {
-        return CongratulationsPage(parseSequenceNumberFromGameState(gameState), playerRef, gameRef);
+        return CongratulationsPage(parseSequenceNumberFromGameState(gameState), participantRef, gameRef);
       }
       if (gameState == GameState.FINAL) {
-        return FinalPage(playerRef, gameRef);
+        return FinalPage(participantRef, gameRef);
       }
       throw ('Game state and route page does not match.');
     }),

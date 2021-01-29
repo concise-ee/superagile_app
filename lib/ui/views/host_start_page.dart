@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
-import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
-import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
@@ -19,7 +19,7 @@ class HostStartPage extends StatefulWidget {
 
 class _HostStartPageState extends State<HostStartPage> {
   final GameService _gameService = GameService();
-  final PlayerService _playerService = PlayerService();
+  final ParticipantService _participantService = ParticipantService();
   final _nameController = TextEditingController();
   final _pinController = TextEditingController();
   bool reconnectToExistingGame = false;
@@ -102,13 +102,13 @@ class _HostStartPageState extends State<HostStartPage> {
             var loggedInUserUid = await signInAnonymously();
             var pin = await _gameService.generateAvailable4DigitPin();
             var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-            var playerRef = await _playerService.addGamePlayer(
-                gameRef, Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), UserRole.HOST, true));
+            var participantRef = await _participantService.addParticipant(gameRef,
+                Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), UserRole.HOST, true));
             await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return WaitingRoomPage(gameRef, playerRef);
+                return WaitingRoomPage(gameRef, participantRef);
               }),
             );
           },
@@ -126,13 +126,13 @@ class _HostStartPageState extends State<HostStartPage> {
             var loggedInUserUid = await signInAnonymously();
             var pin = await _gameService.generateAvailable4DigitPin();
             var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-            var playerRef = await _playerService.addGamePlayer(gameRef,
-                Player(_nameController.text, loggedInUserUid, DateTime.now().toString(), UserRole.HOST, false));
+            var participantRef = await _participantService.addParticipant(gameRef,
+                Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), UserRole.HOST, false));
             await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return WaitingRoomPage(gameRef, playerRef);
+                return WaitingRoomPage(gameRef, participantRef);
               }),
             );
           },
@@ -150,12 +150,12 @@ class _HostStartPageState extends State<HostStartPage> {
           FocusScope.of(context).unfocus();
           await signInAnonymously();
           var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-          var playerRef = await _playerService.findPlayerRefByName(gameRef, _nameController.text);
-          if (playerRef == null) {
+          var participantRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+          if (participantRef == null) {
             throw ('Tried to reconnect as HOST but no such HOST exists.');
           }
           Game game = await _gameService.findActiveGameByRef(gameRef);
-          return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
+          return joinCreatedGameAsExistingUser(game.gameState, participantRef, gameRef, context);
         },
       ),
     );

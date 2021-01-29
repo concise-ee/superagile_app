@@ -44,13 +44,13 @@ class GameService {
   }
 
   Future<void> setScore(
-      DocumentReference playerRef, DocumentReference gameRef, int questionNr, String scoreValue) async {
-    var score = Score(questionNr, scoreValue != null ? int.parse(scoreValue) : null, playerRef.id);
-    return _gameRepository.setScore(playerRef, score);
+      DocumentReference participantRef, DocumentReference gameRef, int questionNr, String scoreValue) async {
+    var score = Score(questionNr, scoreValue != null ? int.parse(scoreValue) : null, participantRef.id);
+    return _gameRepository.setScore(participantRef, score);
   }
 
-  Stream<QuerySnapshot> getScoresStream(DocumentReference playerRef) {
-    return _gameRepository.getScoresStream(playerRef);
+  Stream<QuerySnapshot> getScoresStream(DocumentReference participantRef) {
+    return _gameRepository.getScoresStream(participantRef);
   }
 
   Stream<DocumentSnapshot> getGameStream(DocumentReference gameRef) {
@@ -65,7 +65,7 @@ class GameService {
     return _gameRepository.findScoresForQuestion(gameReference, questionNumber);
   }
 
-  List<String> getAnsweredPlayerNames(QuestionScores questionScores) {
+  List<String> getAnsweredParticipantNames(QuestionScores questionScores) {
     return questionScores.answeredNull +
         questionScores.answered0 +
         questionScores.answered1 +
@@ -73,8 +73,8 @@ class GameService {
         questionScores.answered3;
   }
 
-  void deleteOldScore(DocumentReference playerRef, int questionNr) {
-    _gameRepository.deleteScore(playerRef, questionNr);
+  void deleteOldScore(DocumentReference participantRef, int questionNr) {
+    _gameRepository.deleteScore(participantRef, questionNr);
   }
 
   Future<void> changeGameState(DocumentReference gameRef, String gameState) async {

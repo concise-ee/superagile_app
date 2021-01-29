@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
-import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
@@ -23,21 +23,21 @@ const NUMBER_OF_GAME_QUESTIONS = 13;
 
 class CongratulationsPage extends StatefulWidget {
   final int _questionNr;
-  final DocumentReference _playerRef;
+  final DocumentReference _participantRef;
   final DocumentReference _gameRef;
 
-  CongratulationsPage(this._questionNr, this._playerRef, this._gameRef);
+  CongratulationsPage(this._questionNr, this._participantRef, this._gameRef);
 
   @override
-  _CongratulationsPage createState() => _CongratulationsPage(this._questionNr, this._playerRef, this._gameRef);
+  _CongratulationsPage createState() => _CongratulationsPage(this._questionNr, this._participantRef, this._gameRef);
 }
 
 class _CongratulationsPage extends State<CongratulationsPage> {
   final int questionNr;
-  final DocumentReference playerRef;
+  final DocumentReference participantRef;
   final DocumentReference gameRef;
   final GameService gameService = GameService();
-  final PlayerService playerService = PlayerService();
+  final ParticipantService participantService = ParticipantService();
   final QuestionService questionService = QuestionService();
   StreamSubscription<DocumentSnapshot> gameStream;
   UserRole userRole;
@@ -46,12 +46,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   QuestionTemplate questionByNumber;
   int gamePin;
 
-  _CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
+  _CongratulationsPage(this.questionNr, this.participantRef, this.gameRef);
 
   @override
   void initState() {
     super.initState();
-    startActivityTimer(playerRef);
+    startActivityTimer(participantRef);
     loadDataAndSetupListener();
   }
 
@@ -73,7 +73,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(parseSequenceNumberFromGameState(gameState), playerRef, gameRef);
+            return GameQuestionPage(parseSequenceNumberFromGameState(gameState), participantRef, gameRef);
           }),
         );
       }
@@ -81,7 +81,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return FinalPage(playerRef, gameRef);
+            return FinalPage(participantRef, gameRef);
           }),
         );
       }
@@ -89,12 +89,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<void> loadData() async {
-    Player player = await playerService.findGamePlayerByRef(playerRef);
+    Participant participant = await participantService.findGameParticipantByRef(participantRef);
     String agreedScore = await getAgreedScore();
     QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
-      this.userRole = player.role;
+      this.userRole = participant.role;
       this.agreedScore = agreedScore;
       this.isLoading = false;
       this.questionByNumber = questionByNumber;
@@ -210,7 +210,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                       return Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return FinalPage(playerRef, gameRef);
+                          return FinalPage(participantRef, gameRef);
                         }),
                       );
                     }
@@ -218,7 +218,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return GameQuestionPage(questionNr + 1, playerRef, gameRef);
+                        return GameQuestionPage(questionNr + 1, participantRef, gameRef);
                       }),
                     );
                   },

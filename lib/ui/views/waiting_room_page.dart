@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
-import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
-import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
@@ -19,26 +19,26 @@ const String QUESTION_1 = '${GameState.QUESTION}_1';
 
 class WaitingRoomPage extends StatefulWidget {
   final DocumentReference _gameRef;
-  final DocumentReference _playerRef;
+  final DocumentReference _participantRef;
 
-  WaitingRoomPage(this._gameRef, this._playerRef);
+  WaitingRoomPage(this._gameRef, this._participantRef);
 
   @override
-  _WaitingRoomPageState createState() => _WaitingRoomPageState(this._gameRef, this._playerRef);
+  _WaitingRoomPageState createState() => _WaitingRoomPageState(this._gameRef, this._participantRef);
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final GameService gameService = GameService();
-  final PlayerService playerService = PlayerService();
+  final ParticipantService participantService = ParticipantService();
   final DocumentReference gameRef;
-  final DocumentReference playerRef;
+  final DocumentReference participantRef;
   Timer timer;
   String gamePin = '';
   StreamSubscription<DocumentSnapshot> gameStream;
   UserRole userRole;
   bool isLoading = true;
 
-  _WaitingRoomPageState(this.gameRef, this.playerRef);
+  _WaitingRoomPageState(this.gameRef, this.participantRef);
 
   @override
   void setState(state) {
@@ -50,7 +50,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   @override
   void initState() {
     super.initState();
-    startActivityTimer(playerRef);
+    startActivityTimer(participantRef);
     loadDataAndSetupListener();
   }
 
@@ -61,10 +61,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Future<void> loadData() async {
     Game game = await gameService.findActiveGameByRef(gameRef);
-    Player player = await playerService.findGamePlayerByRef(playerRef);
+    Participant participant = await participantService.findGameParticipantByRef(participantRef);
     setState(() {
       gamePin = game.pin.toString();
-      userRole = player.role;
+      userRole = participant.role;
       isLoading = false;
     });
   }
@@ -75,7 +75,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(1, playerRef, gameRef);
+            return GameQuestionPage(1, participantRef, gameRef);
           }),
         );
       }
@@ -119,41 +119,41 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         buildText(WAIT_FOR_TEAM),
         if (userRole == UserRole.HOST) buildText(PLAY_BUTTON_CALL),
         if (userRole == UserRole.HOST) buildStartGameButton(),
-        buildPlayerCount(),
-        Container(child: buildActivePlayersWidget()),
+        buildParticipantCount(),
+        Container(child: buildActiveParticipantsWidget()),
       ],
     );
   }
 
-  Widget buildPlayerCount() {
+  Widget buildParticipantCount() {
     return StreamBuilder<QuerySnapshot>(
-        stream: playerService.getGamePlayersStream(gameRef),
+        stream: participantService.getParticipantsStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var players = playerService.findActivePlayers(snapshot.data.docs);
+          var participants = participantService.findActiveParticipants(snapshot.data.docs);
           return FittedBox(
               fit: BoxFit.fitWidth,
-              child: Text('There are ' + players.length.toString() + ' people in this game.',
+              child: Text('There are ' + participants.length.toString() + ' people in this game.',
                   textAlign: TextAlign.center, style: TextStyle(fontSize: 24)));
         });
   }
 
-  Widget buildActivePlayersWidget() {
+  Widget buildActiveParticipantsWidget() {
     return StreamBuilder<QuerySnapshot>(
-        stream: playerService.getGamePlayersStream(gameRef),
+        stream: participantService.getParticipantsStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var players = playerService.findActivePlayers(snapshot.data.docs);
+          var participants = participantService.findActiveParticipants(snapshot.data.docs);
           return ListView.builder(
             shrinkWrap: true,
-            itemCount: players.length,
+            itemCount: participants.length,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(
-                  players[index].name,
+                  participants[index].name,
                   style: TextStyle(color: Color(0xffFFFFFF)),
                 ),
-                subtitle: Center(child: Text(players[index].lastActive)),
+                subtitle: Center(child: Text(participants[index].lastActive)),
               );
             },
           );

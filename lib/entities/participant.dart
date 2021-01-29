@@ -7,7 +7,7 @@ const LAST_ACTIVE = 'lastActive';
 const ROLE = 'role';
 const IS_PLAYING_ALONG = 'isPlayingAlong';
 
-class Player {
+class Participant {
   String name;
   String uid;
   String lastActive;
@@ -15,16 +15,16 @@ class Player {
   bool isPlayingAlong;
   DocumentReference reference;
 
-  Player(this.name, this.uid, this.lastActive, this.role, this.isPlayingAlong);
+  Participant(this.name, this.uid, this.lastActive, this.role, this.isPlayingAlong);
 
-  factory Player.fromSnapshot(DocumentSnapshot snapshot) {
-    var newPlayer = Player.fromJson(snapshot.data());
-    newPlayer.reference = snapshot.reference;
-    return newPlayer;
+  factory Participant.fromSnapshot(DocumentSnapshot snapshot) {
+    var newParticipant = Participant.fromJson(snapshot.data());
+    newParticipant.reference = snapshot.reference;
+    return newParticipant;
   }
 
-  factory Player.fromJson(Map<String, dynamic> json) {
-    return Player(json[NAME], json[UID], json[LAST_ACTIVE], toRoleEnum(json[ROLE]), json[IS_PLAYING_ALONG]);
+  factory Participant.fromJson(Map<String, dynamic> json) {
+    return Participant(json[NAME], json[UID], json[LAST_ACTIVE], toRoleEnum(json[ROLE]), json[IS_PLAYING_ALONG]);
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +39,6 @@ class Player {
 
   @override
   String toString() {
-    return 'Player{$NAME: $name, $UID: $uid, $LAST_ACTIVE: $lastActive, $ROLE: $role, $IS_PLAYING_ALONG: $isPlayingAlong}';
+    return '${runtimeType}{$NAME: $name, $UID: $uid, $LAST_ACTIVE: $lastActive, $ROLE: $role, $IS_PLAYING_ALONG: $isPlayingAlong}';
   }
 }

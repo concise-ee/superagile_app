@@ -6,7 +6,7 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/services/game_service.dart';
-import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
@@ -16,28 +16,28 @@ import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class FinalPage extends StatefulWidget {
-  final DocumentReference _playerRef;
+  final DocumentReference _participantRef;
   final DocumentReference _gameRef;
 
-  FinalPage(this._playerRef, this._gameRef);
+  FinalPage(this._participantRef, this._gameRef);
 
   @override
-  _FinalPage createState() => _FinalPage(this._playerRef, this._gameRef);
+  _FinalPage createState() => _FinalPage(this._participantRef, this._gameRef);
 }
 
 class _FinalPage extends State<FinalPage> {
-  final DocumentReference playerRef;
+  final DocumentReference participantRef;
   final DocumentReference gameRef;
   final _emailController = TextEditingController();
   final GameService gameService = GameService();
-  final PlayerService playerService = PlayerService();
+  final ParticipantService participantService = ParticipantService();
   final QuestionService questionService = QuestionService();
   Map<String, int> agreedScores;
   bool isLoading = true;
   int gamePin;
   List<QuestionTemplate> questions;
 
-  _FinalPage(this.playerRef, this.gameRef);
+  _FinalPage(this.participantRef, this.gameRef);
 
   @override
   void initState() {

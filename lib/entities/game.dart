@@ -47,6 +47,6 @@ class Game {
 
   @override
   String toString() {
-    return 'Game{$PIN: $pin}';
+    return '${runtimeType}{$PIN: $pin}';
   }
 }

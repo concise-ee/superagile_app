@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:superagile_app/entities/player.dart';
+import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/user_role.dart';
 import 'package:superagile_app/services/game_service.dart';
-import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
@@ -22,27 +22,28 @@ import 'game_question_page.dart';
 class QuestionResultsPage extends StatefulWidget {
   final int questionNr;
   final DocumentReference gameRef;
-  final DocumentReference playerRef;
+  final DocumentReference participantRef;
 
-  QuestionResultsPage({@required this.questionNr, @required this.playerRef, @required this.gameRef});
+  QuestionResultsPage({@required this.questionNr, @required this.participantRef, @required this.gameRef});
 
   @override
-  _QuestionResultsPageState createState() => _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef);
+  _QuestionResultsPageState createState() =>
+      _QuestionResultsPageState(this.questionNr, this.participantRef, this.gameRef);
 }
 
 class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final GameService gameService = GameService();
-  final PlayerService playerService = PlayerService();
+  final ParticipantService participantService = ParticipantService();
   QuestionScores questionScores = new QuestionScores([], [], [], [], []);
   final int questionNr;
-  final DocumentReference playerRef;
+  final DocumentReference participantRef;
   final DocumentReference gameRef;
   StreamSubscription<DocumentSnapshot> gameStream;
   UserRole userRole;
   bool isLoading = true;
   int gamePin;
 
-  _QuestionResultsPageState(this.questionNr, this.playerRef, this.gameRef);
+  _QuestionResultsPageState(this.questionNr, this.participantRef, this.gameRef);
 
   @override
   void setState(state) {
@@ -54,7 +55,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   @override
   void initState() {
     super.initState();
-    startActivityTimer(playerRef);
+    startActivityTimer(participantRef);
     loadDataAndSetupListener();
   }
 
@@ -79,19 +80,19 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       int newQuestionNr = parseSequenceNumberFromGameState(gameState);
       if (userRole == UserRole.PLAYER && gameState.contains(GameState.QUESTION)) {
         if (newQuestionNr == questionNr) {
-          await gameService.deleteOldScore(playerRef, questionNr);
+          await gameService.deleteOldScore(participantRef, questionNr);
         }
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(newQuestionNr, playerRef, gameRef);
+            return GameQuestionPage(newQuestionNr, participantRef, gameRef);
           }),
         );
       } else if (userRole == UserRole.PLAYER && gameState.contains(GameState.CONGRATULATIONS)) {
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return CongratulationsPage(newQuestionNr, playerRef, gameRef);
+            return CongratulationsPage(newQuestionNr, participantRef, gameRef);
           }),
         );
       }
@@ -99,11 +100,11 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   }
 
   Future<void> loadData() async {
-    Player player = await playerService.findGamePlayerByRef(playerRef);
+    Participant participant = await participantService.findGameParticipantByRef(participantRef);
     var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
-      userRole = player.role;
+      userRole = participant.role;
       questionScores = scores;
       isLoading = false;
       gamePin = pin;
@@ -135,13 +136,13 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
                 child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            QuestionAnswersSection(answerNumber: 3, playerNames: questionScores.answered3),
-            QuestionAnswersSection(answerNumber: 2, playerNames: questionScores.answered2),
-            QuestionAnswersSection(answerNumber: 1, playerNames: questionScores.answered1),
-            QuestionAnswersSection(answerNumber: 0, playerNames: questionScores.answered0),
+            QuestionAnswersSection(answerNumber: 3, participantNames: questionScores.answered3),
+            QuestionAnswersSection(answerNumber: 2, participantNames: questionScores.answered2),
+            QuestionAnswersSection(answerNumber: 1, participantNames: questionScores.answered1),
+            QuestionAnswersSection(answerNumber: 0, participantNames: questionScores.answered0),
           ],
         ))),
-        if (userRole == UserRole.HOST) buildHostContainer() else buildPlayerContainer()
+        if (userRole == UserRole.HOST) buildHostContainer() else buildParticipantContainer()
       ],
     );
   }
@@ -162,7 +163,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     );
   }
 
-  Container buildPlayerContainer() {
+  Container buildParticipantContainer() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
       height: !areVotedScoresSame() ? 80 : 0,
@@ -184,7 +185,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
-              return CongratulationsPage(this.questionNr, this.playerRef, this.gameRef);
+              return CongratulationsPage(this.questionNr, this.participantRef, this.gameRef);
             }),
           );
         },
@@ -193,12 +194,12 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     return AgileButton(
       buttonTitle: CHANGE_ANSWER,
       onPressed: () async {
-        await gameService.deleteOldScore(playerRef, questionNr);
+        await gameService.deleteOldScore(participantRef, questionNr);
         await gameService.changeGameState(gameRef, '${GameState.QUESTION}_$questionNr');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(this.questionNr, this.playerRef, this.gameRef);
+            return GameQuestionPage(this.questionNr, this.participantRef, this.gameRef);
           }),
         );
       },
@@ -206,14 +207,14 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   }
 
   bool areVotedScoresSame() {
-    int numberOfPlayersAnswered = questionScores.answered0.length +
+    int numberOfParticipantsAnswered = questionScores.answered0.length +
         questionScores.answered1.length +
         questionScores.answered2.length +
         questionScores.answered3.length;
-    if (questionScores.answered0.length == numberOfPlayersAnswered ||
-        questionScores.answered1.length == numberOfPlayersAnswered ||
-        questionScores.answered2.length == numberOfPlayersAnswered ||
-        questionScores.answered3.length == numberOfPlayersAnswered) {
+    if (questionScores.answered0.length == numberOfParticipantsAnswered ||
+        questionScores.answered1.length == numberOfParticipantsAnswered ||
+        questionScores.answered2.length == numberOfParticipantsAnswered ||
+        questionScores.answered3.length == numberOfParticipantsAnswered) {
       return true;
     }
     return false;

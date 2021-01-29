@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:superagile_app/services/player_service.dart';
+import 'package:superagile_app/services/participant_service.dart';
 
 Timer activityTimer;
 const TIMER_DURATION = 10;
-final _playerService = PlayerService();
+final _participantService = ParticipantService();
 
-startActivityTimer(playerRef) {
+startActivityTimer(participantRef) {
   if (activityTimer == null) {
-    _playerService.sendLastActive(playerRef);
+    _participantService.sendLastActive(participantRef);
     activityTimer = Timer.periodic(Duration(seconds: TIMER_DURATION), (Timer t) {
-      _playerService.sendLastActive(playerRef);
+      _participantService.sendLastActive(participantRef);
     });
   }
 }
