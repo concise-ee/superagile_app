@@ -5,23 +5,12 @@ import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/score.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
-import 'package:superagile_app/utils/pin_utils.dart';
 
 const SCORES_SUB_COLLECTION = 'scores';
 
 class ScoreService {
   final _gameService = GameService();
   final _participantsService = ParticipantService();
-
-  Future<int> generateAvailable4DigitPin() async {
-    var pin = generate4DigitPin();
-    bool isPinAvailable = await _gameService.isGameByPinAvailable(pin);
-    while (!isPinAvailable) {
-      pin = generate4DigitPin();
-      isPinAvailable = await _gameService.isGameByPinAvailable(pin);
-    }
-    return pin;
-  }
 
   Future<void> setScore(
       DocumentReference participantRef, DocumentReference gameRef, int questionNr, String scoreValue) async {
