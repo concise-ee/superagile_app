@@ -37,10 +37,12 @@ class ParticipantService {
   }
 
   Future<List<Participant>> findActiveGameParticipants(DocumentReference gameRef) async {
-    List<Participant> Participants = await _participantRepository.findParticipants(gameRef);
-    Participants.sort((a, b) => (a.name).compareTo(b.name));
-    return Participants.where((participant) => DateTime.parse(participant.lastActive)
-        .isAfter(DateTime.now().subtract(Duration(seconds: ACTIVITY_INTERVAL)))).toList();
+    List<Participant> participants = await _participantRepository.findParticipants(gameRef);
+    participants.sort((a, b) => (a.name).compareTo(b.name));
+    return participants
+        .where((participant) => DateTime.parse(participant.lastActive)
+            .isAfter(DateTime.now().subtract(Duration(seconds: ACTIVITY_INTERVAL))))
+        .toList();
   }
 
   Stream<QuerySnapshot> getParticipantsStream(DocumentReference gameRef) {
