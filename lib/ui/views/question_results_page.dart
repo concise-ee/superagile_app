@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_scores.dart';
-import 'package:superagile_app/entities/user_role.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
@@ -39,7 +39,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final DocumentReference participantRef;
   final DocumentReference gameRef;
   StreamSubscription<DocumentSnapshot> gameStream;
-  UserRole userRole;
+  Role role;
   bool isLoading = true;
   int gamePin;
 
@@ -78,7 +78,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
       int newQuestionNr = parseSequenceNumberFromGameState(gameState);
-      if (userRole == UserRole.PLAYER && gameState.contains(GameState.QUESTION)) {
+      if (role == Role.PLAYER && gameState.contains(GameState.QUESTION)) {
         if (newQuestionNr == questionNr) {
           await gameService.deleteOldScore(participantRef, questionNr);
         }
@@ -88,7 +88,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
             return GameQuestionPage(newQuestionNr, participantRef, gameRef);
           }),
         );
-      } else if (userRole == UserRole.PLAYER && gameState.contains(GameState.CONGRATULATIONS)) {
+      } else if (role == Role.PLAYER && gameState.contains(GameState.CONGRATULATIONS)) {
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -104,7 +104,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     var scores = await gameService.findScoresForQuestion(this.gameRef, this.questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
-      userRole = participant.role;
+      role = participant.role;
       questionScores = scores;
       isLoading = false;
       gamePin = pin;
@@ -142,7 +142,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
             QuestionAnswersSection(answerNumber: 0, participantNames: questionScores.answered0),
           ],
         ))),
-        if (userRole == UserRole.HOST) buildHostContainer() else buildParticipantContainer()
+        if (role == Role.HOST) buildHostContainer() else buildParticipantContainer()
       ],
     );
   }

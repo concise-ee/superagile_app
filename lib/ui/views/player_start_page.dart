@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/participant.dart';
-import 'package:superagile_app/entities/user_role.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/security_service.dart';
@@ -62,7 +62,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
 
   Future<MaterialPageRoute<dynamic>> joinAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
     DocumentReference playerRef = await _participantService.addParticipant(
-        gameRef, Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), UserRole.PLAYER, true));
+        gameRef, Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
     Game game = await _gameService.findActiveGameByRef(gameRef);
     return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
   }

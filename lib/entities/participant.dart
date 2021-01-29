@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:superagile_app/entities/user_role.dart';
+import 'package:superagile_app/entities/role.dart';
 
 const NAME = 'name';
 const UID = 'uid';
@@ -11,7 +11,7 @@ class Participant {
   String name;
   String uid;
   String lastActive;
-  UserRole role;
+  Role role;
   bool isPlayingAlong;
   DocumentReference reference;
 

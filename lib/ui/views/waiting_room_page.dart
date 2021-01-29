@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/participant.dart';
-import 'package:superagile_app/entities/user_role.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
@@ -35,7 +35,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   Timer timer;
   String gamePin = '';
   StreamSubscription<DocumentSnapshot> gameStream;
-  UserRole userRole;
+  Role role;
   bool isLoading = true;
 
   _WaitingRoomPageState(this.gameRef, this.participantRef);
@@ -64,7 +64,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     Participant participant = await participantService.findGameParticipantByRef(participantRef);
     setState(() {
       gamePin = game.pin.toString();
-      userRole = participant.role;
+      role = participant.role;
       isLoading = false;
     });
   }
@@ -115,10 +115,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             child: Text(WAITING_ROOM,
                 textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
         BorderedText(gamePin),
-        if (userRole == UserRole.HOST) buildText(CODE_SHARE_CALL),
+        if (role == Role.HOST) buildText(CODE_SHARE_CALL),
         buildText(WAIT_FOR_TEAM),
-        if (userRole == UserRole.HOST) buildText(PLAY_BUTTON_CALL),
-        if (userRole == UserRole.HOST) buildStartGameButton(),
+        if (role == Role.HOST) buildText(PLAY_BUTTON_CALL),
+        if (role == Role.HOST) buildStartGameButton(),
         buildParticipantCount(),
         Container(child: buildActiveParticipantsWidget()),
       ],

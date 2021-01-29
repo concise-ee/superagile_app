@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
-import 'package:superagile_app/entities/user_role.dart';
+import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
@@ -44,7 +44,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   List<StreamSubscription<QuerySnapshot>> participantScoreStreams = [];
   StreamSubscription<DocumentSnapshot> gameStream;
   StreamSubscription<QuerySnapshot> participantsStream;
-  UserRole userRole;
+  Role role;
   bool isPlayingAlong;
   bool isLoading = true;
   int gamePin;
@@ -87,7 +87,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     final QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
-      userRole = participant.role;
+      role = participant.role;
       isPlayingAlong = participant.isPlayingAlong;
       questionTemplate = questionByNumber;
       isLoading = false;
@@ -96,9 +96,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void listenForUpdateToGoToQuestionResultsPage() async {
-    if (userRole == UserRole.PLAYER) {
+    if (role == Role.PLAYER) {
       listenGameStateChanges();
-    } else if (userRole == UserRole.HOST) {
+    } else if (role == Role.HOST) {
       listenEveryActiveParticipantScoreChanges();
     }
   }
@@ -302,7 +302,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                     ),
                   ],
                 ))),
-        if (userRole == UserRole.PLAYER || (userRole == UserRole.HOST && isPlayingAlong))
+        if (role == Role.PLAYER || (role == Role.HOST && isPlayingAlong))
           SafeArea(
               child: Row(
             children: [
