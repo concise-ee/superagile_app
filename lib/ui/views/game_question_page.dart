@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
@@ -20,6 +21,8 @@ import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/list_utils.dart';
+
+final _log = Logger((GameQuestionPage).toString());
 
 class GameQuestionPage extends StatefulWidget {
   final int _questionNr;
@@ -149,6 +152,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   Future<MaterialPageRoute<QuestionResultsPage>> navigateToQuestionResultsPage() {
+    _log.info('${participantRef} navigates to QuestionResultsPage, questionNr: ${questionNr}');
     return Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {

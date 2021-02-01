@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/role.dart';
@@ -19,6 +20,8 @@ import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
+
+final _log = Logger((QuestionResultsPage).toString());
 
 class QuestionResultsPage extends StatefulWidget {
   final int questionNr;
@@ -84,6 +87,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
         if (newQuestionNr == questionNr) {
           await scoreService.deleteOldScore(participantRef, questionNr);
         }
+        _log.info('${participantRef} navigates to GameQuestionPage, newQuestionNr: ${newQuestionNr}');
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -91,6 +95,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
           }),
         );
       } else if (role == Role.PLAYER && gameState.contains(GameState.CONGRATULATIONS)) {
+        _log.info('${participantRef} navigates to CongratulationsPage, newQuestionNr: ${newQuestionNr}');
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {

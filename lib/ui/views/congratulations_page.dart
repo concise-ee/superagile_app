@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/entities/role.dart';
@@ -20,6 +21,7 @@ import 'package:superagile_app/utils/labels.dart';
 
 import 'final_page.dart';
 
+final _log = Logger((CongratulationsPage).toString());
 const NUMBER_OF_GAME_QUESTIONS = 13;
 
 class CongratulationsPage extends StatefulWidget {
@@ -72,6 +74,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
       if (role == Role.PLAYER && gameState.contains(GameState.QUESTION)) {
+        _log.info(
+            '${participantRef} navigates to GameQuestionPage, newQuestionNr: ${parseSequenceNumberFromGameState(gameState)}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -80,6 +84,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         );
       }
       if (role == Role.PLAYER && gameState == GameState.FINAL) {
+        _log.info('${participantRef} navigates to FinalPage, gameState: ${gameState}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {

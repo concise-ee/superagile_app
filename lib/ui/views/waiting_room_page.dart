@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/role.dart';
@@ -15,6 +16,7 @@ import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
 
+final _log = Logger((WaitingRoomPage).toString());
 const String QUESTION_1 = '${GameState.QUESTION}_1';
 
 class WaitingRoomPage extends StatefulWidget {
@@ -72,6 +74,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   void listenForUpdateToGoToQuestionPage() {
     gameStream = gameService.getGameStream(gameRef).listen((event) async {
       if (Game.fromSnapshot(event).gameState == QUESTION_1) {
+        _log.info('${participantRef} navigates to GameQuestionPage, gameState: ${QUESTION_1}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
