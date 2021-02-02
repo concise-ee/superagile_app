@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class ButtonPercentPopup extends StatelessWidget {
@@ -25,7 +26,7 @@ class ButtonPercentPopup extends StatelessWidget {
                         Center(
                           child: Text(
                             ANSWERED,
-                            style: TextStyle(fontSize: 24, color: Colors.yellow),
+                            style: TextStyle(fontSize: 24, color: accentColor),
                           ),
                         ),
                         SizedBox(height: 20),
