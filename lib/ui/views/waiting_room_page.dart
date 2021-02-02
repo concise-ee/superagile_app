@@ -32,6 +32,7 @@ class WaitingRoomPage extends StatefulWidget {
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
   final GameService gameService = GameService();
   final ParticipantService participantService = ParticipantService();
+  final TimerService timerService = TimerService();
   final DocumentReference gameRef;
   final DocumentReference participantRef;
   Timer timer;
@@ -52,7 +53,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   @override
   void initState() {
     super.initState();
-    startActivityTimer(participantRef);
+    timerService.startActivityTimer(participantRef);
     loadDataAndSetupListener();
   }
 
@@ -164,8 +165,9 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   Widget buildStartGameButton() {
-    return PlayButton(onPressed: () {
-      gameService.changeGameState(gameRef, QUESTION_1);
+    return PlayButton(onPressed: () async {
+      await gameService.changeGameState(gameRef, QUESTION_1);
+      _log.info('${participantRef} HOST changed gameState to: ${QUESTION_1}');
     });
   }
 

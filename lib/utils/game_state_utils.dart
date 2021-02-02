@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/ui/views/final_page.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
@@ -16,10 +17,10 @@ class GameState {
 }
 
 const String STATE_NUMBER_DELIMITER = '_';
-
+final _log = Logger('GameStateUtils');
 int parseSequenceNumberFromGameState(String gameState) => int.parse(gameState.split(STATE_NUMBER_DELIMITER).last);
 
-Future<MaterialPageRoute<dynamic>> joinCreatedGameAsExistingUser(
+Future<MaterialPageRoute<dynamic>> joinCreatedGameAsExistingParticipant(
     String gameState, DocumentReference participantRef, DocumentReference gameRef, BuildContext context) {
   return Navigator.pushReplacement(
     context,
@@ -40,6 +41,7 @@ Future<MaterialPageRoute<dynamic>> joinCreatedGameAsExistingUser(
       if (gameState == GameState.FINAL) {
         return FinalPage(participantRef, gameRef);
       }
+      _log.severe('${gameRef} state ${gameState} and route page does not match.');
       throw ('Game state and route page does not match.');
     }),
   );

@@ -39,6 +39,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final GameService gameService = GameService();
   final ParticipantService participantService = ParticipantService();
   final ScoreService scoreService = ScoreService();
+  final TimerService timerService = TimerService();
   QuestionScores questionScores = new QuestionScores([], [], [], [], []);
   final int questionNr;
   final DocumentReference participantRef;
@@ -60,7 +61,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   @override
   void initState() {
     super.initState();
-    startActivityTimer(participantRef);
+    timerService.startActivityTimer(participantRef);
     loadDataAndSetupListener();
   }
 
@@ -189,6 +190,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
         onPressed: () async {
           await scoreService.setAgreedScore(gameRef, getAgreedScore(), questionNr);
           await gameService.changeGameState(gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
+          _log.info('${participantRef} HOST changed gameState to: ${GameState.CONGRATULATIONS}_$questionNr');
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
@@ -203,6 +205,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       onPressed: () async {
         await scoreService.deleteOldScore(participantRef, questionNr);
         await gameService.changeGameState(gameRef, '${GameState.QUESTION}_$questionNr');
+        _log.info('${participantRef} HOST changed gameState to: ${GameState.QUESTION}_$questionNr');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {

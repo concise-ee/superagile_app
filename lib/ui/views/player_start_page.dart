@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/role.dart';
@@ -9,6 +10,8 @@ import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
+
+final _log = Logger((PlayerStartPage).toString());
 
 class PlayerStartPage extends StatefulWidget {
   @override
@@ -48,12 +51,16 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                   var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
                   if (playerRef != null) {
                     bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
+                    _log.info('${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
                     if (!isPlayerActive) {
                       Game game = await _gameService.findActiveGameByRef(gameRef);
-                      return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
+                      _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
+                      return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
                     }
+                    _log.severe('${playerRef} tried to join with active participant name');
                     throw ('Cannot use active participant name');
                   }
+                  _log.info('${playerRef} joins as new Player');
                   return joinAsNewPlayer(gameRef, loggedInUserUid);
                 }),
               ],
@@ -64,6 +71,6 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     DocumentReference playerRef = await _participantService.addParticipant(
         gameRef, Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
     Game game = await _gameService.findActiveGameByRef(gameRef);
-    return joinCreatedGameAsExistingUser(game.gameState, playerRef, gameRef, context);
+    return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
   }
 }

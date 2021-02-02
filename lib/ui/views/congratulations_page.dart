@@ -43,6 +43,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   final ParticipantService participantService = ParticipantService();
   final QuestionService questionService = QuestionService();
   final ScoreService scoreService = ScoreService();
+  final TimerService timerService = TimerService();
   StreamSubscription<DocumentSnapshot> gameStream;
   Role role;
   bool isLoading = true;
@@ -55,7 +56,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   @override
   void initState() {
     super.initState();
-    startActivityTimer(participantRef);
+    timerService.startActivityTimer(participantRef);
     loadDataAndSetupListener();
   }
 
@@ -211,9 +212,10 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                   child: Align(
                 alignment: Alignment.bottomLeft,
                 child: PlayButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
-                      gameService.changeGameState(gameRef, GameState.FINAL);
+                      await gameService.changeGameState(gameRef, GameState.FINAL);
+                      _log.info('${participantRef} HOST changed gameState to: ${GameState.FINAL}');
                       return Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) {
@@ -221,7 +223,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                         }),
                       );
                     }
-                    gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
+                    await gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
+                    _log.info('${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {

@@ -41,6 +41,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   final GameService gameService = GameService();
   final ParticipantService participantService = ParticipantService();
   final ScoreService scoreService = ScoreService();
+  final TimerService timerService = TimerService();
   final int questionNr;
   final DocumentReference participantRef;
   final DocumentReference gameRef;
@@ -66,7 +67,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   void initState() {
     super.initState();
-    startActivityTimer(participantRef);
+    timerService.startActivityTimer(participantRef);
     loadDataAndSetupListeners();
   }
 

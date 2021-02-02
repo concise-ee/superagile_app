@@ -34,6 +34,7 @@ class _FinalPage extends State<FinalPage> {
   final ParticipantService participantService = ParticipantService();
   final QuestionService questionService = QuestionService();
   final ScoreService scoreService = ScoreService();
+  final TimerService timerService = TimerService();
   Map<String, int> agreedScores;
   bool isLoading = true;
   int gamePin;
@@ -149,7 +150,7 @@ class _FinalPage extends State<FinalPage> {
           padding: EdgeInsets.only(bottom: 5),
           child: AgileButton(
             onPressed: () {
-              activityTimer.cancel();
+              timerService.cancelActivityTimer();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) {

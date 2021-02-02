@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/role.dart';
@@ -11,6 +12,8 @@ import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'waiting_room_page.dart';
+
+final _log = Logger((HostStartPage).toString());
 
 class HostStartPage extends StatefulWidget {
   @override
@@ -102,13 +105,14 @@ class _HostStartPageState extends State<HostStartPage> {
             var loggedInUserUid = await signInAnonymously();
             var pin = await _gameService.generateAvailable4DigitPin();
             var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-            var participantRef = await _participantService.addParticipant(gameRef,
+            var hostRef = await _participantService.addParticipant(gameRef,
                 Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, true));
             await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
+            _log.info('${hostRef} HOST ${PLAYING_ALONG} and navigates to WaitingRoomPage');
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return WaitingRoomPage(gameRef, participantRef);
+                return WaitingRoomPage(gameRef, hostRef);
               }),
             );
           },
@@ -126,13 +130,14 @@ class _HostStartPageState extends State<HostStartPage> {
             var loggedInUserUid = await signInAnonymously();
             var pin = await _gameService.generateAvailable4DigitPin();
             var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-            var participantRef = await _participantService.addParticipant(gameRef,
+            var hostRef = await _participantService.addParticipant(gameRef,
                 Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, false));
             await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
+            _log.info('${hostRef} HOST ${JUST_A_HOST} and navigates to WaitingRoomPage');
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return WaitingRoomPage(gameRef, participantRef);
+                return WaitingRoomPage(gameRef, hostRef);
               }),
             );
           },
@@ -150,12 +155,14 @@ class _HostStartPageState extends State<HostStartPage> {
           FocusScope.of(context).unfocus();
           await signInAnonymously();
           var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-          var participantRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
-          if (participantRef == null) {
+          var hostRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+          if (hostRef == null) {
+            _log.severe('${hostRef} tried to rejoin as HOST but no such HOST exists in ${gameRef.id}');
             throw ('Tried to reconnect as HOST but no such HOST exists.');
           }
           Game game = await _gameService.findActiveGameByRef(gameRef);
-          return joinCreatedGameAsExistingUser(game.gameState, participantRef, gameRef, context);
+          _log.info('${hostRef} tries to rejoin as HOST to game:${gameRef.id}');
+          return joinCreatedGameAsExistingParticipant(game.gameState, hostRef, gameRef, context);
         },
       ),
     );
