@@ -19,8 +19,11 @@ class GameRepository {
     return Game.fromSnapshot(snapshot.docs.single);
   }
 
-  Future<DocumentReference> findActiveGameRefByPin(int pin) async {
+  Future<DocumentReference> findActiveGameRefByPinNullable(int pin) async {
     var snapshot = await _repository.where(PIN, isEqualTo: pin).where(IS_ACTIVE, isEqualTo: true).get();
+    if (snapshot.docs.isEmpty) {
+      return null;
+    }
     return snapshot.docs.single.reference;
   }
 

@@ -48,6 +48,10 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                   FocusScope.of(context).unfocus();
                   var loggedInUserUid = await signInAnonymously();
                   var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+                  if (gameRef == null) {
+                    _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
+                    throw ('Tried to reconnect as PLAYER but no such game exists.');
+                  }
                   var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
                   if (playerRef != null) {
                     bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);

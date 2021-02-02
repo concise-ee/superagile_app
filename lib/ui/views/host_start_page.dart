@@ -155,9 +155,13 @@ class _HostStartPageState extends State<HostStartPage> {
           FocusScope.of(context).unfocus();
           await signInAnonymously();
           var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+          if (gameRef == null) {
+            _log.severe('HOST tried to rejoin ${_pinController.text} but no such game exists');
+            throw ('Tried to reconnect as HOST but no such game exists.');
+          }
           var hostRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
           if (hostRef == null) {
-            _log.severe('${hostRef} tried to rejoin as HOST but no such HOST exists in ${gameRef.id}');
+            _log.severe('HOST tried to rejoin ${_pinController.text} but no such HOST exists in ${gameRef.id}');
             throw ('Tried to reconnect as HOST but no such HOST exists.');
           }
           Game game = await _gameService.findActiveGameByRef(gameRef);

@@ -33,7 +33,7 @@ class GameService {
   }
 
   Future<DocumentReference> findActiveGameRefByPin(int pin) {
-    return _gameRepository.findActiveGameRefByPin(pin);
+    return _gameRepository.findActiveGameRefByPinNullable(pin);
   }
 
   Stream<DocumentSnapshot> getGameStream(DocumentReference gameRef) {
