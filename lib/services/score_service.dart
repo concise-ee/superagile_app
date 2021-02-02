@@ -41,7 +41,7 @@ class ScoreService {
   Future<QuestionScores> findScoresForQuestion(DocumentReference gameRef, int questionNumber) async {
     QuerySnapshot participantsSnap = await _participantsService.getParticipants(gameRef);
     var scores = await buildScores(participantsSnap, questionNumber);
-    return new QuestionScores(scores[null], scores[0], scores[1], scores[2], scores[3]);
+    return QuestionScores(scores[null], scores[0], scores[1], scores[2], scores[3]);
   }
 
   List<String> getAnsweredParticipantNames(QuestionScores questionScores) {

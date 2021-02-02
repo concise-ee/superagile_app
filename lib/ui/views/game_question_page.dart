@@ -178,7 +178,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
+    return WillPopScope(
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
           appBar: AppBar(

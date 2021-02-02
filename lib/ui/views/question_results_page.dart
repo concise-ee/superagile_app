@@ -40,7 +40,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   final ParticipantService participantService = ParticipantService();
   final ScoreService scoreService = ScoreService();
   final TimerService timerService = TimerService();
-  QuestionScores questionScores = new QuestionScores([], [], [], [], []);
+  QuestionScores questionScores = QuestionScores([], [], [], [], []);
   final int questionNr;
   final DocumentReference participantRef;
   final DocumentReference gameRef;
@@ -128,7 +128,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
+    return WillPopScope(
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
             appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),

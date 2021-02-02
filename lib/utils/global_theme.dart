@@ -27,7 +27,7 @@ ThemeData setTheme() {
         hintStyle: TextStyle(color: accentColor, fontSize: 35),
         contentPadding: EdgeInsets.all(15),
         isDense: true,
-        border: new OutlineInputBorder(borderSide: new BorderSide(color: accentColor))),
+        border: OutlineInputBorder(borderSide: BorderSide(color: accentColor))),
     appBarTheme: AppBarTheme(
         textTheme: TextTheme(headline6: TextStyle(color: accentColor, fontSize: 20.0)),
         iconTheme: IconThemeData(color: accentColor)),

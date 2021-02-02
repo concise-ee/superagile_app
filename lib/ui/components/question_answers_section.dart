@@ -26,7 +26,7 @@ class QuestionAnswersSection extends StatelessWidget {
           Column(
               children: participantNames
                   .map((item) =>
-                      new Text(item, style: TextStyle(color: Colors.white, fontSize: 14, height: 3, letterSpacing: 2)))
+                      Text(item, style: TextStyle(color: Colors.white, fontSize: 14, height: 3, letterSpacing: 2)))
                   .toList()),
         ]));
   }

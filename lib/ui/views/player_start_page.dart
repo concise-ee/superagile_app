@@ -26,7 +26,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         appBar: AppBar(title: Text(HASH_SUPERAGILE)),
         body: Container(
             padding: EdgeInsets.all(25),
