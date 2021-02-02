@@ -11,7 +11,7 @@ class TimerService {
   static Timer _activityTimer;
 
   void startActivityTimer(participantRef) {
-    if (_activityTimer == null) {
+    if (_activityTimer == null || !_activityTimer.isActive) {
       _log.info('${participantRef} timer ${_activityTimer}, new activityTimer started');
       _participantService.sendLastActive(participantRef);
       _activityTimer = Timer.periodic(Duration(seconds: TIMER_DURATION), (Timer t) {
