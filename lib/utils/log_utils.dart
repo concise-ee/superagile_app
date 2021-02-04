@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 FirebaseFunctions _functions = FirebaseFunctions.instanceFor(region: 'europe-west1');
@@ -14,7 +15,9 @@ void _logToCloud(LogRecord record) async {
 void initLogger() {
   Logger.root.onRecord.listen((LogRecord record) {
     print(_buildMessage(record));
-    _logToCloud(record);
+    if (kReleaseMode) {
+      _logToCloud(record);
+    }
   });
 }
 
