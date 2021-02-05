@@ -26,49 +26,67 @@ class _HostStartPageState extends State<HostStartPage> {
   final _nameController = TextEditingController();
   final _pinController = TextEditingController();
   bool reconnectToExistingGame = false;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-        body: Container(
-            padding: EdgeInsets.all(25),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                ),
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(hintText: ENTER_NAME),
-                ),
-                if (reconnectToExistingGame) ...[
-                  SizedBox(height: 25),
-                  TextField(controller: _pinController, decoration: InputDecoration(hintText: ENTER_PIN))
-                ],
-                SwitchListTile(
-                    title: Text(RECONNECT_TO_EXISTING_GAME, style: TextStyle(color: Colors.white, fontSize: 20)),
-                    value: reconnectToExistingGame,
-                    onChanged: (value) {
-                      setState(() {
-                        reconnectToExistingGame = !reconnectToExistingGame;
-                      });
-                    },
-                    activeTrackColor: accentColor,
-                    activeColor: accentColor,
-                    controlAffinity: ListTileControlAffinity.leading),
-                Spacer(
-                  flex: 1,
-                ),
-                if (!reconnectToExistingGame) ...[
-                  ...renderNewGameDescriptionAndButtons(),
-                ],
-                if (reconnectToExistingGame) ...[
-                  renderReconnectButton(),
-                ]
-              ],
-            )));
+    return Form(
+        key: _formKey,
+        child: Scaffold(
+            appBar: AppBar(title: Text(HASH_SUPERAGILE)),
+            body: Container(
+                padding: EdgeInsets.all(25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                    ),
+                    TextFormField(
+                      maxLength: 25,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return WARNING_NAME;
+                        }
+                        return null;
+                      },
+                      controller: _nameController,
+                      decoration: InputDecoration(hintText: ENTER_NAME),
+                    ),
+                    if (reconnectToExistingGame) ...[
+                      SizedBox(height: 25),
+                      TextFormField(
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return WARNING_PIN;
+                            }
+                            return null;
+                          },
+                          controller: _pinController,
+                          decoration: InputDecoration(hintText: ENTER_PIN))
+                    ],
+                    SwitchListTile(
+                        title: Text(RECONNECT_TO_EXISTING_GAME, style: TextStyle(color: Colors.white, fontSize: 20)),
+                        value: reconnectToExistingGame,
+                        onChanged: (value) {
+                          setState(() {
+                            reconnectToExistingGame = !reconnectToExistingGame;
+                          });
+                        },
+                        activeTrackColor: accentColor,
+                        activeColor: accentColor,
+                        controlAffinity: ListTileControlAffinity.leading),
+                    Spacer(
+                      flex: 1,
+                    ),
+                    if (!reconnectToExistingGame) ...[
+                      ...renderNewGameDescriptionAndButtons(),
+                    ],
+                    if (reconnectToExistingGame) ...[
+                      renderReconnectButton(),
+                    ]
+                  ],
+                ))));
   }
 
   List<Widget> renderNewGameDescriptionAndButtons() {
@@ -101,20 +119,23 @@ class _HostStartPageState extends State<HostStartPage> {
         child: AgileButton(
           buttonTitle: PLAYING_ALONG,
           onPressed: () async {
-            FocusScope.of(context).unfocus();
-            var loggedInUserUid = await signInAnonymously();
-            var pin = await _gameService.generateAvailable4DigitPin();
-            var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-            var hostRef = await _participantService.addParticipant(gameRef,
-                Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, true));
-            await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
-            _log.info('${hostRef} HOST ${PLAYING_ALONG} and navigates to WaitingRoomPage');
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return WaitingRoomPage(gameRef, hostRef);
-              }),
-            );
+            if (_formKey.currentState.validate()) {
+              FocusScope.of(context).unfocus();
+              var loggedInUserUid = await signInAnonymously();
+              var pin = await _gameService.generateAvailable4DigitPin();
+              var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
+              var hostRef = await _participantService.addParticipant(gameRef,
+                  Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, true));
+              await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
+              _log.info('${hostRef} HOST ${PLAYING_ALONG} and navigates to WaitingRoomPage');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return WaitingRoomPage(gameRef, hostRef);
+                }),
+              );
+            }
+            ;
           },
         ),
       ),
@@ -126,20 +147,23 @@ class _HostStartPageState extends State<HostStartPage> {
         child: AgileButton(
           buttonTitle: JUST_A_HOST,
           onPressed: () async {
-            FocusScope.of(context).unfocus();
-            var loggedInUserUid = await signInAnonymously();
-            var pin = await _gameService.generateAvailable4DigitPin();
-            var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-            var hostRef = await _participantService.addParticipant(gameRef,
-                Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, false));
-            await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
-            _log.info('${hostRef} HOST ${JUST_A_HOST} and navigates to WaitingRoomPage');
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return WaitingRoomPage(gameRef, hostRef);
-              }),
-            );
+            if (_formKey.currentState.validate()) {
+              FocusScope.of(context).unfocus();
+              var loggedInUserUid = await signInAnonymously();
+              var pin = await _gameService.generateAvailable4DigitPin();
+              var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
+              var hostRef = await _participantService.addParticipant(gameRef,
+                  Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, false));
+              await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
+              _log.info('${hostRef} HOST ${JUST_A_HOST} and navigates to WaitingRoomPage');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return WaitingRoomPage(gameRef, hostRef);
+                }),
+              );
+            }
+            ;
           },
         ),
       )

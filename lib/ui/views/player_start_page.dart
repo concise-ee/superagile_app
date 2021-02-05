@@ -23,52 +23,72 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
   final _nameController = TextEditingController();
   final GameService _gameService = GameService();
   final ParticipantService _participantService = ParticipantService();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: Text(HASH_SUPERAGILE)),
-        body: Container(
-            padding: EdgeInsets.all(25),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: _pinController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(hintText: ENTER_PIN),
-                ),
-                SizedBox(height: 25),
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(hintText: ENTER_NAME),
-                ),
-                SizedBox(height: 25),
-                PlayButton(onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  var loggedInUserUid = await signInAnonymously();
-                  var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-                  if (gameRef == null) {
-                    _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
-                    throw ('Tried to reconnect as PLAYER but no such game exists.');
-                  }
-                  var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
-                  if (playerRef != null) {
-                    bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
-                    _log.info('${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
-                    if (!isPlayerActive) {
-                      Game game = await _gameService.findActiveGameByRef(gameRef);
-                      _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
-                      return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
-                    }
-                    _log.severe('${playerRef} tried to join with active participant name');
-                    throw ('Cannot use active participant name');
-                  }
-                  _log.info('${playerRef} joins as new Player');
-                  return joinAsNewPlayer(gameRef, loggedInUserUid);
-                }),
-              ],
-            )));
+    return Form(
+        key: _formKey,
+        child: Scaffold(
+            appBar: AppBar(title: Text(HASH_SUPERAGILE)),
+            body: Container(
+                padding: EdgeInsets.all(25),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return WARNING_PIN;
+                        }
+                        return null;
+                      },
+                      controller: _pinController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(hintText: ENTER_PIN),
+                    ),
+                    SizedBox(height: 25),
+                    TextFormField(
+                      maxLength: 25,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return WARNING_NAME;
+                        }
+                        return null;
+                      },
+                      controller: _nameController,
+                      decoration: InputDecoration(hintText: ENTER_NAME),
+                    ),
+                    SizedBox(height: 25),
+                    PlayButton(onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        FocusScope.of(context).unfocus();
+                        var loggedInUserUid = await signInAnonymously();
+                        var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+                        if (gameRef == null) {
+                          _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
+                          throw ('Tried to reconnect as PLAYER but no such game exists.');
+                        }
+                        var playerRef =
+                            await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+                        if (playerRef != null) {
+                          bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
+                          _log.info(
+                              '${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
+                          if (!isPlayerActive) {
+                            Game game = await _gameService.findActiveGameByRef(gameRef);
+                            _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
+                            return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
+                          }
+                          _log.severe('${playerRef} tried to join with active participant name');
+                          throw ('Cannot use active participant name');
+                        }
+                        _log.info('${playerRef} joins as new Player');
+                        return joinAsNewPlayer(gameRef, loggedInUserUid);
+                      }
+                    }),
+                  ],
+                ))));
   }
 
   Future<MaterialPageRoute<dynamic>> joinAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
