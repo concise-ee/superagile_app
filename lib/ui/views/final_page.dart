@@ -51,7 +51,7 @@ class _FinalPage extends State<FinalPage> {
   }
 
   void Mailer() async {
-    List<String> subScores;
+    List<String> subScores = new List();
     for (MapEntry<String, int> score in agreedScores.entries) {
       subScores.add(score.value.toString());
     }
@@ -73,6 +73,7 @@ class _FinalPage extends State<FinalPage> {
       'sub_12': subScores[11],
       'sub_13': subScores[12],
     };
+    print(formMap);
     await http.post(
         'https://script.google.com/macros/s/AKfycbyQXnLhyn1pMN4Rq0NodnfUO_r0l3GhiI6VOh15PDGngrOBzDoEzPcskw/exec',
         headers: <String, String>{'Content-Type': 'application/x-www-form-urlencoded'},
