@@ -83,7 +83,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                           _log.severe('${playerRef} tried to join with active participant name');
                           throw ('Cannot use active participant name');
                         }
-                        _log.info('${playerRef} joins as new Player');
+                        _log.info('New player joins');
                         return joinAsNewPlayer(gameRef, loggedInUserUid);
                       }
                     }),
