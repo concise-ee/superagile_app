@@ -1,9 +1,11 @@
+import 'dart:async';
+import 'dart:convert' as convert;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
+import 'package:http/http.dart' as http;
 import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
@@ -49,27 +51,33 @@ class _FinalPage extends State<FinalPage> {
   }
 
   void Mailer() async {
-    String username = 'noreply@concise.ee';
-    String password = 'vhuveuqwywtubdik';
-
-    final smtpServer = gmail(username, password);
-
-    //Create our Message
-    final message = Message()
-      ..from = Address(username, 'concise')
-      ..recipients.add(_emailController.text)
-      ..subject = 'Flutter Mailer Test'
-      ..text = 'Auto Mailing with Flutter with Custom Template';
-
-    try {
-      final sendReport = await send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
-    } on MailerException catch (e) {
-      print('Message not sent.');
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
-      }
+    List<String> subScores;
+    for (MapEntry<String, int> score in agreedScores.entries) {
+      subScores.add(score.value.toString());
     }
+    ;
+    Map<String, dynamic> formMap = {
+      'email': _emailController.text,
+      'final_score': '${calculateOverallScore()}',
+      'sub_1': subScores[0],
+      'sub_2': subScores[1],
+      'sub_3': subScores[2],
+      'sub_4': subScores[3],
+      'sub_5': subScores[4],
+      'sub_6': subScores[5],
+      'sub_7': subScores[6],
+      'sub_8': subScores[7],
+      'sub_9': subScores[8],
+      'sub_10': subScores[9],
+      'sub_11': subScores[10],
+      'sub_12': subScores[11],
+      'sub_13': subScores[12],
+    };
+    await http.post(
+        'https://script.google.com/macros/s/AKfycbyQXnLhyn1pMN4Rq0NodnfUO_r0l3GhiI6VOh15PDGngrOBzDoEzPcskw/exec',
+        headers: <String, String>{'Content-Type': 'application/x-www-form-urlencoded'},
+        body: convert.jsonEncode(formMap),
+        encoding: convert.Encoding.getByName('utf-8'));
   }
 
   void loadData() async {
