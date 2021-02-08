@@ -11,11 +11,10 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/score_service.dart';
-import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
-import 'package:superagile_app/ui/views/start_page.dart';
+import 'package:superagile_app/ui/components/radar_chart.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class FinalPage extends StatefulWidget {
@@ -36,7 +35,6 @@ class _FinalPage extends State<FinalPage> {
   final ParticipantService participantService = ParticipantService();
   final QuestionService questionService = QuestionService();
   final ScoreService scoreService = ScoreService();
-  final TimerService timerService = TimerService();
   Map<String, int> agreedScores;
   bool isLoading = true;
   int gamePin;
@@ -112,6 +110,11 @@ class _FinalPage extends State<FinalPage> {
   }
 
   Widget buildBody(BuildContext context) {
+    const ticks = [1, 2, 3, 4];
+    questions.sort((a, b) => (int.parse(a.reference.id)).compareTo(int.parse(b.reference.id)));
+    var features = questions.map((e) => e.topicNameShort).toList();
+    var data = [agreedScores.values.toList()];
+
     return Column(
       children: [
         Row(children: [GamePin(gamePin: gamePin)]),
@@ -121,17 +124,28 @@ class _FinalPage extends State<FinalPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: EdgeInsets.only(bottom: 20, top: 20),
+              padding: EdgeInsets.only(bottom: 10, top: 10),
               child: Text('${OVERALL_SCORE}: ${calculateOverallScore()}',
-                  style: TextStyle(color: Colors.yellow, fontSize: 24, letterSpacing: 1.5),
+                  style: TextStyle(color: Colors.yellow, fontSize: 18, letterSpacing: 1.5),
                   textAlign: TextAlign.center),
             ),
-            buildSeparateScore(),
           ],
         ))),
+        Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RadarChart.light(
+                ticks: ticks,
+                features: features,
+                data: data,
+              ),
+            ],
+          ),
+        ),
         Row(
           children: [
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: TextField(
@@ -144,7 +158,7 @@ class _FinalPage extends State<FinalPage> {
         ),
         Row(
           children: [
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: AgileButton(
@@ -155,21 +169,6 @@ class _FinalPage extends State<FinalPage> {
             ),
           ],
         ),
-        Container(
-          padding: EdgeInsets.only(bottom: 5),
-          child: AgileButton(
-            onPressed: () {
-              timerService.cancelActivityTimer();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return StartPage();
-                }),
-              );
-            },
-            buttonTitle: BACK_TO_BEGINNING,
-          ),
-        )
       ],
     );
   }
@@ -179,17 +178,5 @@ class _FinalPage extends State<FinalPage> {
       return NO_SCORE;
     }
     return agreedScores.values.reduce((sum, value) => sum + value).toString();
-  }
-
-  Widget buildSeparateScore() {
-    return Column(children: [
-      for (MapEntry<String, int> score in agreedScores.entries)
-        Container(
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            Text('${questions.firstWhere((element) => element.reference.id == score.key).topicName}: ${score.value}',
-                style: TextStyle(color: Colors.white, fontSize: 20, letterSpacing: 1.5), textAlign: TextAlign.center)
-          ]),
-        ),
-    ]);
   }
 }
