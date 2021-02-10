@@ -1,15 +1,27 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/log_utils.dart';
 
+final _log = Logger((SuperagileApp).toString());
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   initLogger();
-  runApp(SuperagileApp());
+  FlutterError.onError = (FlutterErrorDetails details) async {
+    _log.severe('${details.exception}:\n${details.stack}');
+  };
+  runZonedGuarded<Future<void>>(() async {
+    runApp(SuperagileApp());
+  }, (Object error, StackTrace stackTrace) {
+    _log.severe('${error}:\n${stackTrace}');
+  });
 }
 
 class SuperagileApp extends StatelessWidget {
