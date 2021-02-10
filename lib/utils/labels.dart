@@ -41,3 +41,4 @@ const GAME_PIN = 'Game PIN:';
 const ANSWERED = 'Answered:';
 const WARNING_NAME = 'Please enter your name';
 const WARNING_PIN = 'Please enter a pin';
+const CLOSE = 'Close';

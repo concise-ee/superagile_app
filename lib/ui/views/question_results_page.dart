@@ -203,8 +203,8 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     return AgileButton(
       buttonTitle: CHANGE_ANSWER,
       onPressed: () async {
-        await scoreService.deleteOldScore(participantRef, questionNr);
         await gameService.changeGameState(gameRef, '${GameState.QUESTION}_$questionNr');
+        await scoreService.deleteOldScore(participantRef, questionNr);
         _log.info('${participantRef} HOST changed gameState to: ${GameState.QUESTION}_$questionNr');
         Navigator.pushReplacement(
           context,

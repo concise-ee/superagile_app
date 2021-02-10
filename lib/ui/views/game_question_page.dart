@@ -182,7 +182,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
           appBar: AppBar(
-              title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false, actions: <Widget>[ButtonPercentPopup()]),
+              title: Text(HASH_SUPERAGILE),
+              automaticallyImplyLeading: false,
+              actions: [ButtonPercentPopup(participantRef, gameRef, questionNr)]),
           body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
         ));
   }

@@ -55,7 +55,7 @@ class ScoreService {
   Future<void> deleteOldScore(DocumentReference participantRef, int questionNr) async {
     QuerySnapshot score =
         await participantRef.collection(SCORES_SUB_COLLECTION).where(QUESTION, isEqualTo: questionNr).get();
-    score.docs.single.reference.delete();
+    return score.docs.single.reference.delete();
   }
 
   Future<void> setAgreedScore(DocumentReference gameRef, int agreedScore, int questionNr) async {
