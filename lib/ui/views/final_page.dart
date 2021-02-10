@@ -14,7 +14,7 @@ import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
-import 'package:superagile_app/ui/components/radar_chart.dart';
+import 'package:superagile_app/ui/components/superagile_wheel.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class FinalPage extends StatefulWidget {
@@ -110,10 +110,9 @@ class _FinalPage extends State<FinalPage> {
   }
 
   Widget buildBody(BuildContext context) {
-    const ticks = [1, 2, 3, 4];
     questions.sort((a, b) => (int.parse(a.reference.id)).compareTo(int.parse(b.reference.id)));
     var features = questions.map((e) => e.topicNameShort).toList();
-    var data = [agreedScores.values.toList()];
+    var data = agreedScores.values.toList();
 
     return Column(
       children: [
@@ -135,8 +134,7 @@ class _FinalPage extends State<FinalPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              RadarChart.light(
-                ticks: ticks,
+              SuperagileWheel(
                 features: features,
                 data: data,
               ),
