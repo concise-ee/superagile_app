@@ -22,7 +22,6 @@ import 'package:superagile_app/utils/labels.dart';
 import 'final_page.dart';
 
 final _log = Logger((CongratulationsPage).toString());
-const NUMBER_OF_GAME_QUESTIONS = 13;
 
 class CongratulationsPage extends StatefulWidget {
   final int _questionNr;
@@ -137,6 +136,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
+        LinearProgressIndicator(value: questionNr / NUMBER_OF_GAME_QUESTIONS,),
         Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
             child: Column(

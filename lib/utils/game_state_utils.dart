@@ -8,6 +8,7 @@ import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/ui/views/waiting_room_page.dart';
 
+const NUMBER_OF_GAME_QUESTIONS = 13;
 class GameState {
   static const String WAITING_ROOM = 'waitingRoom';
   static const String QUESTION = 'question';
