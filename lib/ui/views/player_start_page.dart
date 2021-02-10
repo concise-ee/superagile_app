@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:superagile_app/entities/game.dart';
 import 'package:superagile_app/entities/participant.dart';
@@ -24,6 +26,8 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
   final GameService _gameService = GameService();
   final ParticipantService _participantService = ParticipantService();
   final _formKey = GlobalKey<FormState>();
+  var hasPin = false;
+  var playerExists = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +41,23 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextFormField(
+                      onChanged: (text) async {
+                        var gameRef = await _gameService.findActiveGameRefByPin(int.parse(text));
+                        if (gameRef == null) {
+                          setState(() => hasPin = false);
+                        } else {
+                          setState(() => hasPin = true);
+                        }
+                      },
                       validator: (value) {
                         if (value.isEmpty) {
                           return WARNING_PIN;
                         }
-                        return null;
+                        if (hasPin) {
+                          return null;
+                        } else {
+                          return PLEASE_ENTER_VALID_PIN;
+                        }
                       },
                       controller: _pinController,
                       keyboardType: TextInputType.number,
@@ -54,13 +70,21 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                         if (value.isEmpty) {
                           return WARNING_NAME;
                         }
-                        return null;
+                        if (playerExists) {
+                          return PLAYER_IS_ALREADY_IN_GAME;
+                        } else {
+                          return null;
+                        }
+                      },
+                      onSaved: (value) {
+                        checkGame();
                       },
                       controller: _nameController,
                       decoration: InputDecoration(hintText: ENTER_NAME),
                     ),
                     SizedBox(height: 25),
                     PlayButton(onPressed: () async {
+                      _formKey.currentState.save();
                       if (_formKey.currentState.validate()) {
                         FocusScope.of(context).unfocus();
                         var loggedInUserUid = await signInAnonymously();
@@ -89,6 +113,21 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                     }),
                   ],
                 ))));
+  }
+
+  checkGame() async {
+    var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+    var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+    if (playerRef != null) {
+      bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
+      if (isPlayerActive) {
+        setState(() => playerExists = true);
+      } else {
+        setState(() => playerExists = false);
+      }
+    } else {
+      setState(() => playerExists = false);
+    }
   }
 
   Future<MaterialPageRoute<dynamic>> joinAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
