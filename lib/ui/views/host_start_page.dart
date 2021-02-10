@@ -51,11 +51,14 @@ class _HostStartPageState extends State<HostStartPage> {
                         if (value.isEmpty) {
                           return WARNING_NAME;
                         }
-                        if (hostExists == true) {
-                          return null;
-                        } else {
-                          return HOST_NAME_IS_DIFFERENT;
+                        if (reconnectToExistingGame) {
+                          if (hostExists == true) {
+                            return null;
+                          } else {
+                            return HOST_NAME_IS_DIFFERENT;
+                          }
                         }
+                        return null;
                       },
                       controller: _nameController,
                       decoration: InputDecoration(hintText: ENTER_NAME),
