@@ -27,6 +27,8 @@ class _HostStartPageState extends State<HostStartPage> {
   final _pinController = TextEditingController();
   bool reconnectToExistingGame = false;
   final _formKey = GlobalKey<FormState>();
+  var hasPin = false;
+  var hostExists = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +47,15 @@ class _HostStartPageState extends State<HostStartPage> {
                     TextFormField(
                       maxLength: 25,
                       validator: (value) {
+                        checkGame();
                         if (value.isEmpty) {
                           return WARNING_NAME;
                         }
-                        return null;
+                        if (hostExists == true) {
+                          return null;
+                        } else {
+                          return HOST_NAME_IS_DIFFERENT;
+                        }
                       },
                       controller: _nameController,
                       decoration: InputDecoration(hintText: ENTER_NAME),
@@ -56,11 +63,23 @@ class _HostStartPageState extends State<HostStartPage> {
                     if (reconnectToExistingGame) ...[
                       SizedBox(height: 25),
                       TextFormField(
+                          onChanged: (text) async {
+                            var gameRef = await _gameService.findActiveGameRefByPin(int.parse(text));
+                            if (gameRef == null) {
+                              setState(() => hasPin = false);
+                            } else {
+                              setState(() => hasPin = true);
+                            }
+                          },
                           validator: (value) {
                             if (value.isEmpty) {
                               return WARNING_PIN;
                             }
-                            return null;
+                            if (hasPin) {
+                              return null;
+                            } else {
+                              return PLEASE_ENTER_VALID_PIN;
+                            }
                           },
                           controller: _pinController,
                           decoration: InputDecoration(hintText: ENTER_PIN))
@@ -176,23 +195,35 @@ class _HostStartPageState extends State<HostStartPage> {
       child: AgileButton(
         buttonTitle: RECONNECT,
         onPressed: () async {
-          FocusScope.of(context).unfocus();
-          await signInAnonymously();
-          var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-          if (gameRef == null) {
-            _log.severe('HOST tried to rejoin ${_pinController.text} but no such game exists');
-            throw ('Tried to reconnect as HOST but no such game exists.');
+          if (_formKey.currentState.validate()) {
+            FocusScope.of(context).unfocus();
+            await signInAnonymously();
+            var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+            if (gameRef == null) {
+              _log.severe('HOST tried to rejoin ${_pinController.text} but no such game exists');
+              throw ('Tried to reconnect as HOST but no such game exists.');
+            }
+            var hostRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+            if (hostRef == null) {
+              _log.severe('HOST tried to rejoin ${_pinController.text} but no such HOST exists in ${gameRef.id}');
+              throw ('Tried to reconnect as HOST but no such HOST exists.');
+            }
+            Game game = await _gameService.findActiveGameByRef(gameRef);
+            _log.info('${hostRef} tries to rejoin as HOST to game:${gameRef.id}');
+            return joinCreatedGameAsExistingParticipant(game.gameState, hostRef, gameRef, context);
           }
-          var hostRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
-          if (hostRef == null) {
-            _log.severe('HOST tried to rejoin ${_pinController.text} but no such HOST exists in ${gameRef.id}');
-            throw ('Tried to reconnect as HOST but no such HOST exists.');
-          }
-          Game game = await _gameService.findActiveGameByRef(gameRef);
-          _log.info('${hostRef} tries to rejoin as HOST to game:${gameRef.id}');
-          return joinCreatedGameAsExistingParticipant(game.gameState, hostRef, gameRef, context);
         },
       ),
     );
+  }
+
+  checkGame() async {
+    var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+    var hostRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+    if (hostRef != null) {
+      setState(() => hostExists = true);
+    } else {
+      setState(() => hostExists = false);
+    }
   }
 }
