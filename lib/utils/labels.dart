@@ -45,3 +45,5 @@ const PLEASE_ENTER_VALID_PIN = 'Please enter a valid pin';
 const PLAYER_IS_ALREADY_IN_GAME = 'A player with that name is already in the game';
 const CLOSE = 'Close';
 const HOST_NAME_IS_DIFFERENT = 'Wrong host name';
+const EMAIL_ACTION_BUTTON = 'Send results';
+const EMAIL_FIELD_HINT_TEXT = 'Enter Email';

@@ -117,7 +117,7 @@ class _FinalPage extends State<FinalPage> {
                 padding: EdgeInsets.all(10),
                 child: TextField(
                   controller: _emailController,
-                  decoration: InputDecoration(hintText: 'Enter Email'),
+                  decoration: InputDecoration(hintText: EMAIL_FIELD_HINT_TEXT),
                 ),
               ),
             ),
@@ -129,7 +129,7 @@ class _FinalPage extends State<FinalPage> {
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: AgileButton(
-                    buttonTitle: 'Send results',
+                    buttonTitle: EMAIL_ACTION_BUTTON,
                     onPressed: () {
                       mailingService.sendResults(_emailController.text, agreedScores);
                     }),

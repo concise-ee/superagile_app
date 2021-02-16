@@ -12,7 +12,7 @@ class MailingService {
     ;
     await http.post(
         'https://script.google.com/macros/s/AKfycbyQXnLhyn1pMN4Rq0NodnfUO_r0l3GhiI6VOh15PDGngrOBzDoEzPcskw/exec',
-        headers: <String, String>{'Content-Type': 'application/x-www-form-urlencoded'},
+        headers: <String, String>{'Content-Type': 'application/json'},
         body: convert.jsonEncode({
           'email': email,
           'finalScore': scores.values.reduce((sum, value) => sum + value).toString(),
