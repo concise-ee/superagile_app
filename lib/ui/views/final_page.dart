@@ -52,6 +52,7 @@ class _FinalPage extends State<FinalPage> {
     var totalScore = await scoreService.getAgreedScores(gameRef);
     var pin = await gameService.getGamePinByRef(gameRef);
     var questionTemplates = await questionService.getAllQuestionTemplates();
+    questionTemplates.sort((a, b) => (int.parse(a.reference.id)).compareTo(int.parse(b.reference.id)));
     setState(() {
       agreedScores = totalScore;
       isLoading = false;
@@ -79,10 +80,6 @@ class _FinalPage extends State<FinalPage> {
   }
 
   Widget buildBody(BuildContext context) {
-    questions.sort((a, b) => (int.parse(a.reference.id)).compareTo(int.parse(b.reference.id)));
-    var features = questions.map((e) => e.topicNameShort).toList();
-    var data = agreedScores.values.toList();
-
     return Column(
       children: [
         Row(children: [GamePin(gamePin: gamePin)]),
@@ -104,8 +101,8 @@ class _FinalPage extends State<FinalPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SuperagileWheel(
-                features: features,
-                data: data,
+                topics: questions.map((e) => e.topicNameShort).toList(),
+                scores: agreedScores.values.toList(),
               ),
             ],
           ),
@@ -131,7 +128,7 @@ class _FinalPage extends State<FinalPage> {
                 child: AgileButton(
                     buttonTitle: EMAIL_ACTION_BUTTON,
                     onPressed: () {
-                      mailingService.sendResults(_emailController.text, agreedScores,calculateOverallScore());
+                      mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
                     }),
               ),
             ),
