@@ -131,7 +131,7 @@ class _FinalPage extends State<FinalPage> {
                 child: AgileButton(
                     buttonTitle: EMAIL_ACTION_BUTTON,
                     onPressed: () {
-                      mailingService.sendResults(_emailController.text, agreedScores);
+                      mailingService.sendResults(_emailController.text, agreedScores,calculateOverallScore());
                     }),
               ),
             ),
