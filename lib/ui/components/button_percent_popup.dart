@@ -21,10 +21,11 @@ class ButtonPercentPopup extends StatefulWidget {
   ButtonPercentPopup(this._participantRef, this._gameRef, this._questionNr);
 
   @override
-  _ButtonPercentPopup createState() => _ButtonPercentPopup(this._participantRef, this._gameRef, this._questionNr);
+  _ButtonPercentPopupState createState() =>
+      _ButtonPercentPopupState(this._participantRef, this._gameRef, this._questionNr);
 }
 
-class _ButtonPercentPopup extends State<ButtonPercentPopup> {
+class _ButtonPercentPopupState extends State<ButtonPercentPopup> {
   final participantService = ParticipantService();
   final gameService = GameService();
   final scoreService = ScoreService();
@@ -37,7 +38,7 @@ class _ButtonPercentPopup extends State<ButtonPercentPopup> {
   QuestionScores questionScores;
   final percentage = ValueNotifier<double>(0.0);
 
-  _ButtonPercentPopup(this.participantRef, this.gameRef, this.questionNr);
+  _ButtonPercentPopupState(this.participantRef, this.gameRef, this.questionNr);
 
   @override
   void setState(state) {
