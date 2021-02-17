@@ -40,14 +40,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextFormField(
-                      onChanged: (text) async {
-                        var gameRef = await _gameService.findActiveGameRefByPin(int.parse(text));
-                        if (gameRef == null) {
-                          setState(() => hasPin = false);
-                        } else {
-                          setState(() => hasPin = true);
-                        }
-                      },
+                      maxLength: 4,
                       validator: (value) {
                         if (!gameExists || value.isEmpty) {
                           return PLEASE_ENTER_VALID_PIN;
@@ -157,3 +150,6 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
   }
 }
+
+// game.null
+//
