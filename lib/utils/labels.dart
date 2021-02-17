@@ -47,5 +47,3 @@ const CLOSE = 'Close';
 const HOST_NAME_IS_DIFFERENT = 'Wrong host name';
 const EMAIL_ACTION_BUTTON = 'Send results';
 const EMAIL_FIELD_HINT_TEXT = 'Enter Email';
-const APP_SCRIPTS_URL =
-    'https://script.google.com/macros/s/AKfycbyQXnLhyn1pMN4Rq0NodnfUO_r0l3GhiI6VOh15PDGngrOBzDoEzPcskw/exec';
