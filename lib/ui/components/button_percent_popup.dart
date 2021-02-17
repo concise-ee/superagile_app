@@ -111,7 +111,6 @@ class _ButtonPercentPopupState extends State<ButtonPercentPopup> {
                         width: 360.0,
                         child: ListView(
                           children: <Widget>[
-                            SizedBox(height: 20),
                             Center(
                               child: Text(
                                 ANSWERED,
@@ -119,7 +118,6 @@ class _ButtonPercentPopupState extends State<ButtonPercentPopup> {
                               ),
                             ),
                             buildActiveParticipantsWidget(),
-                            SizedBox(height: 20),
                           ],
                         ),
                       ),
