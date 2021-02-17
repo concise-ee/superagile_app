@@ -25,8 +25,8 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
   final GameService _gameService = GameService();
   final ParticipantService _participantService = ParticipantService();
   final _formKey = GlobalKey<FormState>();
-  var hasPin = false;
-  var playerExists = false;
+  var gameExists = true;
+  var isParticipantActive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +49,10 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                         }
                       },
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return WARNING_PIN;
-                        }
-                        if (hasPin) {
-                          return null;
-                        } else {
+                        if (!gameExists || value.isEmpty) {
                           return PLEASE_ENTER_VALID_PIN;
                         }
+                        return null;
                       },
                       controller: _pinController,
                       keyboardType: TextInputType.number,
@@ -65,53 +61,78 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                     SizedBox(height: 25),
                     TextFormField(
                       maxLength: 25,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return WARNING_NAME;
-                        }
-                        if (playerExists) {
-                          return PLAYER_IS_ALREADY_IN_GAME;
-                        } else {
-                          return null;
-                        }
-                      },
-                      onSaved: (value) {
-                        checkGame();
-                      },
+                      validator: (value) => validateNameField(value),
                       controller: _nameController,
                       decoration: InputDecoration(hintText: ENTER_NAME),
                     ),
                     SizedBox(height: 25),
                     PlayButton(onPressed: () async {
-                      _formKey.currentState.save();
+                      FocusScope.of(context).unfocus();
+                      var loggedInUserUid = await signInAnonymously();
+                      checkIfPinIsEmpty();
+                      var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+                      if (gameRef == null) {
+                        _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
+                        setState(() => gameExists = false);
+                        setState(() => isParticipantActive = false);
+                        _formKey.currentState.validate();
+                        throw ('Tried to reconnect as PLAYER but no such game exists.');
+                      }
+                      setState(() => gameExists = true);
+                      _formKey.currentState.validate();
+                      checkIfNameIsEmpty();
+                      var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+                      if (playerRef != null) {
+                        bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
+                        _log.info(
+                            '${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
+                        if (!isPlayerActive) {
+                          Game game = await _gameService.findActiveGameByRef(gameRef);
+                          _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
+                          return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
+                        }
+                        _log.severe('${playerRef} tried to join with active participant name');
+                        setState(() => isParticipantActive = true);
+                        if (gameRef != null) {
+                          setState(() => gameExists = true);
+                        }
+                        _formKey.currentState.validate();
+                        throw ('Cannot use active participant name');
+                      }
+                      setState(() => isParticipantActive = false);
+                      _log.info('New player joins');
                       if (_formKey.currentState.validate()) {
-                        FocusScope.of(context).unfocus();
-                        var loggedInUserUid = await signInAnonymously();
-                        var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-                        if (gameRef == null) {
-                          _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
-                          throw ('Tried to reconnect as PLAYER but no such game exists.');
-                        }
-                        var playerRef =
-                            await _participantService.findParticipantRefByName(gameRef, _nameController.text);
-                        if (playerRef != null) {
-                          bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
-                          _log.info(
-                              '${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
-                          if (!isPlayerActive) {
-                            Game game = await _gameService.findActiveGameByRef(gameRef);
-                            _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
-                            return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
-                          }
-                          _log.severe('${playerRef} tried to join with active participant name');
-                          throw ('Cannot use active participant name');
-                        }
-                        _log.info('New player joins');
                         return joinAsNewPlayer(gameRef, loggedInUserUid);
                       }
                     }),
                   ],
                 ))));
+  }
+
+  String validateNameField(String value) {
+    if (value.isEmpty) {
+      return WARNING_NAME;
+    }
+    if (isParticipantActive) {
+      return PLAYER_IS_ALREADY_IN_GAME;
+    }
+    return null;
+  }
+
+  void checkIfNameIsEmpty() {
+    if (_nameController.text.isEmpty) {
+      setState(() => isParticipantActive = false);
+      _formKey.currentState.validate();
+      throw ('Name cannot be empty.');
+    }
+  }
+
+  void checkIfPinIsEmpty() {
+    if (_pinController.text.isEmpty) {
+      setState(() => gameExists = false);
+      _formKey.currentState.validate();
+      throw ('Pin cannot be empty.');
+    }
   }
 
   checkGame() async {
@@ -120,12 +141,12 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     if (playerRef != null) {
       bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
       if (isPlayerActive) {
-        setState(() => playerExists = true);
+        setState(() => isParticipantActive = true);
       } else {
-        setState(() => playerExists = false);
+        setState(() => isParticipantActive = false);
       }
     } else {
-      setState(() => playerExists = false);
+      setState(() => isParticipantActive = false);
     }
   }
 
