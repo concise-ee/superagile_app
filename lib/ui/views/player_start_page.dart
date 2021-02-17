@@ -41,12 +41,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                   children: [
                     TextFormField(
                       maxLength: 4,
-                      validator: (value) {
-                        if (!gameExists || value.isEmpty) {
-                          return PLEASE_ENTER_VALID_PIN;
-                        }
-                        return null;
-                      },
+                      validator: (value) => validateName(value),
                       controller: _pinController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(hintText: ENTER_PIN),
@@ -100,6 +95,13 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                     }),
                   ],
                 ))));
+  }
+
+  String validateName(String value) {
+    if (!gameExists || value.isEmpty) {
+      return PLEASE_ENTER_VALID_PIN;
+    }
+    return null;
   }
 
   String validateNameField(String value) {
