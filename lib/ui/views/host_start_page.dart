@@ -40,10 +40,14 @@ class _HostStartPageState extends State<HostStartPage> {
                       alignment: Alignment.center,
                     ),
                     TextFormField(
+                      key: Key('nameField'),
                       maxLength: 25,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return WARNING_NAME;
+                          return WARNING_NAME_EMPTY;
+                        }
+                        if (value.length > 25) {
+                          return WARNING_NAME_TOO_LONG;
                         }
                         return null;
                       },
@@ -111,7 +115,7 @@ class _HostStartPageState extends State<HostStartPage> {
 
   Future<MaterialPageRoute<dynamic>> createGameAndNavigateToWaitingRoom(bool isPlayingAlong) async {
     if (!_formKey.currentState.validate()) {
-      throw ('Name cannot be empty.');
+      return null;
     }
 
     var loggedInUserUid = await signInAnonymously();

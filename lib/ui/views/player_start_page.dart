@@ -106,7 +106,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
 
   String validateNameField(String value) {
     if (value.isEmpty) {
-      return WARNING_NAME;
+      return WARNING_NAME_EMPTY;
     }
     if (isParticipantActive) {
       return PLAYER_IS_ALREADY_IN_GAME;
