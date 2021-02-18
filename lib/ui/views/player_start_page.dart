@@ -57,18 +57,13 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                     PlayButton(onPressed: () async {
                       FocusScope.of(context).unfocus();
                       var loggedInUserUid = await signInAnonymously();
-                      checkIfPinIsEmpty();
-                      var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-                      if (gameRef == null) {
-                        _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
-                        setState(() => gameExists = false);
+                      DocumentReference gameRef = await getGame();
+                      if (gameRef == null) return null;
+                      if (_nameController.text.isEmpty) {
                         setState(() => isParticipantActive = false);
                         _formKey.currentState.validate();
-                        throw ('Tried to reconnect as PLAYER but no such game exists.');
+                        return null;
                       }
-                      setState(() => gameExists = true);
-                      _formKey.currentState.validate();
-                      checkIfNameIsEmpty();
                       var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
                       if (playerRef != null) {
                         bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
@@ -85,7 +80,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                           setState(() => gameExists = true);
                         }
                         _formKey.currentState.validate();
-                        throw ('Cannot use active participant name');
+                        return null;
                       }
                       setState(() => isParticipantActive = false);
                       _log.info('New player joins');
@@ -95,6 +90,25 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                     }),
                   ],
                 ))));
+  }
+
+  Future<DocumentReference> getGame() async {
+    if (_pinController.text.isEmpty) {
+      setState(() => gameExists = false);
+      _formKey.currentState.validate();
+      return null;
+    }
+    var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
+    if (gameRef == null) {
+      _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
+      setState(() => gameExists = false);
+      setState(() => isParticipantActive = false);
+      _formKey.currentState.validate();
+      return null;
+    }
+    setState(() => gameExists = true);
+    _formKey.currentState.validate();
+    return gameRef;
   }
 
   String validateName(String value) {
@@ -112,22 +126,6 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
       return PLAYER_IS_ALREADY_IN_GAME;
     }
     return null;
-  }
-
-  void checkIfNameIsEmpty() {
-    if (_nameController.text.isEmpty) {
-      setState(() => isParticipantActive = false);
-      _formKey.currentState.validate();
-      throw ('Name cannot be empty.');
-    }
-  }
-
-  void checkIfPinIsEmpty() {
-    if (_pinController.text.isEmpty) {
-      setState(() => gameExists = false);
-      _formKey.currentState.validate();
-      throw ('Pin cannot be empty.');
-    }
   }
 
   checkGame() async {
