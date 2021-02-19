@@ -81,9 +81,6 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                         }
                         _log.severe('${playerRef} tried to join with active participant name');
                         setState(() => isParticipantActive = true);
-                        if (gameRef != null) {
-                          setState(() => gameExists = true);
-                        }
                         _formKey.currentState.validate();
                         throw ('Cannot use active participant name');
                       }
