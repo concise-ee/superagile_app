@@ -127,21 +127,6 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     return null;
   }
 
-  checkGame() async {
-    var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
-    var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
-    if (playerRef != null) {
-      bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
-      if (isPlayerActive) {
-        setState(() => isParticipantActive = true);
-      } else {
-        setState(() => isParticipantActive = false);
-      }
-    } else {
-      setState(() => isParticipantActive = false);
-    }
-  }
-
   Future<MaterialPageRoute<dynamic>> joinAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
     DocumentReference playerRef = await _participantService.addParticipant(
         gameRef, Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
@@ -149,6 +134,3 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
   }
 }
-
-// game.null
-//
