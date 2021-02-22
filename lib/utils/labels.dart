@@ -20,7 +20,7 @@ const BEGIN_GAME = 'Begin the game';
 const CLICK_QUESTION_MARK =
     'Click the question mark in the top right corner to read more about superagile until all of your team is here.';
 const CODE_SHARE_CALL = '*Share this code with your team.';
-const CONGRATS = 'CONGRATULATIONS!';
+const CONGRATS = 'CONGRATULATIONS';
 const GREAT_MINDS = 'Great minds think alike!';
 const GO_TO_NEXT_QUESTION = '* Click the play button to go to the next question.';
 const WAIT_FOR_NEXT_QUESTION = '* Wait for host to continue with next question.';
