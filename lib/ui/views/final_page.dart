@@ -10,10 +10,12 @@ import 'package:superagile_app/services/mailing_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/score_service.dart';
+import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/superagile_wheel.dart';
+import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class FinalPage extends StatefulWidget {
@@ -35,6 +37,7 @@ class _FinalPage extends State<FinalPage> {
   final QuestionService questionService = QuestionService();
   final ScoreService scoreService = ScoreService();
   MailingService mailingService = MailingService();
+  TimerService timerService = TimerService();
   Map<String, int> agreedScores;
   bool isLoading = true;
   int gamePin;
@@ -80,6 +83,9 @@ class _FinalPage extends State<FinalPage> {
   }
 
   Widget buildBody(BuildContext context) {
+    if (agreedScores.containsValue(null)) {
+      return renderNoScores();
+    }
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -102,7 +108,7 @@ class _FinalPage extends State<FinalPage> {
                 Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    'Insert your e-mail to get your results',
+                    INSERT_EMAIL_TO_GET_RESULTS,
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
@@ -140,6 +146,33 @@ class _FinalPage extends State<FinalPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget renderNoScores() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(bottom: 20.0),
+          child: Text(
+            NO_SCORES_TO_DISPLAY,
+            style: TextStyle(fontSize: 24),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        AgileButton(
+            buttonTitle: BACK_TO_START,
+            onPressed: () {
+              timerService.cancelActivityTimer();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return StartPage();
+                }),
+              );
+            }),
+      ],
     );
   }
 

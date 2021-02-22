@@ -21,6 +21,6 @@ class TimerService {
   }
 
   void cancelActivityTimer() {
-    _activityTimer.cancel();
+    _activityTimer?.cancel();
   }
 }

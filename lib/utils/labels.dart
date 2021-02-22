@@ -44,3 +44,6 @@ const PLAYER_IS_ALREADY_IN_GAME = 'A player with that name is already in the gam
 const CLOSE = 'Close';
 const EMAIL_ACTION_BUTTON = 'Send results';
 const EMAIL_FIELD_HINT_TEXT = 'E-MAIL';
+const INSERT_EMAIL_TO_GET_RESULTS = 'Insert your e-mail to get your results';
+const NO_SCORES_TO_DISPLAY = 'No scores to display';
+const BACK_TO_START = 'BACK TO START';
