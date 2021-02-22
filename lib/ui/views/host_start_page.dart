@@ -72,7 +72,7 @@ class _HostStartPageState extends State<HostStartPage> {
               alignment: Alignment.center,
               child: Text(
                 HOST_OR_JOIN,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 textAlign: TextAlign.center,
               ))),
       Flexible(
@@ -82,7 +82,7 @@ class _HostStartPageState extends State<HostStartPage> {
               alignment: Alignment.center,
               child: Text(
                 DECISION_CANT_BE_CHANGED,
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 textAlign: TextAlign.center,
               ))),
       Spacer(
@@ -91,10 +91,10 @@ class _HostStartPageState extends State<HostStartPage> {
       Flexible(
         flex: 5,
         child: AgileButton(
-          buttonTitle: PLAYING_ALONG,
+          buttonTitle: LEAD_THE_WORKSHOP,
           onPressed: () async {
             FocusScope.of(context).unfocus();
-            await createGameAndNavigateToWaitingRoom(true);
+            await createGameAndNavigateToWaitingRoom(false);
           },
         ),
       ),
@@ -104,13 +104,13 @@ class _HostStartPageState extends State<HostStartPage> {
       Flexible(
         flex: 5,
         child: AgileButton(
-          buttonTitle: JUST_A_HOST,
+          buttonTitle: VOTE_WITH_TEAM,
           onPressed: () async {
             FocusScope.of(context).unfocus();
-            await createGameAndNavigateToWaitingRoom(false);
+            await createGameAndNavigateToWaitingRoom(true);
           },
         ),
-      )
+      ),
     ];
   }
 

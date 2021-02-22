@@ -165,7 +165,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       child: Column(
         children: [
           if (!areVotedScoresSame()) ...[
-            Text(SAME_ANSWER, textAlign: TextAlign.center),
+            Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
             Spacer(flex: 1),
           ],
           buildBackOrNextButton()
@@ -180,7 +180,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       height: !areVotedScoresSame() ? 80 : 0,
       child: Column(
         children: [
-          Text(SAME_ANSWER, textAlign: TextAlign.center),
+          Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
         ],
       ),
     );

@@ -23,7 +23,7 @@ void main() {
   testWidgets('Host start page does not allow empty name', (WidgetTester tester) async {
     await tester.pumpWidget(makeTestableWidget(HostStartPage()));
 
-    final buttonFinder = find.text(PLAYING_ALONG);
+    final buttonFinder = find.text(VOTE_WITH_TEAM);
     final emptyNameErrorFinder = find.text(WARNING_NAME_EMPTY);
 
     await tester.tap(buttonFinder);
@@ -39,7 +39,7 @@ void main() {
     // final nameErrorFinder = find.text(WARNING_NAME_TOO_LONG);
     // final nameErrorFinder = find.text(WARNING_NAME_EMPTY);
     final nameFieldFinder = find.byKey(Key('nameField'));
-    final buttonFinder = find.text(PLAYING_ALONG);
+    final buttonFinder = find.text(VOTE_WITH_TEAM);
 
     await tester.enterText(nameFieldFinder, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
