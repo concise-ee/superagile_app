@@ -9,6 +9,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
+import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
@@ -33,7 +34,10 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     return Form(
         key: _formKey,
         child: Scaffold(
-            appBar: AppBar(title: Text(HASH_SUPERAGILE)),
+            appBar: AppBar(
+              title: Text(HASH_SUPERAGILE),
+              actions: [QuestionMarkButton()],
+            ),
             body: Container(
                 padding: EdgeInsets.all(25),
                 child: Column(

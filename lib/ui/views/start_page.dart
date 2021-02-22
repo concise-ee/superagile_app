@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
+import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/views/host_start_page.dart';
 import 'package:superagile_app/ui/views/player_start_page.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -15,7 +16,11 @@ class _StartPageState extends State<StartPage> {
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
+          appBar: AppBar(
+            title: Text(HASH_SUPERAGILE),
+            automaticallyImplyLeading: false,
+            actions: [QuestionMarkButton()],
+          ),
           body: _buildBody(context),
         ));
   }

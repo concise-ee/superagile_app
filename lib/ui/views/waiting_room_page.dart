@@ -11,6 +11,7 @@ import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
+import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -105,7 +106,11 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     return WillPopScope(
       onWillPop: () => _onBackPressed(),
       child: Scaffold(
-          appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
+          appBar: AppBar(
+            title: Text(HASH_SUPERAGILE),
+            automaticallyImplyLeading: false,
+            actions: [QuestionMarkButton()],
+          ),
           body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody()),
     );
   }

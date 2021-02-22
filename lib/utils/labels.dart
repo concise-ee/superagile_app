@@ -47,3 +47,16 @@ const EMAIL_FIELD_HINT_TEXT = 'E-MAIL';
 const INSERT_EMAIL_TO_GET_RESULTS = 'Insert your e-mail to get your results';
 const NO_SCORES_TO_DISPLAY = 'No scores to display';
 const BACK_TO_START = 'BACK TO START';
+const WHY = 'Why #superagile?';
+const APPROACH =
+    'This approach is specifically for digital product development, and it involves more than being just agile.';
+const SUPERAGILE_IS_DESIGNED =
+    '#superagile is designed to support building scalable teams and software. It has a growth mindset and makes it easy to respond to new business opportunities in a quickly changing world.';
+const NOT_A_PROCESS =
+    'It is not a process; it is a framework, approach, and a type of culture every startup benefits from. It combines top-notch technology with agile principles and adds a growth hacking mindset. It brings business, marketing, and development closer together to reduce expensive communication faults and spreads ownership feeling across all team members.';
+const IN_THE_END =
+    'In the end, it helps to save time and money. It makes innovation cheaper by paying attention to the right thing at the right time.';
+const BLOG = ' BLOG';
+const EBOOK = 'EBOOK';
+const HONEST = 'It is an honest and open approach to successful digital product building.';
+const READ_MORE = 'Read more:';
