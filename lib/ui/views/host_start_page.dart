@@ -52,7 +52,8 @@ class _HostStartPageState extends State<HostStartPage> {
                         return null;
                       },
                       controller: _nameController,
-                      decoration: InputDecoration(hintText: ENTER_NAME),
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(hintText: YOUR_NAME),
                     ),
                     Spacer(
                       flex: 1,
@@ -71,7 +72,7 @@ class _HostStartPageState extends State<HostStartPage> {
               alignment: Alignment.center,
               child: Text(
                 HOST_OR_JOIN,
-                style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
+                style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ))),
       Flexible(
@@ -81,7 +82,7 @@ class _HostStartPageState extends State<HostStartPage> {
               alignment: Alignment.center,
               child: Text(
                 DECISION_CANT_BE_CHANGED,
-                style: TextStyle(color: Colors.white, fontSize: 12, letterSpacing: 1.5),
+                style: TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ))),
       Spacer(

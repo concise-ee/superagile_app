@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/views/start_page.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'agile_button.dart';
@@ -14,8 +15,7 @@ class BackDialogAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(ARE_YOU_SURE),
-      content: Text(EXIT_TO_START_PAGE),
+      content: Text(EXIT_TO_START_PAGE, style: TextStyle(color: white)),
       actions: [
         AgileButton(
           onPressed: () {

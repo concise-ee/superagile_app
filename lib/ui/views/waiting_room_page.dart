@@ -12,6 +12,7 @@ import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
@@ -116,15 +117,15 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           alignment: Alignment.center,
         ),
         Container(
-            child: Text(WAITING_ROOM,
-                textAlign: TextAlign.center, style: TextStyle(color: Color(0xffE5E5E5), fontSize: 35))),
-        BorderedText(gamePin),
-        if (role == Role.HOST) buildText(CODE_SHARE_CALL),
-        buildText(WAIT_FOR_TEAM),
-        if (role == Role.HOST) buildText(PLAY_BUTTON_CALL),
-        if (role == Role.HOST) buildStartGameButton(),
+          child: Padding(
+              padding: EdgeInsets.only(top: 30),
+              child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(fontSize: 36))),
+        ),
+        buildBorderedText(gamePin),
+        if (role == Role.PLAYER) buildText(WAIT_FOR_TEAM),
         buildParticipantCount(),
         Container(child: buildActiveParticipantsWidget()),
+        if (role == Role.HOST) buildStartGameButton(),
       ],
     );
   }
@@ -135,10 +136,11 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
           var participants = participantService.findActiveParticipants(snapshot.data.docs);
-          return FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text('There are ' + participants.length.toString() + ' people in this game.',
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 24)));
+          return Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Text('There are ' + participants.length.toString() + ' people in this workshop.',
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 24)),
+          );
         });
   }
 
@@ -155,7 +157,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
               return ListTile(
                 title: Text(
                   participants[index].name,
-                  style: TextStyle(color: Color(0xffFFFFFF)),
+                  style: TextStyle(color: white),
                 ),
                 subtitle: Center(child: Text(participants[index].lastActive)),
               );
@@ -172,18 +174,19 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   Widget buildText(String text) {
-    return Text(text, textAlign: TextAlign.center, style: TextStyle(color: Colors.yellowAccent));
+    return Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: 16));
   }
 
-  Widget BorderedText(String text) {
+  Widget buildBorderedText(String text) {
     return Container(
       margin: const EdgeInsets.all(30.0),
       padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(border: Border.all(width: 3.0, color: Color(0xff656565))),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 60),
+      decoration: BoxDecoration(border: Border.all(width: 3.0, color: secondaryColor)),
+      child: Column(
+        children: [
+          Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: 48, color: accentColor)),
+          buildText(CODE_SHARE_CALL)
+        ],
       ),
     );
   }

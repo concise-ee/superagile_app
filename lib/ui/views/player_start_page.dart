@@ -40,18 +40,20 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextFormField(
+                      textAlign: TextAlign.center,
                       maxLength: 4,
                       validator: (value) => validateName(value),
                       controller: _pinController,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(hintText: ENTER_PIN),
+                      decoration: InputDecoration(hintText: ENTER_CODE),
                     ),
                     SizedBox(height: 25),
                     TextFormField(
+                      textAlign: TextAlign.center,
                       maxLength: 25,
                       validator: (value) => validateNameField(value),
                       controller: _nameController,
-                      decoration: InputDecoration(hintText: ENTER_NAME),
+                      decoration: InputDecoration(hintText: YOUR_NAME),
                     ),
                     SizedBox(height: 25),
                     PlayButton(onPressed: () async {

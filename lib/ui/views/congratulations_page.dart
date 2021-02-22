@@ -136,7 +136,9 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
-        LinearProgressIndicator(value: questionNr / NUMBER_OF_GAME_QUESTIONS,),
+        LinearProgressIndicator(
+          value: questionNr / NUMBER_OF_GAME_QUESTIONS,
+        ),
         Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
             child: Column(
@@ -151,8 +153,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                         child: Padding(
                   padding: EdgeInsets.all(50.0),
                   child: Text('${TEAMS_RESULTS} ${questionByNumber.topicName}: ${agreedScore}',
-                      style: TextStyle(color: Colors.white, fontSize: 24, letterSpacing: 1.5),
-                      textAlign: TextAlign.center),
+                      style: TextStyle(fontSize: 24), textAlign: TextAlign.center),
                 ))),
               ],
             ),
@@ -170,8 +171,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                       padding: EdgeInsets.all(12.0),
                       child: Text(
                         CONGRATS,
-                        style: TextStyle(
-                            color: Colors.yellowAccent, fontSize: 28, letterSpacing: 3, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                       )),
                 ))
           ],
@@ -185,22 +185,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                     padding: EdgeInsets.all(12.0),
                     child: Text(
                       GREAT_MINDS,
-                      style: TextStyle(color: Colors.yellowAccent, fontSize: 22, letterSpacing: 1.5),
+                      style: TextStyle(fontSize: 22),
                     )),
-              ),
-            )
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                child: Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Text(role == Role.HOST ? GO_TO_NEXT_QUESTION : WAIT_FOR_NEXT_QUESTION,
-                        style: TextStyle(color: Colors.yellowAccent, fontSize: 14, letterSpacing: 1.5),
-                        textAlign: TextAlign.center)),
               ),
             )
           ],

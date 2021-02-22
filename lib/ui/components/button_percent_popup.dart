@@ -114,7 +114,7 @@ class _ButtonPercentPopupState extends State<ButtonPercentPopup> {
                             Center(
                               child: Text(
                                 ANSWERED,
-                                style: TextStyle(fontSize: 24, color: accentColor),
+                                style: TextStyle(fontSize: 24),
                               ),
                             ),
                             buildActiveParticipantsWidget(),
@@ -141,7 +141,7 @@ class _ButtonPercentPopupState extends State<ButtonPercentPopup> {
               lineWidth: 5.0,
               percent: percentage.value,
               progressColor: accentColor,
-              backgroundColor: Colors.black,
+              backgroundColor: secondaryColor,
             )));
   }
 

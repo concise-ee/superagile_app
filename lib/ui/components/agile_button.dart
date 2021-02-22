@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 
 class AgileButton extends StatelessWidget {
   AgileButton({@required this.onPressed, @required this.buttonTitle});
@@ -17,9 +18,9 @@ class AgileButton extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 200.0),
               child: Text(
                 buttonTitle,
-                style: TextStyle(color: Colors.yellowAccent, fontSize: 90),
+                style: TextStyle(color: accentColor, fontSize: 90),
               )),
-          borderSide: BorderSide(width: 1.0, color: Color.fromRGBO(140, 140, 140, 1.0), style: BorderStyle.solid),
+          borderSide: BorderSide(width: 1.0, color: secondaryColor, style: BorderStyle.solid),
           onPressed: onPressed,
         ));
   }

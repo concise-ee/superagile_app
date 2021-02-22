@@ -80,61 +80,66 @@ class _FinalPage extends State<FinalPage> {
   }
 
   Widget buildBody(BuildContext context) {
-    return Column(
-      children: [
-        Row(children: [GamePin(gamePin: gamePin)]),
-        Expanded(
-            child: SingleChildScrollView(
-                child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 10, top: 10),
-              child: Text('${OVERALL_SCORE}: ${calculateOverallScore()}',
-                  style: TextStyle(color: Colors.yellow, fontSize: 18, letterSpacing: 1.5),
-                  textAlign: TextAlign.center),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(children: [GamePin(gamePin: gamePin)]),
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SuperagileWheel(
+                  topics: questions.map((e) => e.topicNameShort).toList(),
+                  scores: agreedScores.values.toList(),
+                ),
+              ],
             ),
-          ],
-        ))),
-        Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SuperagileWheel(
-                topics: questions.map((e) => e.topicNameShort).toList(),
-                scores: agreedScores.values.toList(),
+          ),
+          Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    'Insert your e-mail to get your results',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(hintText: EMAIL_FIELD_HINT_TEXT),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ],
           ),
-        ),
-        Row(
-          children: [
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(hintText: EMAIL_FIELD_HINT_TEXT),
+          Row(
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: AgileButton(
+                      buttonTitle: EMAIL_ACTION_BUTTON,
+                      onPressed: () {
+                        mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
+                      }),
                 ),
               ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: AgileButton(
-                    buttonTitle: EMAIL_ACTION_BUTTON,
-                    onPressed: () {
-                      mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
-                    }),
-              ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 

@@ -138,7 +138,9 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Widget buildBody(context) {
     return Column(
       children: [
-        LinearProgressIndicator(value: questionNr / NUMBER_OF_GAME_QUESTIONS,),
+        LinearProgressIndicator(
+          value: questionNr / NUMBER_OF_GAME_QUESTIONS,
+        ),
         Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
             child: SingleChildScrollView(

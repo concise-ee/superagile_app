@@ -29,7 +29,7 @@ class _StartPageState extends State<StartPage> {
             Flexible(
               flex: 5,
               child: AgileButton(
-                buttonTitle: HOST,
+                buttonTitle: HOST_WORKSHOP,
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   Navigator.push(
@@ -47,7 +47,7 @@ class _StartPageState extends State<StartPage> {
             Flexible(
               flex: 5,
               child: AgileButton(
-                buttonTitle: JOIN,
+                buttonTitle: JOIN_WITH_CODE,
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   Navigator.push(

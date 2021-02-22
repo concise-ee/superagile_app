@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const primaryColor = Color.fromRGBO(51, 51, 51, 1);
 const accentColor = Color.fromRGBO(255, 255, 0, 1);
 const secondaryColor = Color.fromRGBO(167, 168, 170, 1);
+const white = Colors.white;
 
 ThemeData setTheme() {
   return ThemeData(
@@ -12,14 +13,14 @@ ThemeData setTheme() {
     accentColor: accentColor,
     textTheme: TextTheme(
         subtitle1: TextStyle(fontSize: 35, color: accentColor),
-        bodyText1: TextStyle(color: accentColor),
-        bodyText2: TextStyle(color: accentColor),
-        headline1: TextStyle(color: accentColor),
-        headline2: TextStyle(color: accentColor),
-        headline3: TextStyle(color: accentColor),
-        headline4: TextStyle(color: accentColor),
-        headline5: TextStyle(color: accentColor),
-        headline6: TextStyle(color: accentColor)),
+        bodyText1: TextStyle(color: white),
+        bodyText2: TextStyle(color: white),
+        headline1: TextStyle(color: white),
+        headline2: TextStyle(color: white),
+        headline3: TextStyle(color: white),
+        headline4: TextStyle(color: white),
+        headline5: TextStyle(color: white),
+        headline6: TextStyle(color: white)),
     buttonTheme: ButtonThemeData(
       buttonColor: primaryColor,
       textTheme: ButtonTextTheme.accent,
@@ -30,7 +31,7 @@ ThemeData setTheme() {
         isDense: true,
         border: OutlineInputBorder(borderSide: BorderSide(color: accentColor))),
     appBarTheme: AppBarTheme(
-        textTheme: TextTheme(headline6: TextStyle(color: accentColor, fontSize: 20.0)),
+        textTheme: TextTheme(headline6: TextStyle(color: accentColor, fontSize: 24.0)),
         iconTheme: IconThemeData(color: accentColor)),
   );
 }

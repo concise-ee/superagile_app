@@ -196,11 +196,13 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Widget buildBody(BuildContext context) {
     return Column(
       children: [
-        LinearProgressIndicator(value: questionNr / NUMBER_OF_GAME_QUESTIONS,),
+        LinearProgressIndicator(
+          value: questionNr / NUMBER_OF_GAME_QUESTIONS,
+        ),
         Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
             child: SingleChildScrollView(
-                padding: EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                padding: EdgeInsets.only(left: 25, right: 25),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -208,26 +210,23 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       children: [
                         Flexible(
                             fit: FlexFit.tight,
-                            flex: 2,
+                            flex: 5,
                             child: Container(
                               alignment: Alignment.center,
                               child: Padding(
-                                  padding: EdgeInsets.all(12.0),
+                                  padding: EdgeInsets.only(right: 10),
                                   child: Text(
                                     questionNr.toString(),
-                                    style: TextStyle(color: Colors.white, fontSize: 90, letterSpacing: 1.5),
+                                    style: TextStyle(fontSize: 105),
                                   )),
                             )),
                         Expanded(
-                          flex: 3,
+                          flex: 8,
                           child: Container(
-                            child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  questionTemplate.question,
-                                  style: TextStyle(color: Colors.white, fontSize: 18, height: 1.2, letterSpacing: 1.5),
-                                )),
-                          ),
+                              child: Text(
+                            questionTemplate.question,
+                            style: TextStyle(fontSize: 20),
+                          )),
                         ),
                       ],
                     ),
@@ -240,7 +239,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 questionTemplate.zeroMeaning,
-                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                                style: TextStyle(color: accentColor, fontSize: 18),
                               )),
                         )),
                     Flexible(
@@ -252,7 +251,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 questionTemplate.oneMeaning,
-                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                                style: TextStyle(color: accentColor, fontSize: 18),
                               )),
                         )),
                     Flexible(
@@ -264,7 +263,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 questionTemplate.twoMeaning,
-                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                                style: TextStyle(color: accentColor, fontSize: 18),
                               )),
                         )),
                     Flexible(
@@ -276,7 +275,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                               padding: EdgeInsets.all(5.0),
                               child: Text(
                                 questionTemplate.threeMeaning,
-                                style: TextStyle(color: Colors.yellowAccent, fontSize: 18, letterSpacing: 1.5),
+                                style: TextStyle(color: accentColor, fontSize: 18),
                               )),
                         )),
                     Flexible(
@@ -284,18 +283,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       flex: 1,
                       child: Container(
                           alignment: Alignment.center,
-                          child: Padding(
-                              padding: EdgeInsets.only(
-                                left: 5,
-                                right: 5,
-                                top: 25,
-                                bottom: 25,
-                              ),
-                              child: Text(
-                                questionTemplate.shortDesc,
-                                style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing: 1.5),
-                                textAlign: TextAlign.center,
-                              ))),
+                          child: Text(
+                            questionTemplate.shortDesc,
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          )),
                     ),
                     Flexible(
                       fit: FlexFit.loose,
@@ -306,7 +298,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             padding: EdgeInsets.all(5),
                             child: Text(
                               questionTemplate.longDesc,
-                              style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
+                              style: TextStyle(fontSize: 16),
                             )),
                       ),
                     ),
@@ -331,12 +323,15 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Expanded renderScoreButton(String value) {
     return Expanded(
       child: Container(
-        height: 50,
+        height: 100,
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: secondaryColor, width: 5),
+          ),
+        ),
         child: RaisedButton(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
           child: Text(value,
-              style: TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 24)),
+              style: TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 48)),
           color: value == pressedButton.toString() ? accentColor : primaryColor,
           onPressed: () {
             setState(() => pressedButton = int.parse(value));
@@ -352,13 +347,16 @@ class _GameQuestionPage extends State<GameQuestionPage> {
       children: [
         Expanded(
           child: Container(
-            height: 50,
+            height: 100,
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(color: secondaryColor, width: 5),
+              ),
+            ),
             child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0), side: BorderSide(color: Colors.grey, width: 2)),
               child: Text(
                 CONTINUE,
-                style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: 24),
+                style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: 48),
               ),
               color: pressedButton == HOST_SKIP_VALUE ? accentColor : primaryColor,
               onPressed: () {
