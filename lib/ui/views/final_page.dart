@@ -131,6 +131,7 @@ class _FinalPage extends State<FinalPage> {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                 child: Padding(

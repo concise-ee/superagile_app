@@ -15,27 +15,31 @@ class BackDialogAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Text(EXIT_TO_START_PAGE, style: TextStyle(color: white)),
+      content: Text(EXIT_TO_START_PAGE, textAlign: TextAlign.center, style: TextStyle(color: white)),
       actions: [
-        AgileButton(
-          onPressed: () {
-            timerService.cancelActivityTimer();
-            _log.info('Participant clicked exit and answered YES, timer cancelled');
-            Navigator.pop(context);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return StartPage();
-              }),
-            );
-          },
-          buttonTitle: YES,
+        Center(
+          child: AgileButton(
+            onPressed: () {
+              timerService.cancelActivityTimer();
+              _log.info('Participant clicked exit and answered YES, timer cancelled');
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return StartPage();
+                }),
+              );
+            },
+            buttonTitle: YES,
+          ),
         ),
-        AgileButton(
-          buttonTitle: NO,
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        Center(
+          child: AgileButton(
+            buttonTitle: NO,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         SizedBox(height: 16),
       ],

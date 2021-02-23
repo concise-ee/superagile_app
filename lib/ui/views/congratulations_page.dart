@@ -141,85 +141,61 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         ),
         Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(12.0),
             child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                    child: Container(
-                        child: Padding(
-                  padding: EdgeInsets.all(50.0),
+                Padding(
+                  padding: EdgeInsets.only(top: 12, bottom: 50),
                   child: Text('${TEAMS_RESULTS} ${questionByNumber.topicName}: ${agreedScore}',
                       style: TextStyle(fontSize: 24), textAlign: TextAlign.center),
-                ))),
-              ],
-            ),
-          ],
-        )),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Text(
-                        CONGRATS,
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                      )),
-                ))
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                    padding: EdgeInsets.all(12.0),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(bottom: 24, top: MediaQuery.of(context).size.height / 4),
+                    child: Text(
+                      CONGRATS,
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(bottom: 24),
                     child: Text(
                       GREAT_MINDS,
                       style: TextStyle(fontSize: 22),
                     )),
-              ),
-            )
-          ],
+              ],
+            ),
+          ),
         ),
         if (role == Role.HOST)
           Row(
             children: [
               Expanded(
-                  child: Align(
-                alignment: Alignment.bottomLeft,
-                child: PlayButton(
-                  onPressed: () async {
-                    if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
-                      await gameService.changeGameState(gameRef, GameState.FINAL);
-                      _log.info('${participantRef} HOST changed gameState to: ${GameState.FINAL}');
-                      return Navigator.pushReplacement(
+                child: Container(
+                  height: 200,
+                  child: PlayButton(
+                    onPressed: () async {
+                      if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
+                        await gameService.changeGameState(gameRef, GameState.FINAL);
+                        _log.info('${participantRef} HOST changed gameState to: ${GameState.FINAL}');
+                        return Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return FinalPage(participantRef, gameRef);
+                          }),
+                        );
+                      }
+                      await gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
+                      _log.info('${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return FinalPage(participantRef, gameRef);
+                          return GameQuestionPage(questionNr + 1, participantRef, gameRef);
                         }),
                       );
-                    }
-                    await gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
-                    _log.info('${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return GameQuestionPage(questionNr + 1, participantRef, gameRef);
-                      }),
-                    );
-                  },
+                    },
+                  ),
                 ),
-              ))
+              ),
             ],
           )
       ],
