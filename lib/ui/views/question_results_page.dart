@@ -160,8 +160,8 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   Container buildHostContainer() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
-      height: !areVotedScoresSame() ? 160 : 100,
+      padding: EdgeInsets.all(25),
+      height: !areVotedScoresSame() ? 180 : 130,
       child: Column(
         children: [
           if (!areVotedScoresSame()) ...[

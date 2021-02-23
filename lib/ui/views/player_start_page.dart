@@ -38,61 +38,66 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
               title: Text(HASH_SUPERAGILE),
               actions: [QuestionMarkButton()],
             ),
-            body: Container(
-                padding: EdgeInsets.all(25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      maxLength: 4,
-                      validator: (value) => validateName(value),
-                      controller: _pinController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(hintText: ENTER_CODE),
-                    ),
-                    SizedBox(height: 25),
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      maxLength: 25,
-                      validator: (value) => validateNameField(value),
-                      controller: _nameController,
-                      decoration: InputDecoration(hintText: YOUR_NAME),
-                    ),
-                    SizedBox(height: 25),
-                    PlayButton(onPressed: () async {
-                      FocusScope.of(context).unfocus();
-                      var loggedInUserUid = await signInAnonymously();
-                      DocumentReference gameRef = await getGame();
-                      if (gameRef == null) return null;
-                      if (_nameController.text.isEmpty) {
-                        setState(() => isParticipantActive = false);
-                        _formKey.currentState.validate();
-                        return null;
-                      }
-                      var playerRef = await _participantService.findParticipantRefByName(gameRef, _nameController.text);
-                      if (playerRef != null) {
-                        bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
-                        _log.info(
-                            '${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
-                        if (!isPlayerActive) {
-                          Game game = await _gameService.findActiveGameByRef(gameRef);
-                          _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
-                          return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
-                        }
-                        _log.severe('${playerRef} tried to join with active participant name');
-                        setState(() => isParticipantActive = true);
-                        _formKey.currentState.validate();
-                        return null;
-                      }
-                      setState(() => isParticipantActive = false);
-                      _log.info('New player joins');
-                      if (_formKey.currentState.validate()) {
-                        return joinAsNewPlayer(gameRef, loggedInUserUid);
-                      }
-                    }),
-                  ],
-                ))));
+            body: Center(
+              child: SingleChildScrollView(
+                child: Container(
+                    padding: EdgeInsets.all(25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          textAlign: TextAlign.center,
+                          maxLength: 4,
+                          validator: (value) => validateName(value),
+                          controller: _pinController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(hintText: ENTER_CODE),
+                        ),
+                        SizedBox(height: 25),
+                        TextFormField(
+                          textAlign: TextAlign.center,
+                          maxLength: 25,
+                          validator: (value) => validateNameField(value),
+                          controller: _nameController,
+                          decoration: InputDecoration(hintText: YOUR_NAME),
+                        ),
+                        SizedBox(height: 25),
+                        PlayButton(onPressed: () async {
+                          FocusScope.of(context).unfocus();
+                          var loggedInUserUid = await signInAnonymously();
+                          DocumentReference gameRef = await getGame();
+                          if (gameRef == null) return null;
+                          if (_nameController.text.isEmpty) {
+                            setState(() => isParticipantActive = false);
+                            _formKey.currentState.validate();
+                            return null;
+                          }
+                          var playerRef =
+                              await _participantService.findParticipantRefByName(gameRef, _nameController.text);
+                          if (playerRef != null) {
+                            bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
+                            _log.info(
+                                '${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
+                            if (!isPlayerActive) {
+                              Game game = await _gameService.findActiveGameByRef(gameRef);
+                              _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
+                              return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
+                            }
+                            _log.severe('${playerRef} tried to join with active participant name');
+                            setState(() => isParticipantActive = true);
+                            _formKey.currentState.validate();
+                            return null;
+                          }
+                          setState(() => isParticipantActive = false);
+                          _log.info('New player joins');
+                          if (_formKey.currentState.validate()) {
+                            return joinAsNewPlayer(gameRef, loggedInUserUid);
+                          }
+                        }),
+                      ],
+                    )),
+              ),
+            )));
   }
 
   Future<DocumentReference> getGame() async {

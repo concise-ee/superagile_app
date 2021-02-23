@@ -35,85 +35,69 @@ class _HostStartPageState extends State<HostStartPage> {
               title: Text(HASH_SUPERAGILE),
               actions: [QuestionMarkButton()],
             ),
-            body: Container(
-                padding: EdgeInsets.all(25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                    ),
-                    TextFormField(
-                      key: Key('nameField'),
-                      maxLength: 25,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return WARNING_NAME_EMPTY;
-                        }
-                        if (value.length > 25) {
-                          return WARNING_NAME_TOO_LONG;
-                        }
-                        return null;
-                      },
-                      controller: _nameController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(hintText: YOUR_NAME),
-                    ),
-                    Spacer(
-                      flex: 1,
-                    ),
-                    ...renderNewGameDescriptionAndButtons(),
-                  ],
-                ))));
+            body: Center(
+              child: SingleChildScrollView(
+                child: Container(
+                    padding: EdgeInsets.all(25),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextFormField(
+                          key: Key('nameField'),
+                          maxLength: 25,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return WARNING_NAME_EMPTY;
+                            }
+                            if (value.length > 25) {
+                              return WARNING_NAME_TOO_LONG;
+                            }
+                            return null;
+                          },
+                          controller: _nameController,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(hintText: YOUR_NAME),
+                        ),
+                        SizedBox(height: 50),
+                        ...renderNewGameDescriptionAndButtons(),
+                      ],
+                    )),
+              ),
+            )));
   }
 
   List<Widget> renderNewGameDescriptionAndButtons() {
     return [
-      Flexible(
-          fit: FlexFit.loose,
-          flex: 3,
-          child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                HOST_OR_JOIN,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                textAlign: TextAlign.center,
-              ))),
-      Flexible(
-          fit: FlexFit.loose,
-          flex: 2,
-          child: Container(
-              alignment: Alignment.center,
-              child: Text(
-                DECISION_CANT_BE_CHANGED,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                textAlign: TextAlign.center,
-              ))),
-      Spacer(
-        flex: 1,
+      Container(
+          alignment: Alignment.center,
+          child: Text(
+            HOST_OR_JOIN,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            textAlign: TextAlign.center,
+          )),
+      SizedBox(height: 25),
+      Container(
+          alignment: Alignment.center,
+          child: Text(
+            DECISION_CANT_BE_CHANGED,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            textAlign: TextAlign.center,
+          )),
+      SizedBox(height: 50),
+      AgileButton(
+        buttonTitle: LEAD_THE_WORKSHOP,
+        onPressed: () async {
+          FocusScope.of(context).unfocus();
+          await createGameAndNavigateToWaitingRoom(false);
+        },
       ),
-      Flexible(
-        flex: 5,
-        child: AgileButton(
-          buttonTitle: LEAD_THE_WORKSHOP,
-          onPressed: () async {
-            FocusScope.of(context).unfocus();
-            await createGameAndNavigateToWaitingRoom(false);
-          },
-        ),
-      ),
-      Spacer(
-        flex: 1,
-      ),
-      Flexible(
-        flex: 5,
-        child: AgileButton(
-          buttonTitle: VOTE_WITH_TEAM,
-          onPressed: () async {
-            FocusScope.of(context).unfocus();
-            await createGameAndNavigateToWaitingRoom(true);
-          },
-        ),
+      SizedBox(height: 50),
+      AgileButton(
+        buttonTitle: VOTE_WITH_TEAM,
+        onPressed: () async {
+          FocusScope.of(context).unfocus();
+          await createGameAndNavigateToWaitingRoom(true);
+        },
       ),
     ];
   }

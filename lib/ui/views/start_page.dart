@@ -27,6 +27,8 @@ class _StartPageState extends State<StartPage> {
 
   Widget _buildBody(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
+      child: Padding(
         padding: EdgeInsets.all(25),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -65,6 +67,8 @@ class _StartPageState extends State<StartPage> {
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
