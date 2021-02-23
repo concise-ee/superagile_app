@@ -115,24 +115,23 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     );
   }
 
-  ListView buildBody() {
-    return ListView(
-      children: [
-        Align(
-          alignment: Alignment.center,
-        ),
-        Container(
-          child: Padding(
-              padding: EdgeInsets.only(top: 30),
-              child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(fontSize: 36))),
-        ),
-        buildBorderedText(gamePin),
-        if (role == Role.PLAYER) buildText(WAIT_FOR_TEAM),
-        buildParticipantCount(),
-        Container(child: buildActiveParticipantsWidget()),
-        if (role == Role.HOST) buildStartGameButton(),
-      ],
-    );
+  Widget buildBody() {
+    return SingleChildScrollView(
+        child: Column(children: [
+      Align(
+        alignment: Alignment.center,
+      ),
+      Container(
+        child: Padding(
+            padding: EdgeInsets.only(top: 30),
+            child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(fontSize: 36))),
+      ),
+      buildBorderedText(gamePin),
+      if (role == Role.PLAYER) buildText(WAIT_FOR_TEAM),
+      buildParticipantCount(),
+      buildActiveParticipantsWidget(),
+      if (role == Role.HOST) buildStartGameButton(),
+    ]));
   }
 
   Widget buildParticipantCount() {
@@ -157,14 +156,17 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           var participants = participantService.findActiveParticipants(snapshot.data.docs);
           return ListView.builder(
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemCount: participants.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(
-                  participants[index].name,
-                  style: TextStyle(color: white),
+                title: Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Text(
+                    participants[index].name,
+                    style: TextStyle(color: white),
+                  ),
                 ),
-                subtitle: Center(child: Text(participants[index].lastActive)),
               );
             },
           );
