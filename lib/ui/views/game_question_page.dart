@@ -228,54 +228,6 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       ],
                     ),
                     Flexible(
-                        fit: FlexFit.loose,
-                        flex: 1,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                questionTemplate.zeroMeaning,
-                                style: TextStyle(color: accentColor, fontSize: 18),
-                              )),
-                        )),
-                    Flexible(
-                        fit: FlexFit.loose,
-                        flex: 1,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                questionTemplate.oneMeaning,
-                                style: TextStyle(color: accentColor, fontSize: 18),
-                              )),
-                        )),
-                    Flexible(
-                        fit: FlexFit.loose,
-                        flex: 1,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                questionTemplate.twoMeaning,
-                                style: TextStyle(color: accentColor, fontSize: 18),
-                              )),
-                        )),
-                    Flexible(
-                        fit: FlexFit.loose,
-                        flex: 1,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                questionTemplate.threeMeaning,
-                                style: TextStyle(color: accentColor, fontSize: 18),
-                              )),
-                        )),
-                    Flexible(
                       fit: FlexFit.loose,
                       flex: 1,
                       child: Container(
@@ -305,10 +257,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           SafeArea(
               child: Row(
             children: [
-              renderScoreButton(ZERO),
-              renderScoreButton(ONE),
-              renderScoreButton(TWO),
-              renderScoreButton(THREE)
+              renderScoreButton(ZERO, questionTemplate.zeroMeaning),
+              renderScoreButton(ONE, questionTemplate.oneMeaning),
+              renderScoreButton(TWO, questionTemplate.twoMeaning),
+              renderScoreButton(THREE, questionTemplate.threeMeaning)
             ],
           ))
         else
@@ -317,7 +269,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     );
   }
 
-  Expanded renderScoreButton(String value) {
+  Expanded renderScoreButton(String value, String meaning) {
     return Expanded(
       child: Container(
         height: 100,
@@ -327,8 +279,16 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           ),
         ),
         child: RaisedButton(
-          child: Text(value,
-              style: TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 48)),
+          child: Column(
+            children: [
+              Text(value,
+                  style:
+                      TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 48)),
+              Text(meaning,
+                  style: TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 12),
+                  textAlign: TextAlign.center),
+            ],
+          ),
           color: value == pressedButton.toString() ? accentColor : primaryColor,
           onPressed: () {
             setState(() => pressedButton = int.parse(value));
