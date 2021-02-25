@@ -61,19 +61,23 @@ class _CongratulationsPage extends State<CongratulationsPage> {
 
   @override
   void dispose() {
-    gameStream.cancel();
+    if (role == Role.PLAYER) {
+      gameStream.cancel();
+    }
     super.dispose();
   }
 
   void loadDataAndSetupListener() async {
     await loadData();
-    listenForUpdateToGoToNextQuestion();
+    if (role == Role.PLAYER) {
+      listenForUpdateToGoToNextQuestion();
+    }
   }
 
   void listenForUpdateToGoToNextQuestion() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
-      if (role == Role.PLAYER && gameState.contains(GameState.QUESTION)) {
+      if (gameState.contains(GameState.QUESTION)) {
         _log.info(
             '${participantRef} navigates to GameQuestionPage, newQuestionNr: ${parseSequenceNumberFromGameState(gameState)}');
         Navigator.pushReplacement(
@@ -83,7 +87,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           }),
         );
       }
-      if (role == Role.PLAYER && gameState == GameState.FINAL) {
+      if (gameState == GameState.FINAL) {
         _log.info('${participantRef} navigates to FinalPage, gameState: ${gameState}');
         Navigator.pushReplacement(
           context,

@@ -67,15 +67,13 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   @override
   void dispose() {
-    if (gameStream != null) {
-      gameStream.cancel();
-    }
+    gameStream?.cancel();
     super.dispose();
   }
 
   void loadDataAndSetupListener() async {
     await loadData();
-    if (mounted) {
+    if (mounted && role == Role.PLAYER) {
       listenForUpdateToSwitchPage();
     }
   }
@@ -84,7 +82,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
       int newQuestionNr = parseSequenceNumberFromGameState(gameState);
-      if (role == Role.PLAYER && gameState.contains(GameState.QUESTION)) {
+      if (gameState.contains(GameState.QUESTION)) {
         if (newQuestionNr == questionNr) {
           await scoreService.deleteOldScore(participantRef, questionNr);
         }
@@ -95,7 +93,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
             return GameQuestionPage(newQuestionNr, participantRef, gameRef);
           }),
         );
-      } else if (role == Role.PLAYER && gameState.contains(GameState.CONGRATULATIONS)) {
+      } else if (gameState.contains(GameState.CONGRATULATIONS)) {
         _log.info('${participantRef} navigates to CongratulationsPage, newQuestionNr: ${newQuestionNr}');
         return Navigator.pushReplacement(
           context,
