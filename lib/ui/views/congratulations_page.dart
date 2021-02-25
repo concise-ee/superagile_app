@@ -53,6 +53,13 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   _CongratulationsPage(this.questionNr, this.participantRef, this.gameRef);
 
   @override
+  void setState(state) {
+    if (mounted) {
+      super.setState(state);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     timerService.startActivityTimer(participantRef);
