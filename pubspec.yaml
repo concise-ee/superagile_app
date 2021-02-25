@@ -34,6 +34,8 @@ dependencies:
   cloud_functions: ^0.7.2
   logging: ^0.11.4
   url_launcher: ^5.7.10
+  upgrader: ^2.8.2
+  in_app_update: ^1.1.15
 
 dev_dependencies:
   flutter_test:
