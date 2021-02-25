@@ -154,12 +154,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   Future<MaterialPageRoute<QuestionResultsPage>> navigateToQuestionResultsPage() {
     _log.info('${participantRef} navigates to QuestionResultsPage, questionNr: ${questionNr}');
-    return Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, participantRef: participantRef);
-      }),
-    );
+    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
+      return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, participantRef: participantRef);
+    }), (Route<dynamic> route) => false);
   }
 
   void cancelParticipantsScoreStreams() {
