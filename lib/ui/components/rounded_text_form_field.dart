@@ -17,7 +17,7 @@ class RoundedTextFormField extends StatelessWidget {
   final int maxLength;
   final TextInputType keyboardType;
   final Key key;
-  final Function(String) validator;
+  final FormFieldValidator<String> validator;
 
   @override
   Widget build(BuildContext context) {
