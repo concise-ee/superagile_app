@@ -186,7 +186,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                       }
                       await gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
                       _log.info('${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) {
                           return GameQuestionPage(questionNr + 1, participantRef, gameRef);

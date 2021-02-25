@@ -114,7 +114,7 @@ class _HostStartPageState extends State<HostStartPage> {
         Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, isPlayingAlong));
     await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
     _log.info('${hostRef} HOST isPlayingAlong:${isPlayingAlong} and navigates to WaitingRoomPage');
-    return Navigator.push(
+    return Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
         return WaitingRoomPage(gameRef, hostRef);
