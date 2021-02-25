@@ -8,6 +8,7 @@ import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
+import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
@@ -42,7 +43,7 @@ class _HostStartPageState extends State<HostStartPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextFormField(
+                        RoundedTextFormField(
                           key: Key('nameField'),
                           maxLength: 25,
                           validator: (value) {
@@ -55,8 +56,7 @@ class _HostStartPageState extends State<HostStartPage> {
                             return null;
                           },
                           controller: _nameController,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(hintText: YOUR_NAME),
+                          hintText: YOUR_NAME,
                         ),
                         SizedBox(height: 50),
                         ...renderNewGameDescriptionAndButtons(),

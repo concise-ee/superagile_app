@@ -14,12 +14,14 @@ class AgileButton extends StatelessWidget {
     return Container(
       width: 400,
       height: 80,
-      child: OutlineButton(
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(60.0), side: BorderSide(color: secondaryColor, width: 3)),
+        color: black,
         child: Text(
           buttonTitle,
           style: TextStyle(color: accentColor, fontSize: 24),
         ),
-        borderSide: BorderSide(width: 1.0, color: secondaryColor, style: BorderStyle.solid),
         onPressed: onPressed,
       ),
     );

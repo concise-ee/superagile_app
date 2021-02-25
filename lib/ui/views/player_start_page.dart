@@ -10,6 +10,7 @@ import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
+import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
 
@@ -45,21 +46,19 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextFormField(
-                          textAlign: TextAlign.center,
+                        RoundedTextFormField(
                           maxLength: 4,
                           validator: (value) => validateName(value),
                           controller: _pinController,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(hintText: ENTER_CODE),
+                          hintText: ENTER_CODE,
                         ),
                         SizedBox(height: 25),
-                        TextFormField(
-                          textAlign: TextAlign.center,
+                        RoundedTextFormField(
                           maxLength: 25,
                           validator: (value) => validateNameField(value),
                           controller: _nameController,
-                          decoration: InputDecoration(hintText: YOUR_NAME),
+                          hintText: YOUR_NAME,
                         ),
                         SizedBox(height: 25),
                         PlayButton(onPressed: () async {

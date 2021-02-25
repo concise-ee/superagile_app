@@ -14,6 +14,7 @@ import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
+import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/ui/components/superagile_wheel.dart';
 import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -98,52 +99,31 @@ class _FinalPage extends State<FinalPage> {
                   topics: questions.map((e) => e.topicNameShort).toList(),
                   scores: agreedScores.values.toList(),
                 ),
-              ],
-            ),
-          ),
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                   child: Text(
                     INSERT_EMAIL_TO_GET_RESULTS,
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Flexible(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                  child: RoundedTextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(hintText: EMAIL_FIELD_HINT_TEXT),
-                    textAlign: TextAlign.center,
+                    hintText: EMAIL_FIELD_HINT_TEXT,
                   ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                   child: AgileButton(
                       buttonTitle: EMAIL_ACTION_BUTTON,
                       onPressed: () {
                         mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
                       }),
-                ),
-              ),
-            ],
+                )
+              ],
+            ),
           ),
         ],
       ),
