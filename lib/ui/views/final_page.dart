@@ -133,29 +133,32 @@ class _FinalPage extends State<FinalPage> {
   Widget renderNoScores() {
     return Container(
       alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              NO_SCORES_TO_DISPLAY,
-              style: TextStyle(fontSize: 24),
-              textAlign: TextAlign.center,
+      child: Padding(
+        padding: EdgeInsets.all(25.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: 25.0),
+              child: Text(
+                NO_SCORES_TO_DISPLAY,
+                style: TextStyle(fontSize: 24),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          AgileButton(
-              buttonTitle: BACK_TO_START,
-              onPressed: () {
-                timerService.cancelActivityTimer();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return StartPage();
-                  }),
-                );
-              }),
-        ],
+            AgileButton(
+                buttonTitle: BACK_TO_START,
+                onPressed: () {
+                  timerService.cancelActivityTimer();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return StartPage();
+                    }),
+                  );
+                }),
+          ],
+        ),
       ),
     );
   }

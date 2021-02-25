@@ -16,7 +16,7 @@ class GamePin extends StatelessWidget {
             padding: EdgeInsets.all(25),
             alignment: Alignment.topRight,
             child: Text(
-              '${GAME_PIN} ${this.gamePin}',
+              '${GAME_CODE} ${this.gamePin}',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
