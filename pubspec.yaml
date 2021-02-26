@@ -36,6 +36,7 @@ dependencies:
   url_launcher: ^5.7.10
   upgrader: ^2.8.2
   in_app_update: ^1.1.15
+  flutuate_mixpanel: ^1.1.7
 
 dev_dependencies:
   flutter_test:

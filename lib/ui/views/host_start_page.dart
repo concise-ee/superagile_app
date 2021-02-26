@@ -11,6 +11,7 @@ import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/utils/mixpanel_utils.dart';
 
 import 'waiting_room_page.dart';
 
@@ -87,6 +88,7 @@ class _HostStartPageState extends State<HostStartPage> {
       AgileButton(
         buttonTitle: LEAD_THE_WORKSHOP,
         onPressed: () async {
+          trackElement('Host without voting');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(false);
         },
@@ -95,6 +97,7 @@ class _HostStartPageState extends State<HostStartPage> {
       AgileButton(
         buttonTitle: VOTE_WITH_TEAM,
         onPressed: () async {
+          trackElement('Host Join as Player');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(true);
         },
@@ -117,6 +120,7 @@ class _HostStartPageState extends State<HostStartPage> {
     return Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
+        trackElement('Go to waiting room');
         return WaitingRoomPage(gameRef, hostRef);
       }),
     );

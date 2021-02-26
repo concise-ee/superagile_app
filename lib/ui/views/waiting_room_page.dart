@@ -15,6 +15,7 @@ import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/utils/game_state_utils.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/utils/mixpanel_utils.dart';
 
 import 'game_question_page.dart';
 
@@ -175,6 +176,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildStartGameButton() {
     return PlayButton(onPressed: () async {
+      trackElement('Start game');
       await gameService.changeGameState(gameRef, QUESTION_1);
       _log.info('${participantRef} HOST changed gameState to: ${QUESTION_1}');
     });
