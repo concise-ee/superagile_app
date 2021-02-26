@@ -60,3 +60,4 @@ const BLOG = ' BLOG';
 const EBOOK = 'EBOOK';
 const HONEST = 'It is an honest and open approach to successful digital product building.';
 const READ_MORE = 'Read more:';
+const FOLLOW_US = 'Follow us on social media';

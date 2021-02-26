@@ -15,6 +15,7 @@ import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
+import 'package:superagile_app/ui/components/social_media_icons.dart';
 import 'package:superagile_app/ui/components/superagile_wheel.dart';
 import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/labels.dart';
@@ -121,7 +122,8 @@ class _FinalPage extends State<FinalPage> {
                       onPressed: () {
                         mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
                       }),
-                )
+                ),
+                Padding(padding: EdgeInsets.symmetric(vertical: 10), child: SocialMediaIcons()),
               ],
             ),
           ),
@@ -157,6 +159,10 @@ class _FinalPage extends State<FinalPage> {
                     }),
                   );
                 }),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: SocialMediaIcons(),
+            ),
           ],
         ),
       ),
