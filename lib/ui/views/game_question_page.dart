@@ -207,7 +207,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       children: [
                         Flexible(
                             fit: FlexFit.tight,
-                            flex: 5,
+                            flex: 6,
                             child: Container(
                               alignment: Alignment.center,
                               child: Padding(
