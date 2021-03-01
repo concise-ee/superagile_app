@@ -57,7 +57,11 @@ class _StartPageState extends State<StartPage> {
           ? UpdateAvailable(updateInfo: _updateInfo)
           : _buildBodyContainer(context));
     } else if (Platform.isIOS) {
-      return UpgradeAlert(child: _buildBodyContainer(context), dialogStyle: UpgradeDialogStyle.cupertino);
+      return UpgradeAlert(
+          child: _buildBodyContainer(context),
+          dialogStyle: UpgradeDialogStyle.cupertino,
+          showIgnore: false,
+          showLater: false);
     }
     throw ('Unsupported platform.');
   }
