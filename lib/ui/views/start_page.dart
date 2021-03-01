@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
@@ -18,12 +20,15 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   AppUpdateInfo _updateInfo;
 
+  @override
+  void initState() {
+    this.checkForUpdate();
+    super.initState();
+  }
+
   Future<void> checkForUpdate() async {
-    InAppUpdate.checkForUpdate().then((info) {
-      setState(() {
-        _updateInfo = info;
-      });
-    });
+    var info = await InAppUpdate.checkForUpdate();
+    setState(() => _updateInfo = info);
   }
 
   @override
@@ -41,53 +46,60 @@ class _StartPageState extends State<StartPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return _updateInfo?.updateAvailable == true
-        ? UpdateAvailable(updateInfo: _updateInfo)
-        : UpgradeAlert(
-            debugLogging: true,
-            child: Container(
-                alignment: Alignment.center,
-                child: Padding(
-                    padding: EdgeInsets.all(25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 5,
-                          child: AgileButton(
-                            buttonTitle: HOST_WORKSHOP,
-                            onPressed: () {
-                              FocusScope.of(context).unfocus();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) {
-                                  trackElement('Host Workshop');
-                                  return HostStartPage();
-                                }),
-                              );
-                            },
-                          ),
-                        ),
-                        Spacer(
-                          flex: 1,
-                        ),
-                        Flexible(
-                          flex: 5,
-                          child: AgileButton(
-                            buttonTitle: JOIN_WITH_CODE,
-                            onPressed: () {
-                              FocusScope.of(context).unfocus();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) {
-                                  trackElement('Join Workshop');
-                                  return PlayerStartPage();
-                                }),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ))));
+    if (Platform.isAndroid) {
+      return (_updateInfo?.updateAvailable == true
+          ? UpdateAvailable(updateInfo: _updateInfo)
+          : _buildBodyContainer(context));
+    } else if (Platform.isIOS) {
+      return UpgradeAlert(debugLogging: true, child: _buildBodyContainer(context));
+    }
+    return null;
+  }
+
+  Container _buildBodyContainer(BuildContext context) {
+    return Container(
+        alignment: Alignment.center,
+        child: Padding(
+            padding: EdgeInsets.all(25),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  flex: 5,
+                  child: AgileButton(
+                    buttonTitle: HOST_WORKSHOP,
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          trackElement('Host Workshop');
+                          return HostStartPage();
+                        }),
+                      );
+                    },
+                  ),
+                ),
+                Spacer(
+                  flex: 1,
+                ),
+                Flexible(
+                  flex: 5,
+                  child: AgileButton(
+                    buttonTitle: JOIN_WITH_CODE,
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          trackElement('Join Workshop');
+                          return PlayerStartPage();
+                        }),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            )));
   }
 }
