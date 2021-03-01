@@ -109,15 +109,23 @@ class _ButtonPercentPopupState extends State<ButtonPercentPopup> {
                       Container(
                         height: 400.0,
                         width: 360.0,
-                        child: ListView(
-                          children: <Widget>[
+                        child: Column(
+                          children: [
                             Center(
                               child: Text(
                                 ANSWERED,
                                 style: TextStyle(fontSize: 24),
                               ),
                             ),
-                            buildActiveParticipantsWidget(),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: (Column(
+                                  children: [
+                                    buildActiveParticipantsWidget(),
+                                  ],
+                                )),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -154,6 +162,7 @@ class _ButtonPercentPopupState extends State<ButtonPercentPopup> {
             valueListenable: percentage,
             builder: (context, value, widget) {
               return ListView.builder(
+                physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: activeParticipants.length,
                 itemBuilder: (context, index) {
