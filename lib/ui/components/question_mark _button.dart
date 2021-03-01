@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:superagile_app/utils/url_utils.dart';
 
 class QuestionMarkButton extends StatelessWidget {
   @override
@@ -29,14 +29,6 @@ class FullScreenDialog extends StatelessWidget {
   static const urlEbook = 'https://concise.ee/superagile';
   static const urlBlog = 'https://concise.ee/blog';
 
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceWebView: true);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +40,6 @@ class FullScreenDialog extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     alignment: Alignment.bottomCenter,
@@ -108,7 +99,7 @@ class FullScreenDialog extends StatelessWidget {
                 ],
               ),
               Container(
-                child: Image.asset('lib/assets/3426525.png'),
+                child: Image.asset('lib/assets/green_about_us_picture.png'),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +173,7 @@ class FullScreenDialog extends StatelessWidget {
                 ],
               ),
               Container(
-                child: Image.asset('lib/assets/2888960.png'),
+                child: Image.asset('lib/assets/blue_about_us_picture.png'),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -219,7 +210,7 @@ class FullScreenDialog extends StatelessWidget {
                         padding: EdgeInsets.all(15),
                         child: AgileButton(
                             onPressed: () {
-                              _launchURL(urlBlog);
+                              launchURL(urlBlog);
                             },
                             buttonTitle: BLOG),
                       ),
@@ -233,7 +224,7 @@ class FullScreenDialog extends StatelessWidget {
                         padding: EdgeInsets.all(15),
                         child: AgileButton(
                             onPressed: () {
-                              _launchURL(urlEbook);
+                              launchURL(urlEbook);
                             },
                             buttonTitle: EBOOK),
                       ),

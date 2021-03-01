@@ -54,8 +54,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - lib/assets/2888960.png
-    - lib/assets/3426525.png
+    - lib/assets/blue_about_us_picture.png
+    - lib/assets/green_about_us_picture.png
     - lib/assets/facebook.png
     - lib/assets/instagram.png
     - lib/assets/linkedin.png
