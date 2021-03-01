@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:superagile_app/utils/labels.dart';
 
 class UpdateAvailable extends StatelessWidget {
   UpdateAvailable({@required this.updateInfo});
@@ -19,7 +20,7 @@ class UpdateAvailable extends StatelessWidget {
           ),
           Spacer(flex: 1),
           RaisedButton(
-              child: Text('Update app'),
+              child: Text(UPDATE_APP),
               onPressed: () {
                 InAppUpdate.performImmediateUpdate();
               }),
