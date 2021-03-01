@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class UpdateAvailable extends StatelessWidget {
@@ -12,15 +13,15 @@ class UpdateAvailable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(50),
+        padding: EdgeInsets.symmetric(vertical: 50, horizontal: 25),
         child: Column(children: [
           Center(
-            child: Text('Update is available: $updateInfo. Please update app to continue.',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
+            child: Text('Update is available: ${updateInfo.availableVersionCode}. Please update app to continue.',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
           ),
           Spacer(flex: 1),
-          RaisedButton(
-              child: Text(UPDATE_APP),
+          AgileButton(
+              buttonTitle: UPDATE_APP,
               onPressed: () {
                 InAppUpdate.performImmediateUpdate();
               }),

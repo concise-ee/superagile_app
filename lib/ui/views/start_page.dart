@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
@@ -22,13 +23,15 @@ class _StartPageState extends State<StartPage> {
 
   @override
   void initState() {
-    this.checkForUpdate();
+    checkForUpdate();
     super.initState();
   }
 
   Future<void> checkForUpdate() async {
-    var info = await InAppUpdate.checkForUpdate();
-    setState(() => _updateInfo = info);
+    if (kReleaseMode) {
+      var info = await InAppUpdate.checkForUpdate();
+      setState(() => _updateInfo = info);
+    }
   }
 
   @override
@@ -46,6 +49,9 @@ class _StartPageState extends State<StartPage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    if (!kReleaseMode) {
+      return _buildBodyContainer(context);
+    }
     if (Platform.isAndroid) {
       return (_updateInfo?.updateAvailable == true
           ? UpdateAvailable(updateInfo: _updateInfo)
@@ -53,7 +59,7 @@ class _StartPageState extends State<StartPage> {
     } else if (Platform.isIOS) {
       return UpgradeAlert(debugLogging: true, child: _buildBodyContainer(context));
     }
-    return null;
+    throw ('Unsupported platform.');
   }
 
   Container _buildBodyContainer(BuildContext context) {
