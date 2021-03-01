@@ -25,9 +25,7 @@ class ParticipantService {
   }
 
   void sendLastActive(DocumentReference participantRef) async {
-    Participant participant = await findParticipantByRef(participantRef);
-    participant.lastActive = DateTime.now().toString();
-    participant.reference.update(participant.toJson());
+    participantRef.update({LAST_ACTIVE: DateTime.now().toString()});
   }
 
   Future<DocumentReference> addParticipant(DocumentReference gameRef, Participant participant) async {
@@ -76,5 +74,11 @@ class ParticipantService {
 
   Future<QuerySnapshot> getParticipants(DocumentReference gameRef) {
     return gameRef.collection(PARTICIPANTS_SUB_COLLECTION).get();
+  }
+
+  double calculateCircleFill(List<Participant> activeParticipants, List<String> answeredParticipantNames) {
+    List<String> activeParticipantNames = activeParticipants.map((p) => p.name).toList();
+    int activeAnswers = answeredParticipantNames.where((p) => activeParticipantNames.contains(p)).length;
+    return activeAnswers / activeParticipants.length;
   }
 }

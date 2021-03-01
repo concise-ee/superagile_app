@@ -16,7 +16,7 @@ import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/question_answers_section.dart';
 import 'package:superagile_app/ui/views/congratulations_page.dart';
-import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
@@ -189,7 +189,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       return AgileButton(
         buttonTitle: CONTINUE,
         onPressed: () async {
-          await scoreService.setAgreedScore(gameRef, getAgreedScore(), questionNr);
+          await scoreService.updateAgreedScore(gameRef, getAgreedScore(), questionNr);
           await gameService.changeGameState(gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
           _log.info('${participantRef} HOST changed gameState to: ${GameState.CONGRATULATIONS}_$questionNr');
           Navigator.pushReplacement(

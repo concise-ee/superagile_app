@@ -11,7 +11,7 @@ import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
-import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 final _log = Logger((PlayerStartPage).toString());
@@ -25,6 +25,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
   final _pinController = TextEditingController();
   final _nameController = TextEditingController();
   final GameService _gameService = GameService();
+  final GameStateRouter _gameStateRouter = GameStateRouter();
   final ParticipantService _participantService = ParticipantService();
   final _formKey = GlobalKey<FormState>();
   var gameExists = true;
@@ -80,7 +81,8 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                             if (!isPlayerActive) {
                               Game game = await _gameService.findActiveGameByRef(gameRef);
                               _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
-                              return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
+                              return _gameStateRouter.joinCreatedGameAsExistingParticipant(
+                                  game.gameState, playerRef, gameRef, context);
                             }
                             _log.severe('${playerRef} tried to join with active participant name');
                             setState(() => isParticipantActive = true);
@@ -139,6 +141,6 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     DocumentReference playerRef = await _participantService.addParticipant(
         gameRef, Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
     Game game = await _gameService.findActiveGameByRef(gameRef);
-    return joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
+    return _gameStateRouter.joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
   }
 }

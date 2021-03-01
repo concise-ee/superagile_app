@@ -15,7 +15,8 @@ class ScoreService {
   Future<void> setScore(
       DocumentReference participantRef, DocumentReference gameRef, int questionNr, String scoreValue) async {
     var score = Score(questionNr, scoreValue != null ? int.parse(scoreValue) : null, participantRef.id);
-    return participantRef.collection(SCORES_SUB_COLLECTION).doc(score.question.toString()).set(score.toJson());
+    await participantRef.collection(SCORES_SUB_COLLECTION).doc(score.question.toString()).set(score.toJson());
+    return _gameService.updateLastUpdate(gameRef, DateTime.now().toString());
   }
 
   Stream<QuerySnapshot> getScoresStream(DocumentReference participantRef) {
@@ -58,11 +59,11 @@ class ScoreService {
     return score.docs.single.reference.delete();
   }
 
-  Future<void> setAgreedScore(DocumentReference gameRef, int agreedScore, int questionNr) async {
+  Future<void> updateAgreedScore(DocumentReference gameRef, int agreedScore, int questionNr) async {
     DocumentSnapshot gameSnap = await gameRef.get();
     Game game = Game.fromSnapshot(gameSnap);
     game.agreedScores[questionNr.toString()] = agreedScore;
-    return gameRef.set(game.toJson());
+    return gameRef.update({AGREED_SCORES: game.agreedScores});
   }
 
   Future<Map<String, int>> getAgreedScores(DocumentReference gameRef) async {

@@ -45,9 +45,7 @@ class GameService {
   }
 
   Future<void> changeGameState(DocumentReference gameRef, String gameState) async {
-    Game game = await findActiveGameByRef(gameRef);
-    game.gameState = gameState;
-    return gameRef.set(game.toJson());
+    return gameRef.update({GAME_STATE: gameState});
   }
 
   Future<String> getGameState(DocumentReference gameRef) async {
@@ -58,5 +56,9 @@ class GameService {
   Future<int> getGamePinByRef(DocumentReference gameRef) async {
     Game game = await findActiveGameByRef(gameRef);
     return game.pin;
+  }
+
+  Future<void> updateLastUpdate(DocumentReference gameRef, String dateTime) {
+    return gameRef.update({LAST_UPDATE: dateTime});
   }
 }

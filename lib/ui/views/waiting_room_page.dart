@@ -12,7 +12,7 @@ import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
-import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/mixpanel_utils.dart';

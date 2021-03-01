@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:superagile_app/entities/participant.dart';
 import 'package:superagile_app/entities/question_scores.dart';
 import 'package:superagile_app/entities/question_template.dart';
@@ -14,13 +15,11 @@ import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
-import 'package:superagile_app/ui/components/button_percent_popup.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
-import 'package:superagile_app/utils/game_state_utils.dart';
+import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
-import 'package:superagile_app/utils/list_utils.dart';
 
 final _log = Logger((GameQuestionPage).toString());
 
@@ -47,13 +46,14 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   final DocumentReference gameRef;
   QuestionTemplate questionTemplate;
   int pressedButton;
-  List<StreamSubscription<QuerySnapshot>> participantScoreStreams = [];
   StreamSubscription<DocumentSnapshot> gameStream;
-  StreamSubscription<QuerySnapshot> participantsStream;
   Role role;
   bool isPlayingAlong;
   bool isLoading = true;
   int gamePin;
+  List<String> answeredParticipantNames = [];
+  List<Participant> activeParticipants = [];
+  final ValueNotifier<double> percentage = ValueNotifier<double>(0.0);
 
   _GameQuestionPage(this.questionNr, this.participantRef, this.gameRef);
 
@@ -73,13 +73,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   @override
   void dispose() {
-    cancelParticipantsScoreStreams();
-    if (gameStream != null) {
-      gameStream.cancel();
-    }
-    if (participantsStream != null) {
-      participantsStream.cancel();
-    }
+    gameStream?.cancel();
     super.dispose();
   }
 
@@ -112,6 +106,14 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   void listenGameStateChanges() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
+      List<Participant> activeParticipants = await participantService.findActiveGameParticipants(gameRef);
+      QuestionScores questionScores = await scoreService.findScoresForQuestion(gameRef, questionNr);
+      List<String> answeredParticipantNames = scoreService.getAnsweredParticipantNames(questionScores);
+      setState(() {
+        this.activeParticipants = activeParticipants;
+        this.answeredParticipantNames = answeredParticipantNames;
+      });
+      percentage.value = participantService.calculateCircleFill(activeParticipants, answeredParticipantNames);
       if (gameState.contains(GameState.QUESTION_RESULTS)) {
         return navigateToQuestionResultsPage();
       }
@@ -119,37 +121,31 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   void listenEveryActiveParticipantScoreChanges() async {
-    List<Participant> activeParticipants = await participantService.findActiveGameParticipants(gameRef);
-    setupActiveParticipantsScoreStreams(activeParticipants);
-    participantsStream = participantService.getParticipantsStream(gameRef).listen((data) async {
-      List<Participant> newActiveParticipants = await participantService.findActiveGameParticipants(gameRef);
-      if (!areEqualByName(activeParticipants, newActiveParticipants)) {
-        cancelParticipantsScoreStreams();
-        activeParticipants = newActiveParticipants;
-        setupActiveParticipantsScoreStreams(activeParticipants);
+    gameStream = gameService.getGameStream(gameRef).listen((data) async {
+      List<Participant> activeParticipants = await participantService.findActiveGameParticipants(gameRef);
+      QuestionScores questionScores = await scoreService.findScoresForQuestion(gameRef, questionNr);
+      List<String> answeredParticipantNames = scoreService.getAnsweredParticipantNames(questionScores);
+      setState(() {
+        this.activeParticipants = activeParticipants;
+        this.answeredParticipantNames = answeredParticipantNames;
+      });
+      percentage.value = participantService.calculateCircleFill(activeParticipants, answeredParticipantNames);
+
+      bool haveAllActiveParticipantsVoted = true;
+      if (activeParticipants.isEmpty) {
+        return false;
+      }
+      for (var activeParticipant in activeParticipants) {
+        if (!answeredParticipantNames.contains(activeParticipant.name)) {
+          haveAllActiveParticipantsVoted = false;
+        }
+      }
+      if (haveAllActiveParticipantsVoted) {
+        gameStream.cancel();
+        await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
+        return navigateToQuestionResultsPage();
       }
     });
-  }
-
-  void setupActiveParticipantsScoreStreams(List<Participant> activeParticipants) {
-    for (var participant in activeParticipants) {
-      StreamSubscription<QuerySnapshot> stream =
-          scoreService.getScoresStream(participant.reference).listen((data) async {
-        QuestionScores questionScores = await scoreService.findScoresForQuestion(gameRef, questionNr);
-        List<String> answeredParticipantNames = scoreService.getAnsweredParticipantNames(questionScores);
-        bool haveAllActiveParticipantsVoted = true;
-        for (var activeParticipant in activeParticipants) {
-          if (!answeredParticipantNames.contains(activeParticipant.name)) {
-            haveAllActiveParticipantsVoted = false;
-          }
-        }
-        if (haveAllActiveParticipantsVoted) {
-          await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
-          return navigateToQuestionResultsPage();
-        }
-      });
-      participantScoreStreams.add(stream);
-    }
   }
 
   Future<MaterialPageRoute<QuestionResultsPage>> navigateToQuestionResultsPage() {
@@ -157,13 +153,6 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
       return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, participantRef: participantRef);
     }), (Route<dynamic> route) => false);
-  }
-
-  void cancelParticipantsScoreStreams() {
-    participantScoreStreams.forEach((stream) {
-      stream.cancel();
-    });
-    participantScoreStreams.clear();
   }
 
   Future<bool> _onBackPressed() {
@@ -179,11 +168,97 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
           appBar: AppBar(
-              title: Text(HASH_SUPERAGILE),
-              automaticallyImplyLeading: false,
-              actions: [ButtonPercentPopup(participantRef, gameRef, questionNr)]),
+              title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false, actions: [buildParticipantsDialog()]),
           body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
         ));
+  }
+
+  Widget buildParticipantsDialog() {
+    return FlatButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SimpleDialog(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                elevation: 16,
+                children: [
+                  Container(
+                    height: 400.0,
+                    width: 360.0,
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            ANSWERED,
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: (Column(
+                              children: [
+                                buildParticipantsList(),
+                              ],
+                            )),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SimpleDialogOption(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Center(
+                        child: Text(
+                          CLOSE,
+                          style: TextStyle(fontSize: 24, color: accentColor),
+                        ),
+                      ))
+                ],
+              );
+            },
+          );
+        },
+        child: CircularPercentIndicator(
+          radius: 30.0,
+          lineWidth: 5.0,
+          percent: percentage.value,
+          progressColor: accentColor,
+          backgroundColor: secondaryColor,
+        ));
+  }
+
+  Widget buildParticipantsList() {
+    return Column(
+      children: <Widget>[
+        ValueListenableBuilder(
+          builder: (BuildContext context, double value, Widget child) {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: activeParticipants.length,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    activeParticipants[index].name,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  trailing: Icon(renderIcon(activeParticipants[index].name)),
+                );
+              },
+            );
+          },
+          valueListenable: percentage,
+        )
+      ],
+    );
+  }
+
+  IconData renderIcon(String participantName) {
+    if (answeredParticipantNames == null) return null;
+    return answeredParticipantNames.contains(participantName) ? Icons.check : null;
   }
 
   void saveScoreAndWaitForNextPage(String scoreValue) async {
