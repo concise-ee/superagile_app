@@ -162,7 +162,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                       style: TextStyle(fontSize: 24), textAlign: TextAlign.center),
                 ),
                 Padding(
-                    padding: EdgeInsets.only(bottom: 24, top: MediaQuery.of(context).size.height / 4),
+                    padding: EdgeInsets.only(top: 12, bottom: 24),
                     child: Text(
                       CONGRATS,
                       style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
