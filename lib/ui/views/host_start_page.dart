@@ -7,6 +7,7 @@ import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/security_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
+import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
@@ -34,9 +35,9 @@ class _HostStartPageState extends State<HostStartPage> {
         key: _formKey,
         child: Scaffold(
             appBar: AppBar(
-              title: Text(HASH_SUPERAGILE),
-              actions: [QuestionMarkButton()],
-            ),
+                title: AgileWithBackIconButton(() => Navigator.pop(context)),
+                actions: [QuestionMarkButton()],
+                automaticallyImplyLeading: false),
             body: Center(
               child: SingleChildScrollView(
                 child: Container(

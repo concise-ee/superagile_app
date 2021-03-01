@@ -12,6 +12,7 @@ import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
+import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
@@ -138,7 +139,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     return WillPopScope(
       onWillPop: () => _onBackPressed(),
       child: Scaffold(
-        appBar: AppBar(title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false),
+        appBar: AppBar(title: AgileWithBackIconButton(_onBackPressed), automaticallyImplyLeading: false),
         body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
       ),
     );

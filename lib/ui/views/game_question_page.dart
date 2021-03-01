@@ -14,6 +14,7 @@ import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
+import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
@@ -168,7 +169,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
           appBar: AppBar(
-              title: Text(HASH_SUPERAGILE), automaticallyImplyLeading: false, actions: [buildParticipantsDialog()]),
+              title: AgileWithBackIconButton(_onBackPressed),
+              automaticallyImplyLeading: false,
+              actions: [buildParticipantsDialog()]),
           body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
         ));
   }

@@ -9,6 +9,7 @@ import 'package:superagile_app/entities/role.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
+import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
@@ -108,7 +109,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       onWillPop: () => _onBackPressed(),
       child: Scaffold(
           appBar: AppBar(
-            title: Text(HASH_SUPERAGILE),
+            title: AgileWithBackIconButton(_onBackPressed),
             automaticallyImplyLeading: false,
             actions: [QuestionMarkButton()],
           ),
