@@ -13,21 +13,25 @@ class QuestionAnswersSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
             top: BorderSide(width: 1.0, color: secondaryColor),
             bottom: BorderSide(width: 1.0, color: secondaryColor),
           ),
         ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        child: Row(children: [
           Text(
             answerNumber.toString(),
             style: TextStyle(color: Colors.white, fontSize: 105),
           ),
-          Column(
-              children: participantNames
-                  .map((item) => Text(item, style: TextStyle(color: Colors.white, fontSize: 16)))
-                  .toList()),
+          Padding(
+            padding: EdgeInsets.only(left: 25),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: participantNames
+                    .map((item) => Text(item, style: TextStyle(color: Colors.white, fontSize: 16)))
+                    .toList()),
+          ),
         ]));
   }
 }
