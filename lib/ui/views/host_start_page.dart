@@ -74,7 +74,10 @@ class _HostStartPageState extends State<HostStartPage> {
           alignment: Alignment.center,
           child: Text(
             HOST_OR_JOIN,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
             textAlign: TextAlign.center,
           )),
       SizedBox(height: 25),
@@ -87,20 +90,20 @@ class _HostStartPageState extends State<HostStartPage> {
           )),
       SizedBox(height: 50),
       AgileButton(
-        buttonTitle: LEAD_THE_WORKSHOP,
-        onPressed: () async {
-          trackElement('Host without voting');
-          FocusScope.of(context).unfocus();
-          await createGameAndNavigateToWaitingRoom(false);
-        },
-      ),
-      SizedBox(height: 50),
-      AgileButton(
         buttonTitle: VOTE_WITH_TEAM,
         onPressed: () async {
           trackElement('Host Join as Player');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(true);
+        },
+      ),
+      SizedBox(height: 50),
+      AgileButton(
+        buttonTitle: LEAD_THE_WORKSHOP,
+        onPressed: () async {
+          trackElement('Host without voting');
+          FocusScope.of(context).unfocus();
+          await createGameAndNavigateToWaitingRoom(false);
         },
       ),
     ];

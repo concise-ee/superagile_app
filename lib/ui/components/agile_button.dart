@@ -16,11 +16,12 @@ class AgileButton extends StatelessWidget {
       height: 80,
       child: RaisedButton(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(60.0), side: BorderSide(color: secondaryColor, width: 3)),
+            borderRadius: BorderRadius.circular(60.0), side: BorderSide(color: agileButtonBorderColor, width: 3)),
         color: black,
+        elevation: 5,
         child: Text(
           buttonTitle,
-          style: TextStyle(color: accentColor, fontSize: 24),
+          style: TextStyle(color: accentColor, fontSize: 18),
         ),
         onPressed: onPressed,
       ),
