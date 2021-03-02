@@ -43,6 +43,8 @@ class _FinalPage extends State<FinalPage> {
   TimerService timerService = TimerService();
   Map<String, int> agreedScores;
   bool isLoading = true;
+  bool isMailSending = false;
+  bool isMailSent = false;
   int gamePin;
   List<QuestionTemplate> questions;
 
@@ -104,7 +106,7 @@ class _FinalPage extends State<FinalPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                   child: Text(
-                    INSERT_EMAIL_TO_GET_RESULTS,
+                    isMailSent ? EMAIL_SENT : INSERT_EMAIL_TO_GET_RESULTS,
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
@@ -118,11 +120,7 @@ class _FinalPage extends State<FinalPage> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                  child: AgileButton(
-                      buttonTitle: EMAIL_ACTION_BUTTON,
-                      onPressed: () {
-                        mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
-                      }),
+                  child: renderSendEmail(),
                 ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 10), child: SocialMediaIcons()),
               ],
@@ -131,6 +129,21 @@ class _FinalPage extends State<FinalPage> {
         ],
       ),
     );
+  }
+
+  Widget renderSendEmail() {
+    return !isMailSending
+        ? AgileButton(
+            buttonTitle: EMAIL_ACTION_BUTTON,
+            onPressed: () async {
+              setState(() => isMailSending = true);
+              await mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
+              setState(() {
+                isMailSending = false;
+                isMailSent = true;
+              });
+            })
+        : SizedBox(height: 80, width: 80, child: CircularProgressIndicator());
   }
 
   Widget renderNoScores() {

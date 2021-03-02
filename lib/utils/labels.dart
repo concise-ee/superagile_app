@@ -45,6 +45,7 @@ const CLOSE = 'Close';
 const EMAIL_ACTION_BUTTON = 'SEND RESULTS';
 const EMAIL_FIELD_HINT_TEXT = 'E-MAIL';
 const INSERT_EMAIL_TO_GET_RESULTS = 'Insert your e-mail to get your results';
+const EMAIL_SENT = 'E-mail sent!';
 const NO_SCORES_TO_DISPLAY = 'No scores to display';
 const BACK_TO_START = 'BACK TO START';
 const WHY_SUPERAGILE = 'Why #superagile?';

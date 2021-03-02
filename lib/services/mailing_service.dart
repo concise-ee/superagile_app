@@ -6,8 +6,8 @@ class MailingService {
   static const APP_SCRIPTS_URL =
       'https://script.google.com/macros/s/AKfycbyQXnLhyn1pMN4Rq0NodnfUO_r0l3GhiI6VOh15PDGngrOBzDoEzPcskw/exec';
 
-  void sendResults(String email, Map<String, int> scores, String totalScore) {
-    http.post(APP_SCRIPTS_URL,
+  Future<http.Response> sendResults(String email, Map<String, int> scores, String totalScore) async {
+    return await http.post(APP_SCRIPTS_URL,
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode({
           'email': email,
