@@ -47,10 +47,7 @@ class FullScreenDialog extends StatelessWidget {
                         padding: EdgeInsets.all(25.0),
                         child: Text(
                           WHY_SUPERAGILE,
-                          style: TextStyle(
-                              color: Colors.yellowAccent,
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.yellowAccent, fontSize: 32, fontWeight: FontWeight.bold),
                         )),
                   ),
                 ],
@@ -68,10 +65,7 @@ class FullScreenDialog extends StatelessWidget {
                           padding: EdgeInsets.all(25),
                           child: Text(APPROACH,
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  letterSpacing: 1.5,
-                                  fontWeight: FontWeight.bold),
+                                  color: Colors.white, fontSize: 16, letterSpacing: 1.5, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center)),
                     ),
                   ),
@@ -89,10 +83,7 @@ class FullScreenDialog extends StatelessWidget {
                           padding: EdgeInsets.all(25),
                           child: Text(
                             SUPERAGILE_IS_DESIGNED,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 1.5),
+                            style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                           )),
                     ),
                   ),
@@ -103,7 +94,6 @@ class FullScreenDialog extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(
                     fit: FlexFit.loose,
@@ -114,10 +104,7 @@ class FullScreenDialog extends StatelessWidget {
                           padding: EdgeInsets.all(25),
                           child: Text(
                             NOT_A_PROCESS,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 1.5),
+                            style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                           )),
                     ),
                   ),
@@ -136,10 +123,7 @@ class FullScreenDialog extends StatelessWidget {
                           padding: EdgeInsets.all(25),
                           child: Text(
                             IN_THE_END,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 1.5),
+                            style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                           )),
                     ),
                   ),
@@ -163,10 +147,7 @@ class FullScreenDialog extends StatelessWidget {
                           ),
                           child: Text(HONEST,
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  letterSpacing: 1.5,
-                                  fontWeight: FontWeight.bold),
+                                  color: Colors.white, fontSize: 16, letterSpacing: 1.5, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center)),
                     ),
                   ),
@@ -185,14 +166,10 @@ class FullScreenDialog extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       child: Padding(
-                          padding: EdgeInsets.only(
-                              top: 50, bottom: 20, left: 20, right: 20),
+                          padding: EdgeInsets.only(top: 50, bottom: 20, left: 20, right: 20),
                           child: Text(
                             READ_MORE,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 1.5),
+                            style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 1.5),
                           )),
                     ),
                   ),
