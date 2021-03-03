@@ -92,7 +92,7 @@ class _HostStartPageState extends State<HostStartPage> {
       AgileButton(
         buttonTitle: VOTE_WITH_TEAM,
         onPressed: () async {
-          mixpanel.track('Host Join as Player');
+          mixpanel.track('host_start_page: VOTE WITH TEAM');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(true);
         },
@@ -101,7 +101,7 @@ class _HostStartPageState extends State<HostStartPage> {
       AgileButton(
         buttonTitle: LEAD_THE_WORKSHOP,
         onPressed: () async {
-          mixpanel.track('Host without voting');
+          mixpanel.track('host_start_page: HOST THE WORKSHOP');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(false);
         },
@@ -124,7 +124,6 @@ class _HostStartPageState extends State<HostStartPage> {
     return Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
-        mixpanel.track('Go to waiting room');
         return WaitingRoomPage(gameRef, hostRef);
       }),
     );

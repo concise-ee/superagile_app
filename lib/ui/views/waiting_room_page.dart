@@ -177,7 +177,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildStartGameButton() {
     return PlayButton(onPressed: () async {
-      mixpanel.track('Start game');
+      mixpanel.track('waiting_room_page: PLAY BUTTON');
       await gameService.changeGameState(gameRef, QUESTION_1);
       _log.info('${participantRef} HOST changed gameState to: ${QUESTION_1}');
     });
