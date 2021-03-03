@@ -83,7 +83,7 @@ class _StartPageState extends State<StartPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          trackElement('Host Workshop');
+                          mixpanel.track('start_page: HOST THE WORKSHOP');
                           return HostStartPage();
                         }),
                       );
@@ -102,7 +102,7 @@ class _StartPageState extends State<StartPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          trackElement('Join Workshop');
+                          mixpanel.track('start_page: JOIN WITH CODE');
                           return PlayerStartPage();
                         }),
                       );

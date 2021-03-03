@@ -92,7 +92,7 @@ class _HostStartPageState extends State<HostStartPage> {
       AgileButton(
         buttonTitle: VOTE_WITH_TEAM,
         onPressed: () async {
-          trackElement('Host Join as Player');
+          mixpanel.track('Host Join as Player');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(true);
         },
@@ -101,7 +101,7 @@ class _HostStartPageState extends State<HostStartPage> {
       AgileButton(
         buttonTitle: LEAD_THE_WORKSHOP,
         onPressed: () async {
-          trackElement('Host without voting');
+          mixpanel.track('Host without voting');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(false);
         },
@@ -109,27 +109,22 @@ class _HostStartPageState extends State<HostStartPage> {
     ];
   }
 
-  Future<MaterialPageRoute<dynamic>> createGameAndNavigateToWaitingRoom(
-      bool isPlayingAlong) async {
+  Future<MaterialPageRoute<dynamic>> createGameAndNavigateToWaitingRoom(bool isPlayingAlong) async {
     if (!_formKey.currentState.validate()) {
       return null;
     }
 
     var loggedInUserUid = await signInAnonymously();
     var pin = await _gameService.generateAvailable4DigitPin();
-    var gameRef =
-        await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
-    var hostRef = await _participantService.addParticipant(
-        gameRef,
-        Participant(_nameController.text, loggedInUserUid,
-            DateTime.now().toString(), Role.HOST, isPlayingAlong));
+    var gameRef = await _gameService.addGame(Game(pin, loggedInUserUid, true, null));
+    var hostRef = await _participantService.addParticipant(gameRef,
+        Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.HOST, isPlayingAlong));
     await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
-    _log.info(
-        '${hostRef} HOST isPlayingAlong:${isPlayingAlong} and navigates to WaitingRoomPage');
+    _log.info('${hostRef} HOST isPlayingAlong:${isPlayingAlong} and navigates to WaitingRoomPage');
     return Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
-        trackElement('Go to waiting room');
+        mixpanel.track('Go to waiting room');
         return WaitingRoomPage(gameRef, hostRef);
       }),
     );

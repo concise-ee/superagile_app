@@ -7,6 +7,7 @@ import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/log_utils.dart';
+import 'package:superagile_app/utils/mixpanel_utils.dart';
 
 final _log = Logger((SuperagileApp).toString());
 
@@ -18,6 +19,7 @@ void main() async {
     _log.severe('${details.exception}:\n${details.stack}');
   };
   runZonedGuarded<Future<void>>(() async {
+    initMixpanel();
     runApp(SuperagileApp());
   }, (Object error, StackTrace stackTrace) {
     _log.severe('${error}:\n${stackTrace}');
