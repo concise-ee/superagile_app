@@ -38,7 +38,6 @@ const NO = 'NO';
 const GAME_CODE = 'Code:';
 const ANSWERED = 'Answered:';
 const WARNING_NAME_EMPTY = 'Please enter your name';
-const WARNING_NAME_TOO_LONG = 'Name is too long';
 const PLEASE_ENTER_VALID_PIN = 'Please enter a valid pin';
 const PLAYER_IS_ALREADY_IN_GAME = 'A player with that name is already in the game';
 const CLOSE = 'Close';

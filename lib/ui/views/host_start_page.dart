@@ -48,13 +48,11 @@ class _HostStartPageState extends State<HostStartPage> {
                       children: [
                         RoundedTextFormField(
                           key: Key('nameField'),
-                          maxLength: 25,
+                          maxLength: 15,
+                          keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value.isEmpty) {
                               return WARNING_NAME_EMPTY;
-                            }
-                            if (value.length > 25) {
-                              return WARNING_NAME_TOO_LONG;
                             }
                             return null;
                           },

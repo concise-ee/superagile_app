@@ -57,7 +57,8 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                         ),
                         SizedBox(height: 25),
                         RoundedTextFormField(
-                          maxLength: 25,
+                          maxLength: 15,
+                          keyboardType: TextInputType.text,
                           validator: (value) => validateNameField(value),
                           controller: _nameController,
                           hintText: YOUR_NAME,
@@ -73,28 +74,19 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                             _formKey.currentState.validate();
                             return null;
                           }
-                          var playerRef = await _participantService
-                              .findParticipantRefByName(
-                                  gameRef, _nameController.text);
+                          var playerRef =
+                              await _participantService.findParticipantRefByName(gameRef, _nameController.text);
                           if (playerRef != null) {
-                            bool isPlayerActive = await _participantService
-                                .checkIfParticipantIsActive(playerRef);
+                            bool isPlayerActive = await _participantService.checkIfParticipantIsActive(playerRef);
                             _log.info(
                                 '${playerRef} isPlayerActive:${isPlayerActive} tries to rejoin existing game as Player');
                             if (!isPlayerActive) {
-                              Game game = await _gameService
-                                  .findActiveGameByRef(gameRef);
-                              _log.info(
-                                  '${playerRef} rejoins existing game:${gameRef.id} as Player');
-                              return _gameStateRouter
-                                  .joinCreatedGameAsExistingParticipant(
-                                      game.gameState,
-                                      playerRef,
-                                      gameRef,
-                                      context);
+                              Game game = await _gameService.findActiveGameByRef(gameRef);
+                              _log.info('${playerRef} rejoins existing game:${gameRef.id} as Player');
+                              return _gameStateRouter.joinCreatedGameAsExistingParticipant(
+                                  game.gameState, playerRef, gameRef, context);
                             }
-                            _log.severe(
-                                '${playerRef} tried to join with active participant name');
+                            _log.severe('${playerRef} tried to join with active participant name');
                             setState(() => isParticipantActive = true);
                             _formKey.currentState.validate();
                             return null;
@@ -117,11 +109,9 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
       _formKey.currentState.validate();
       return null;
     }
-    var gameRef = await _gameService
-        .findActiveGameRefByPin(int.parse(_pinController.text));
+    var gameRef = await _gameService.findActiveGameRefByPin(int.parse(_pinController.text));
     if (gameRef == null) {
-      _log.severe(
-          'PLAYER tried to rejoin ${_pinController.text} but no such game exists');
+      _log.severe('PLAYER tried to rejoin ${_pinController.text} but no such game exists');
       setState(() => gameExists = false);
       setState(() => isParticipantActive = false);
       _formKey.currentState.validate();
@@ -149,14 +139,10 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     return null;
   }
 
-  Future<MaterialPageRoute<dynamic>> joinAsNewPlayer(
-      DocumentReference gameRef, String loggedInUserUid) async {
+  Future<MaterialPageRoute<dynamic>> joinAsNewPlayer(DocumentReference gameRef, String loggedInUserUid) async {
     DocumentReference playerRef = await _participantService.addParticipant(
-        gameRef,
-        Participant(_nameController.text, loggedInUserUid,
-            DateTime.now().toString(), Role.PLAYER, true));
+        gameRef, Participant(_nameController.text, loggedInUserUid, DateTime.now().toString(), Role.PLAYER, true));
     Game game = await _gameService.findActiveGameByRef(gameRef);
-    return _gameStateRouter.joinCreatedGameAsExistingParticipant(
-        game.gameState, playerRef, gameRef, context);
+    return _gameStateRouter.joinCreatedGameAsExistingParticipant(game.gameState, playerRef, gameRef, context);
   }
 }

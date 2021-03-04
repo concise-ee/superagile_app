@@ -115,6 +115,7 @@ class _FinalPage extends State<FinalPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                   child: RoundedTextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     hintText: EMAIL_FIELD_HINT_TEXT,
                   ),
