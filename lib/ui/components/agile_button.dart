@@ -21,7 +21,7 @@ class AgileButton extends StatelessWidget {
         elevation: 5,
         child: Text(
           buttonTitle,
-          style: TextStyle(color: accentColor, fontSize: 18),
+          style: TextStyle(color: accentColor, fontSize: 20),
         ),
         onPressed: onPressed,
       ),

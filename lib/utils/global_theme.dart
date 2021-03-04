@@ -4,7 +4,6 @@ const primaryColor = Color.fromRGBO(51, 51, 51, 1);
 const accentColor = Color.fromRGBO(255, 255, 0, 1);
 const secondaryColor = Color.fromRGBO(167, 168, 170, 1);
 const agileButtonBorderColor = Color.fromRGBO(101, 101, 101, 1);
-const textHighlightColor = Color.fromRGBO(167, 168, 170, 0.45);
 const white = Colors.white;
 const black = Colors.black;
 
