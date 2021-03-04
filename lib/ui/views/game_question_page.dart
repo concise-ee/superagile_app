@@ -342,7 +342,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
             ],
           ))
         else
-          renderContinueButton(),
+          SafeArea(child: Row(children: [renderContinueButton()]))
       ],
     );
   }
@@ -377,31 +377,27 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     );
   }
 
-  Row renderContinueButton() {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 100,
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: secondaryColor, width: 5),
-              ),
-            ),
-            child: RaisedButton(
-              child: Text(
-                CONTINUE,
-                style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: 48),
-              ),
-              color: pressedButton == HOST_SKIP_VALUE ? accentColor : primaryColor,
-              onPressed: () {
-                setState(() => pressedButton = HOST_SKIP_VALUE);
-                saveScoreAndWaitForNextPage(null);
-              },
-            ),
+  Expanded renderContinueButton() {
+    return Expanded(
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: secondaryColor, width: 5),
           ),
-        )
-      ],
+        ),
+        child: RaisedButton(
+          child: Text(
+            CONTINUE,
+            style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: 48),
+          ),
+          color: pressedButton == HOST_SKIP_VALUE ? accentColor : primaryColor,
+          onPressed: () {
+            setState(() => pressedButton = HOST_SKIP_VALUE);
+            saveScoreAndWaitForNextPage(null);
+          },
+        ),
+      ),
     );
   }
 }
