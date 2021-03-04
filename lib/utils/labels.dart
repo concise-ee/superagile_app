@@ -48,7 +48,7 @@ const INSERT_EMAIL_TO_GET_RESULTS = 'Insert your e-mail to get your results';
 const EMAIL_SENT = 'E-mail sent!';
 const NO_SCORES_TO_DISPLAY = 'No scores to display';
 const BACK_TO_START = 'BACK TO START';
-const WHY_SUPERAGILE = 'Why #superagile?';
+const WHY = 'Why';
 const APPROACH =
     'This approach is specifically for digital product development, and it involves more than being just agile.';
 const SUPERAGILE_IS_DESIGNED =

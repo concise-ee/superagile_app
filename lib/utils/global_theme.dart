@@ -4,8 +4,16 @@ const primaryColor = Color.fromRGBO(51, 51, 51, 1);
 const accentColor = Color.fromRGBO(255, 255, 0, 1);
 const secondaryColor = Color.fromRGBO(167, 168, 170, 1);
 const agileButtonBorderColor = Color.fromRGBO(101, 101, 101, 1);
+const aboutPageBackgroundColor = Color.fromRGBO(229, 229, 229, 1);
 const white = Colors.white;
 const black = Colors.black;
+const fontExtraExtraSmall = 9.0;
+const fontExtraSmall = 12.0;
+const fontSmall = 16.0;
+const fontMedium = 24.0;
+const fontLarge = 36.0;
+const fontExtraLarge = 48.0;
+const fontExtraExtraLarge = 105.0;
 
 ThemeData setTheme() {
   return ThemeData(

@@ -22,14 +22,14 @@ class QuestionAnswersSection extends StatelessWidget {
         child: Row(children: [
           Text(
             answerNumber.toString(),
-            style: TextStyle(color: Colors.white, fontSize: 105),
+            style: TextStyle(color: Colors.white, fontSize: fontExtraExtraLarge),
           ),
           Padding(
             padding: EdgeInsets.only(left: 25),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: participantNames
-                    .map((item) => Text(item, style: TextStyle(color: Colors.white, fontSize: 16)))
+                    .map((item) => Text(item, style: TextStyle(color: Colors.white, fontSize: fontSmall)))
                     .toList()),
           ),
         ]));

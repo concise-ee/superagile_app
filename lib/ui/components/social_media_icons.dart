@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/url_utils.dart';
 
@@ -9,7 +10,7 @@ class SocialMediaIcons extends StatelessWidget {
     return Column(children: [
       Text(
         FOLLOW_US,
-        style: TextStyle(fontSize: 16),
+        style: TextStyle(fontSize: fontSmall),
         textAlign: TextAlign.center,
       ),
       SizedBox(height: 20),
@@ -18,20 +19,16 @@ class SocialMediaIcons extends StatelessWidget {
         children: [
           IconButton(
               icon: Image.asset('lib/assets/facebook.png'),
-              onPressed: () =>
-                  launchURL('https://www.facebook.com/concisechangestheworld')),
+              onPressed: () => launchURL('https://www.facebook.com/concisechangestheworld')),
           IconButton(
               icon: Image.asset('lib/assets/instagram.png'),
-              onPressed: () => launchURL(
-                  'https://www.instagram.com/concisechangestheworld')),
+              onPressed: () => launchURL('https://www.instagram.com/concisechangestheworld')),
           IconButton(
               icon: Image.asset('lib/assets/linkedin.png'),
-              onPressed: () => launchURL(
-                  'https://ee.linkedin.com/company/concisechangestheworld')),
+              onPressed: () => launchURL('https://ee.linkedin.com/company/concisechangestheworld')),
           IconButton(
               icon: Image.asset('lib/assets/youtube.png'),
-              onPressed: () => launchURL(
-                  'https://www.youtube.com/channel/UCK7wm7UDEIP0t6a9FGTMlqg')),
+              onPressed: () => launchURL('https://www.youtube.com/channel/UCK7wm7UDEIP0t6a9FGTMlqg')),
         ],
       )
     ]);

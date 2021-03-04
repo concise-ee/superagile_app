@@ -17,7 +17,7 @@ class SuperagileWheel extends StatefulWidget {
   SuperagileWheel({
     @required this.topics,
     @required this.scores,
-    this.featuresTextStyle = const TextStyle(color: accentColor, fontSize: 9),
+    this.featuresTextStyle = const TextStyle(color: accentColor, fontSize: fontExtraExtraSmall),
     this.outlineColor = accentColor,
     this.axisColor = secondaryColor,
   });
@@ -231,7 +231,8 @@ class _SuperagileWheelPainter extends CustomPainter {
 
       TextPainter textPainter = new TextPainter(textDirection: TextDirection.ltr);
       textPainter.text = TextSpan(
-          text: point.toString(), style: TextStyle(color: primaryColor, fontSize: 9, fontWeight: FontWeight.bold));
+          text: point.toString(),
+          style: TextStyle(color: primaryColor, fontSize: fontExtraExtraSmall, fontWeight: FontWeight.bold));
       textPainter.layout(
         minWidth: 0,
         maxWidth: double.maxFinite,

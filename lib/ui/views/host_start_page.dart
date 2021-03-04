@@ -11,6 +11,7 @@ import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/mixpanel_utils.dart';
 
@@ -75,7 +76,7 @@ class _HostStartPageState extends State<HostStartPage> {
           child: Text(
             HOST_OR_JOIN,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: fontSmall,
               fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
@@ -85,7 +86,7 @@ class _HostStartPageState extends State<HostStartPage> {
           alignment: Alignment.center,
           child: Text(
             DECISION_CANT_BE_CHANGED,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: fontSmall, fontWeight: FontWeight.w700),
             textAlign: TextAlign.center,
           )),
       SizedBox(height: 50),

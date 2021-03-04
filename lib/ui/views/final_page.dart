@@ -19,6 +19,7 @@ import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/ui/components/social_media_icons.dart';
 import 'package:superagile_app/ui/components/superagile_wheel.dart';
 import 'package:superagile_app/ui/views/start_page.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class FinalPage extends StatefulWidget {
@@ -107,7 +108,7 @@ class _FinalPage extends State<FinalPage> {
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                   child: Text(
                     isMailSent ? EMAIL_SENT : INSERT_EMAIL_TO_GET_RESULTS,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: fontSmall),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -158,7 +159,7 @@ class _FinalPage extends State<FinalPage> {
               padding: EdgeInsets.only(bottom: 25.0),
               child: Text(
                 NO_SCORES_TO_DISPLAY,
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(fontSize: fontMedium),
                 textAlign: TextAlign.center,
               ),
             ),

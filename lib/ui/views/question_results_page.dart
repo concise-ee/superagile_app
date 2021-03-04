@@ -18,6 +18,7 @@ import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/question_answers_section.dart';
 import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'game_question_page.dart';
@@ -164,7 +165,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       child: Column(
         children: [
           if (!areVotedScoresSame()) ...[
-            Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+            Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall)),
             Spacer(flex: 1),
           ],
           buildBackOrNextButton()
@@ -179,7 +180,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       height: !areVotedScoresSame() ? 80 : 0,
       child: Column(
         children: [
-          Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+          Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall)),
         ],
       ),
     );

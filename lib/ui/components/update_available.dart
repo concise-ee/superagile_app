@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class UpdateAvailable extends StatelessWidget {
@@ -17,7 +18,7 @@ class UpdateAvailable extends StatelessWidget {
         child: Column(children: [
           Center(
             child: Text('Update is available: ${updateInfo.availableVersionCode}. Please update app to continue.',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
+                style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
           ),
           Spacer(flex: 1),
           AgileButton(

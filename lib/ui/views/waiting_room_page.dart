@@ -126,7 +126,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       Container(
         child: Padding(
             padding: EdgeInsets.only(top: 30),
-            child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(fontSize: 36))),
+            child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(fontSize: fontLarge))),
       ),
       buildBorderedText(gamePin),
       if (role == Role.PLAYER) buildText(WAIT_FOR_TEAM),
@@ -145,7 +145,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
           return Padding(
             padding: EdgeInsets.only(top: 10),
             child: Text('There are ' + participants.length.toString() + ' people in this workshop.',
-                textAlign: TextAlign.center, style: TextStyle(fontSize: 24)),
+                textAlign: TextAlign.center, style: TextStyle(fontSize: fontMedium)),
           );
         });
   }
@@ -184,7 +184,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   Widget buildText(String text) {
-    return Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: 16));
+    return Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall));
   }
 
   Widget buildBorderedText(String text) {
@@ -194,7 +194,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       decoration: BoxDecoration(border: Border.all(width: 3.0, color: secondaryColor)),
       child: Column(
         children: [
-          Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: 48, color: accentColor)),
+          Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: fontExtraLarge, color: accentColor)),
           buildText(CODE_SHARE_CALL)
         ],
       ),

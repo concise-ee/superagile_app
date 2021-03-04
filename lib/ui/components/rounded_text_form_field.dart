@@ -31,11 +31,11 @@ class RoundedTextFormField extends StatelessWidget {
         validator: validator,
         textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.top,
-        style: TextStyle(fontSize: 24),
+        style: TextStyle(fontSize: fontMedium),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(24.0),
           hintText: hintText,
-          hintStyle: TextStyle(fontSize: 24, color: accentColor),
+          hintStyle: TextStyle(fontSize: fontMedium, color: accentColor),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: secondaryColor, width: 3), borderRadius: BorderRadius.circular(60.0)),
           border: OutlineInputBorder(

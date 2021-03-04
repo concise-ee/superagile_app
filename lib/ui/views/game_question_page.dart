@@ -194,7 +194,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                         Center(
                           child: Text(
                             ANSWERED,
-                            style: TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: fontMedium),
                           ),
                         ),
                         Expanded(
@@ -216,7 +216,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       child: Center(
                         child: Text(
                           CLOSE,
-                          style: TextStyle(fontSize: 24, color: accentColor),
+                          style: TextStyle(fontSize: fontMedium, color: accentColor),
                         ),
                       ))
                 ],
@@ -292,7 +292,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                                   padding: EdgeInsets.only(right: 10),
                                   child: Text(
                                     questionNr.toString(),
-                                    style: TextStyle(fontSize: 105),
+                                    style: TextStyle(fontSize: fontExtraExtraLarge),
                                   )),
                             )),
                         Expanded(
@@ -300,7 +300,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           child: Container(
                               child: Text(
                             questionTemplate.question,
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: fontMedium),
                           )),
                         ),
                       ],
@@ -312,7 +312,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                           alignment: Alignment.center,
                           child: Text(
                             questionTemplate.shortDesc,
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: fontSmall),
                             textAlign: TextAlign.center,
                           )),
                     ),
@@ -325,7 +325,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             padding: EdgeInsets.all(5),
                             child: Text(
                               questionTemplate.longDesc,
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(fontSize: fontSmall),
                             )),
                       ),
                     ),
@@ -360,10 +360,11 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           child: Column(
             children: [
               Text(value,
-                  style:
-                      TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 48)),
+                  style: TextStyle(
+                      color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: fontExtraLarge)),
               Text(meaning,
-                  style: TextStyle(color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: 12),
+                  style: TextStyle(
+                      color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: fontExtraSmall),
                   textAlign: TextAlign.center),
             ],
           ),
@@ -389,7 +390,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         child: RaisedButton(
           child: Text(
             CONTINUE,
-            style: TextStyle(color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: 48),
+            style: TextStyle(
+                color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: fontExtraLarge),
           ),
           color: pressedButton == HOST_SKIP_VALUE ? accentColor : primaryColor,
           onPressed: () {

@@ -18,6 +18,7 @@ import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 import 'final_page.dart';
@@ -160,19 +161,19 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 Padding(
                   padding: EdgeInsets.only(top: 12, bottom: 50),
                   child: Text('${TEAMS_RESULTS} ${questionByNumber.topicName}: ${agreedScore}',
-                      style: TextStyle(fontSize: 24), textAlign: TextAlign.center),
+                      style: TextStyle(fontSize: fontMedium), textAlign: TextAlign.center),
                 ),
                 Padding(
                     padding: EdgeInsets.only(top: 12, bottom: 24),
                     child: Text(
                       CONGRATS,
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
                     )),
                 Padding(
                     padding: EdgeInsets.only(bottom: 24),
                     child: Text(
                       GREAT_MINDS,
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(fontSize: fontMedium),
                     )),
               ],
             ),

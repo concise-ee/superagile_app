@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
 class GamePin extends StatelessWidget {
@@ -19,7 +20,7 @@ class GamePin extends StatelessWidget {
               '${GAME_CODE} ${this.gamePin}',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: fontSmall,
               ),
             )));
   }
