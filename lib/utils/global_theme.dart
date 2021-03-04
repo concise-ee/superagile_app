@@ -14,6 +14,7 @@ const fontMedium = 24.0;
 const fontLarge = 36.0;
 const fontExtraLarge = 48.0;
 const fontExtraExtraLarge = 105.0;
+const fontAgileButton = 20.0;
 
 ThemeData setTheme() {
   return ThemeData(
@@ -36,12 +37,12 @@ ThemeData setTheme() {
       textTheme: ButtonTextTheme.accent,
     ),
     inputDecorationTheme: InputDecorationTheme(
-        hintStyle: TextStyle(color: accentColor, fontSize: 35),
+        hintStyle: TextStyle(color: accentColor, fontSize: fontLarge),
         contentPadding: EdgeInsets.all(15),
         isDense: true,
         border: OutlineInputBorder(borderSide: BorderSide(color: accentColor))),
     appBarTheme: AppBarTheme(
-        textTheme: TextTheme(headline6: TextStyle(color: accentColor, fontSize: 24.0)),
+        textTheme: TextTheme(headline6: TextStyle(color: accentColor, fontSize: fontMedium)),
         iconTheme: IconThemeData(color: accentColor)),
   );
 }

@@ -2,11 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/curve_painter.dart';
-import 'package:superagile_app/ui/components/play_button.dart';
-import 'package:superagile_app/ui/views/host_start_page.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
-import 'package:superagile_app/utils/mixpanel_utils.dart';
 import 'package:superagile_app/utils/url_utils.dart';
 
 class AboutPage extends StatelessWidget {
@@ -199,18 +196,6 @@ class AboutPage extends StatelessWidget {
                   )
                 ],
               ),
-              PlayButton(
-                onPressed: () {
-                  FocusScope.of(context).unfocus();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      mixpanel.track('about_page: HOST THE WORKSHOP');
-                      return HostStartPage();
-                    }),
-                  );
-                },
-              )
             ],
           ),
         ));
