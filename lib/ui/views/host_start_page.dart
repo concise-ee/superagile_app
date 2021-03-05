@@ -100,7 +100,7 @@ class _HostStartPageState extends State<HostStartPage> {
       AgileButton(
         buttonTitle: LEAD_THE_WORKSHOP,
         onPressed: () async {
-          mixpanel.track('host_start_page: HOST THE WORKSHOP');
+          mixpanel.track('host_start_page: LEAD THE WORKSHOP');
           FocusScope.of(context).unfocus();
           await createGameAndNavigateToWaitingRoom(false);
         },

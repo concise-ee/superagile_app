@@ -1,7 +1,7 @@
-import 'package:flutuate_mixpanel/flutuate_mixpanel.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
-MixpanelAPI mixpanel;
+Mixpanel mixpanel;
 
-void initMixpanel() async {
-  mixpanel = await MixpanelAPI.getInstance(String.fromEnvironment('MIXPANEL_TOKEN'));
+Future<void> initMixpanel() async {
+  mixpanel = await Mixpanel.init(String.fromEnvironment('MIXPANEL_TOKEN'), optOutTrackingDefault: false);
 }
