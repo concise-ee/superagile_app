@@ -75,7 +75,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   void loadDataAndSetupListener() async {
     await loadData();
-    if (mounted && role == Role.PLAYER) {
+    if (role == Role.PLAYER) {
       listenForUpdateToSwitchPage();
     }
   }
