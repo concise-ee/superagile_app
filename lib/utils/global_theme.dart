@@ -23,7 +23,7 @@ ThemeData setTheme() {
     scaffoldBackgroundColor: primaryColor,
     accentColor: accentColor,
     textTheme: TextTheme(
-        subtitle1: TextStyle(fontSize: 35, color: accentColor),
+        subtitle1: TextStyle(fontSize: fontLarge, color: accentColor),
         bodyText1: TextStyle(color: white),
         bodyText2: TextStyle(color: white),
         headline1: TextStyle(color: white),
