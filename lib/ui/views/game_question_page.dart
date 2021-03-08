@@ -357,6 +357,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           ),
         ),
         child: RaisedButton(
+          elevation: 0,
+          hoverElevation: 0,
+          focusElevation: 0,
+          highlightElevation: 0,
           child: Column(
             children: [
               Text(value,
