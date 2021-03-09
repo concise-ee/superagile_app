@@ -18,7 +18,7 @@ class BackDialogAlert extends StatelessWidget {
       content: Text(EXIT_TO_START_PAGE, textAlign: TextAlign.center, style: TextStyle(color: white)),
       actions: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
           child: Center(
             child: AgileButton(
               onPressed: () {
@@ -37,7 +37,7 @@ class BackDialogAlert extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 30),
           child: Center(
             child: AgileButton(
               buttonTitle: NO,
