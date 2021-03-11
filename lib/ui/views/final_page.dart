@@ -48,6 +48,7 @@ class _FinalPage extends State<FinalPage> {
   bool isMailSent = false;
   int gamePin;
   List<QuestionTemplate> questions;
+  final _formKey = GlobalKey<FormState>();
 
   _FinalPage(this.participantRef, this.gameRef);
 
@@ -92,45 +93,56 @@ class _FinalPage extends State<FinalPage> {
     if (agreedScores.containsValue(null)) {
       return renderNoScores();
     }
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(children: [GamePin(gamePin: gamePin)]),
-          Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SuperagileWheel(
-                  topics: questions.map((e) => e.topicNameShort).toList(),
-                  scores: agreedScores.values.toList(),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                  child: Text(
-                    isMailSent ? EMAIL_SENT : INSERT_EMAIL_TO_GET_RESULTS,
-                    style: TextStyle(fontSize: fontSmall),
-                    textAlign: TextAlign.center,
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(children: [GamePin(gamePin: gamePin)]),
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SuperagileWheel(
+                    topics: questions.map((e) => e.topicNameShort).toList(),
+                    scores: agreedScores.values.toList(),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                  child: RoundedTextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _emailController,
-                    hintText: EMAIL_FIELD_HINT_TEXT,
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                    child: Text(
+                      isMailSent ? EMAIL_SENT : INSERT_EMAIL_TO_GET_RESULTS,
+                      style: TextStyle(fontSize: fontSmall),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                  child: renderSendEmail(),
-                ),
-                Padding(padding: EdgeInsets.symmetric(vertical: 10), child: SocialMediaIcons()),
-              ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                    child: RoundedTextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
+                      hintText: EMAIL_FIELD_HINT_TEXT,
+                      validator: (value) {
+                        if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+                          setState(() {
+                            isMailSent = false;
+                          });
+                          return PLEASE_ENTER_VALID_EMAIL;
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                    child: renderSendEmail(),
+                  ),
+                  Padding(padding: EdgeInsets.symmetric(vertical: 10), child: SocialMediaIcons()),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+    ));
   }
 
   Widget renderSendEmail() {
@@ -138,12 +150,14 @@ class _FinalPage extends State<FinalPage> {
         ? AgileButton(
             buttonTitle: EMAIL_ACTION_BUTTON,
             onPressed: () async {
-              setState(() => isMailSending = true);
-              await mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
-              setState(() {
-                isMailSending = false;
-                isMailSent = true;
-              });
+              if (_formKey.currentState.validate()) {
+                setState(() => isMailSending = true);
+                await mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
+                setState(() {
+                  isMailSending = false;
+                  isMailSent = true;
+                });
+              }
             })
         : SizedBox(height: 80, width: 80, child: CircularProgressIndicator());
   }

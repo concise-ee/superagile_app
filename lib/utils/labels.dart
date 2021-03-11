@@ -39,6 +39,7 @@ const GAME_CODE = 'Code:';
 const ANSWERED = 'Answered:';
 const WARNING_NAME_EMPTY = 'Please enter your name';
 const PLEASE_ENTER_VALID_PIN = 'Please enter a valid pin';
+const PLEASE_ENTER_VALID_EMAIL = 'Please enter a valid e-mail';
 const PLAYER_IS_ALREADY_IN_GAME = 'A player with that name is already in the game';
 const CLOSE = 'Close';
 const EMAIL_ACTION_BUTTON = 'SEND RESULTS';
