@@ -128,11 +128,8 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             padding: EdgeInsets.only(top: 30),
             child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(fontSize: fontLarge))),
       ),
-      buildBorderedText(gamePin),
-      if (role == Role.PLAYER) buildText(WAIT_FOR_TEAM),
-      buildParticipantCount(),
-      buildActiveParticipantsWidget(),
-      if (role == Role.HOST) buildStartGameButton(),
+      if (role == Role.HOST) buildHostView(),
+      if (role == Role.PLAYER) buildPlayerView(),
     ]));
   }
 
@@ -142,10 +139,20 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
           var participants = participantService.findActiveParticipants(snapshot.data.docs);
+          var text = '';
+          if (participants.length > 1) {
+            text = 'There are ' + participants.length.toString() + ' people in this workshop.';
+          } else if (participants.length == 1) {
+            text = 'There is 1 person in this workshop.';
+          } else {
+            text = 'There are no people in this workshop yet.';
+          }
           return Padding(
             padding: EdgeInsets.only(top: 10),
-            child: Text('There are ' + participants.length.toString() + ' people in this workshop.',
-                textAlign: TextAlign.center, style: TextStyle(fontSize: fontMedium)),
+            child: Text(text,
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(fontSize: role == Role.PLAYER ? fontLarge : fontMedium, fontWeight: FontWeight.normal)),
           );
         });
   }
@@ -161,12 +168,12 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             physics: NeverScrollableScrollPhysics(),
             itemCount: participants.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
+              return Container(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 55, right: 30, top: 20),
                   child: Text(
                     participants[index].name,
-                    style: TextStyle(color: white),
+                    style: TextStyle(color: white, fontSize: 20),
                   ),
                 ),
               );
@@ -187,10 +194,33 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     return Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall));
   }
 
+  Widget buildPlayerView() {
+    return Column(children: [
+      Padding(
+        padding: EdgeInsets.only(left: 60, right: 60, top: 20, bottom: 60),
+        child: buildText(CLICK_THE_QUESTION_MARK),
+      ),
+      Padding(
+        padding: EdgeInsets.only(left: 30, right: 30),
+        child: buildParticipantCount(),
+      ),
+      Image.asset('lib/assets/superagile_wheel.png'),
+    ]);
+  }
+
+  Widget buildHostView() {
+    return Column(children: [
+      buildBorderedText(gamePin),
+      buildParticipantCount(),
+      buildActiveParticipantsWidget(),
+      buildStartGameButton()
+    ]);
+  }
+
   Widget buildBorderedText(String text) {
     return Container(
       margin: const EdgeInsets.all(30.0),
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 50, right: 50),
       decoration: BoxDecoration(border: Border.all(width: 3.0, color: secondaryColor)),
       child: Column(
         children: [

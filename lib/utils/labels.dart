@@ -17,8 +17,6 @@ const DECISION_CANT_BE_CHANGED = "* The decision can't be changed.";
 const SAME_ANSWER = '* You are stuck on this question until your team agrees on the same number.';
 const CHANGE_ANSWER = 'CHANGE ANSWER';
 const BEGIN_GAME = 'Begin the game';
-const CLICK_QUESTION_MARK =
-    'Click the question mark in the top right corner to read more about superagile until all of your team is here.';
 const CODE_SHARE_CALL = '*Share this code with your team.';
 const CONGRATS = 'CONGRATULATIONS';
 const GREAT_MINDS = 'Great minds think alike!';
@@ -63,3 +61,5 @@ const HONEST = 'It is an honest and open approach to successful digital product 
 const READ_MORE = 'Read more:';
 const FOLLOW_US = 'Follow us on social media';
 const UPDATE_APP = 'UPDATE APP';
+const CLICK_THE_QUESTION_MARK =
+    '* Click the question mark in the top right corner to read more about superagile until all of your team is here.';
