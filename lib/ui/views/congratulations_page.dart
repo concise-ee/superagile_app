@@ -16,6 +16,7 @@ import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
+import 'package:superagile_app/ui/components/barchart.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
@@ -49,6 +50,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Role role;
   bool isLoading = true;
   String agreedScore;
+  List<String> scoreMeanings;
   QuestionTemplate questionByNumber;
   int gamePin;
 
@@ -111,11 +113,13 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Future<void> loadData() async {
     Participant participant = await participantService.findGameParticipantByRef(participantRef);
     String agreedScore = await getAgreedScore();
+    List<String> scoreMeanings = await getScoreMeanings();
     QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       this.role = participant.role;
       this.agreedScore = agreedScore;
+      this.scoreMeanings = scoreMeanings;
       this.isLoading = false;
       this.questionByNumber = questionByNumber;
       this.gamePin = pin;
@@ -126,6 +130,11 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     int agreedScore = await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
     if (agreedScore == null) return NO_SCORE;
     return agreedScore.toString();
+  }
+
+  Future<List<String>> getScoreMeanings() async {
+    QuestionTemplate questionTemplate = await questionService.findQuestionByNumber(questionNr);
+    return List.unmodifiable(['', '0. ' + questionTemplate.zeroMeaning, '1. ' + questionTemplate.oneMeaning, '2. ' + questionTemplate.twoMeaning, '3. ' + questionTemplate.threeMeaning]);
   }
 
   Future<bool> _onBackPressed() {
@@ -159,11 +168,6 @@ class _CongratulationsPage extends State<CongratulationsPage> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 12, bottom: 50),
-                  child: Text('${TEAMS_RESULTS} ${questionByNumber.topicName}: ${agreedScore}',
-                      style: TextStyle(fontSize: fontMedium), textAlign: TextAlign.center),
-                ),
-                Padding(
                     padding: EdgeInsets.only(top: 12, bottom: 24),
                     child: Text(
                       CONGRATS,
@@ -172,9 +176,20 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 Padding(
                     padding: EdgeInsets.only(bottom: 24),
                     child: Text(
+                      TEAM_VOTED + agreedScore,
+                      style: TextStyle(fontSize: fontMedium),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(bottom: 24),
+                    child: Text(
                       GREAT_MINDS,
                       style: TextStyle(fontSize: fontMedium),
                     )),
+                Container(
+                    width: 400.0,
+                    height: 200.0,
+                    child: BarChart.withSampleData(scoreMeanings, questionByNumber.topicName, int.parse(agreedScore))
+                ),
               ],
             ),
           ),
