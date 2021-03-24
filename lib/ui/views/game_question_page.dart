@@ -417,8 +417,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           ),
           color: value == pressedButton.toString() ? accentColor : primaryColor,
           onPressed: () {
-            setState(() => pressedButton = int.parse(value));
-            saveScoreAndWaitForNextPage(value);
+            if (pressedButton != int.parse(value)) {
+              setState(() => pressedButton = int.parse(value));
+              saveScoreAndWaitForNextPage(value);
+            }
           },
         ),
       ),
@@ -445,8 +447,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           ),
           color: pressedButton == HOST_SKIP_VALUE ? accentColor : primaryColor,
           onPressed: () {
-            setState(() => pressedButton = HOST_SKIP_VALUE);
-            saveScoreAndWaitForNextPage(null);
+            if (pressedButton != HOST_SKIP_VALUE) {
+              setState(() => pressedButton = HOST_SKIP_VALUE);
+              saveScoreAndWaitForNextPage(null);
+            }
           },
         ),
       ),

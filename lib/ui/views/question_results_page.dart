@@ -54,6 +54,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Role role;
   bool isLoading = true;
   int gamePin;
+  var _firstPress = true;
 
   _QuestionResultsPageState(this.questionNr, this.participantRef, this.gameRef);
 
@@ -223,37 +224,43 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       return AgileButton(
         buttonTitle: CONTINUE,
         onPressed: () async {
-          await scoreService.updateAgreedScore(
-              gameRef, getAgreedScore(), questionNr);
-          await gameService.changeGameState(
-              gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
-          _log.info(
-              '${participantRef} HOST changed gameState to: ${GameState.CONGRATULATIONS}_$questionNr');
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return CongratulationsPage(
-                  this.questionNr, this.participantRef, this.gameRef);
-            }),
-          );
+          if (_firstPress) {
+            _firstPress = false;
+            await scoreService.updateAgreedScore(
+                gameRef, getAgreedScore(), questionNr);
+            await gameService.changeGameState(
+                gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
+            _log.info(
+                '${participantRef} HOST changed gameState to: ${GameState.CONGRATULATIONS}_$questionNr');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return CongratulationsPage(
+                    this.questionNr, this.participantRef, this.gameRef);
+              }),
+            );
+          }
         },
       );
     }
     return AgileButton(
       buttonTitle: CHANGE_ANSWER,
       onPressed: () async {
-        await gameService.changeGameState(
-            gameRef, '${GameState.QUESTION}_$questionNr');
-        await scoreService.deleteOldScore(participantRef, questionNr);
-        _log.info(
-            '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_$questionNr');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) {
-            return GameQuestionPage(
-                this.questionNr, this.participantRef, this.gameRef);
-          }),
-        );
+        if (_firstPress) {
+          _firstPress = false;
+          await gameService.changeGameState(
+              gameRef, '${GameState.QUESTION}_$questionNr');
+          await scoreService.deleteOldScore(participantRef, questionNr);
+          _log.info(
+              '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_$questionNr');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return GameQuestionPage(
+                  this.questionNr, this.participantRef, this.gameRef);
+            }),
+          );
+        }
       },
     );
   }

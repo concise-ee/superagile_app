@@ -54,6 +54,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   List<String> scoreMeanings;
   QuestionTemplate questionByNumber;
   int gamePin;
+  var _firstPress = true;
 
   _CongratulationsPage(this.questionNr, this.participantRef, this.gameRef);
 
@@ -132,7 +133,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Future<String> getAgreedScore() async {
     int agreedScore =
         await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
-    if (agreedScore == null) return NO_SCORE;
+    if (agreedScore == null) return '0';
     return agreedScore.toString();
   }
 
@@ -218,29 +219,32 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                   height: 200,
                   child: PlayButton(
                     onPressed: () async {
-                      if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
+                      if (_firstPress) {
+                        _firstPress = false;
+                        if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
+                          await gameService.changeGameState(
+                              gameRef, GameState.FINAL);
+                          _log.info(
+                              '${participantRef} HOST changed gameState to: ${GameState.FINAL}');
+                          return Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return FinalPage(participantRef, gameRef);
+                            }),
+                          );
+                        }
                         await gameService.changeGameState(
-                            gameRef, GameState.FINAL);
+                            gameRef, '${GameState.QUESTION}_${questionNr + 1}');
                         _log.info(
-                            '${participantRef} HOST changed gameState to: ${GameState.FINAL}');
-                        return Navigator.pushReplacement(
+                            '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return FinalPage(participantRef, gameRef);
+                            return GameQuestionPage(
+                                questionNr + 1, participantRef, gameRef);
                           }),
                         );
                       }
-                      await gameService.changeGameState(
-                          gameRef, '${GameState.QUESTION}_${questionNr + 1}');
-                      _log.info(
-                          '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return GameQuestionPage(
-                              questionNr + 1, participantRef, gameRef);
-                        }),
-                      );
                     },
                   ),
                 ),

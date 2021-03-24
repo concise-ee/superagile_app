@@ -45,6 +45,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   StreamSubscription<DocumentSnapshot> gameStream;
   Role role;
   bool isLoading = true;
+  var _firstPress = true;
 
   _WaitingRoomPageState(this.gameRef, this.participantRef);
 
@@ -196,9 +197,11 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Widget buildStartGameButton() {
     return PlayButton(onPressed: () async {
-      mixpanel.track('waiting_room_page: PLAY BUTTON');
-      await gameService.changeGameState(gameRef, QUESTION_1);
-      _log.info('${participantRef} HOST changed gameState to: ${QUESTION_1}');
+      if (_firstPress) {
+        mixpanel.track('waiting_room_page: PLAY BUTTON');
+        await gameService.changeGameState(gameRef, QUESTION_1);
+        _log.info('${participantRef} HOST changed gameState to: ${QUESTION_1}');
+      }
     });
   }
 
