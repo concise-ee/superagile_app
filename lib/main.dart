@@ -20,6 +20,7 @@ void main() async {
   };
   runZonedGuarded<Future<void>>(() async {
     initMixpanel();
+    _log.info(String.fromEnvironment('MIXPANEL_TOKEN'));
     runApp(SuperagileApp());
   }, (Object error, StackTrace stackTrace) {
     _log.severe('${error}:\n${stackTrace}');
