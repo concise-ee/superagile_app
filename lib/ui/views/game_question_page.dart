@@ -22,6 +22,8 @@ import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 
+import 'final_page.dart';
+
 final _log = Logger((GameQuestionPage).toString());
 
 class GameQuestionPage extends StatefulWidget {
@@ -32,7 +34,8 @@ class GameQuestionPage extends StatefulWidget {
   GameQuestionPage(this._questionNr, this._participantRef, this._gameRef);
 
   @override
-  _GameQuestionPage createState() => _GameQuestionPage(this._questionNr, this._participantRef, this._gameRef);
+  _GameQuestionPage createState() =>
+      _GameQuestionPage(this._questionNr, this._participantRef, this._gameRef);
 }
 
 class _GameQuestionPage extends State<GameQuestionPage> {
@@ -84,8 +87,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   }
 
   Future<void> loadData() async {
-    Participant participant = await participantService.findGameParticipantByRef(participantRef);
-    final QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
+    Participant participant =
+        await participantService.findGameParticipantByRef(participantRef);
+    final QuestionTemplate questionByNumber =
+        await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       role = participant.role;
@@ -107,30 +112,47 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   void listenGameStateChanges() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
       String gameState = await gameService.getGameState(gameRef);
-      List<Participant> activeParticipants = await participantService.findActiveGameParticipants(gameRef);
-      QuestionScores questionScores = await scoreService.findScoresForQuestion(gameRef, questionNr);
-      List<String> answeredParticipantNames = scoreService.getAnsweredParticipantNames(questionScores);
+      List<Participant> activeParticipants =
+          await participantService.findActiveGameParticipants(gameRef);
+      QuestionScores questionScores =
+          await scoreService.findScoresForQuestion(gameRef, questionNr);
+      List<String> answeredParticipantNames =
+          scoreService.getAnsweredParticipantNames(questionScores);
       setState(() {
         this.activeParticipants = activeParticipants;
         this.answeredParticipantNames = answeredParticipantNames;
       });
-      percentage.value = participantService.calculateCircleFill(activeParticipants, answeredParticipantNames);
+      percentage.value = participantService.calculateCircleFill(
+          activeParticipants, answeredParticipantNames);
       if (gameState.contains(GameState.QUESTION_RESULTS)) {
         return navigateToQuestionResultsPage();
+      } else if (gameState == GameState.FINAL) {
+        _log.info(
+            '${participantRef} navigates to FinalPage, gameState: ${gameState}');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return FinalPage(participantRef, gameRef);
+          }),
+        );
       }
     });
   }
 
   void listenEveryActiveParticipantScoreChanges() async {
     gameStream = gameService.getGameStream(gameRef).listen((data) async {
-      List<Participant> activeParticipants = await participantService.findActiveGameParticipants(gameRef);
-      QuestionScores questionScores = await scoreService.findScoresForQuestion(gameRef, questionNr);
-      List<String> answeredParticipantNames = scoreService.getAnsweredParticipantNames(questionScores);
+      List<Participant> activeParticipants =
+          await participantService.findActiveGameParticipants(gameRef);
+      QuestionScores questionScores =
+          await scoreService.findScoresForQuestion(gameRef, questionNr);
+      List<String> answeredParticipantNames =
+          scoreService.getAnsweredParticipantNames(questionScores);
       setState(() {
         this.activeParticipants = activeParticipants;
         this.answeredParticipantNames = answeredParticipantNames;
       });
-      percentage.value = participantService.calculateCircleFill(activeParticipants, answeredParticipantNames);
+      percentage.value = participantService.calculateCircleFill(
+          activeParticipants, answeredParticipantNames);
 
       bool haveAllActiveParticipantsVoted = true;
       if (activeParticipants.isEmpty) {
@@ -143,16 +165,23 @@ class _GameQuestionPage extends State<GameQuestionPage> {
       }
       if (haveAllActiveParticipantsVoted) {
         gameStream.cancel();
-        await gameService.changeGameState(gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
+        await gameService.changeGameState(
+            gameRef, '${GameState.QUESTION_RESULTS}_$questionNr');
         return navigateToQuestionResultsPage();
       }
     });
   }
 
-  Future<MaterialPageRoute<QuestionResultsPage>> navigateToQuestionResultsPage() {
-    _log.info('${participantRef} navigates to QuestionResultsPage, questionNr: ${questionNr}');
-    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) {
-      return QuestionResultsPage(questionNr: questionNr, gameRef: gameRef, participantRef: participantRef);
+  Future<MaterialPageRoute<QuestionResultsPage>>
+      navigateToQuestionResultsPage() {
+    _log.info(
+        '${participantRef} navigates to QuestionResultsPage, questionNr: ${questionNr}');
+    return Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) {
+      return QuestionResultsPage(
+          questionNr: questionNr,
+          gameRef: gameRef,
+          participantRef: participantRef);
     }), (Route<dynamic> route) => false);
   }
 
@@ -172,7 +201,9 @@ class _GameQuestionPage extends State<GameQuestionPage> {
               title: AgileWithBackIconButton(_onBackPressed),
               automaticallyImplyLeading: false,
               actions: [buildParticipantsDialog()]),
-          body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
+          body: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : buildBody(context),
         ));
   }
 
@@ -183,7 +214,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
             context: context,
             builder: (context) {
               return SimpleDialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40)),
                 elevation: 16,
                 children: [
                   Container(
@@ -216,7 +248,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       child: Center(
                         child: Text(
                           CLOSE,
-                          style: TextStyle(fontSize: fontMedium, color: accentColor),
+                          style: TextStyle(
+                              fontSize: fontMedium, color: accentColor),
                         ),
                       ))
                 ],
@@ -261,11 +294,14 @@ class _GameQuestionPage extends State<GameQuestionPage> {
 
   IconData renderIcon(String participantName) {
     if (answeredParticipantNames == null) return null;
-    return answeredParticipantNames.contains(participantName) ? Icons.check : null;
+    return answeredParticipantNames.contains(participantName)
+        ? Icons.check
+        : null;
   }
 
   void saveScoreAndWaitForNextPage(String scoreValue) async {
-    await scoreService.setScore(participantRef, gameRef, questionNr, scoreValue);
+    await scoreService.setScore(
+        participantRef, gameRef, questionNr, scoreValue);
   }
 
   Widget buildBody(BuildContext context) {
@@ -292,7 +328,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                                   padding: EdgeInsets.only(right: 10),
                                   child: Text(
                                     questionNr.toString(),
-                                    style: TextStyle(fontSize: fontExtraExtraLarge),
+                                    style: TextStyle(
+                                        fontSize: fontExtraExtraLarge),
                                   )),
                             )),
                         Expanded(
@@ -365,17 +402,25 @@ class _GameQuestionPage extends State<GameQuestionPage> {
             children: [
               Text(value,
                   style: TextStyle(
-                      color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: fontExtraLarge)),
+                      color: value == pressedButton.toString()
+                          ? primaryColor
+                          : accentColor,
+                      fontSize: fontExtraLarge)),
               Text(meaning,
                   style: TextStyle(
-                      color: value == pressedButton.toString() ? primaryColor : accentColor, fontSize: fontExtraSmall),
+                      color: value == pressedButton.toString()
+                          ? primaryColor
+                          : accentColor,
+                      fontSize: fontExtraSmall),
                   textAlign: TextAlign.center),
             ],
           ),
           color: value == pressedButton.toString() ? accentColor : primaryColor,
           onPressed: () {
-            setState(() => pressedButton = int.parse(value));
-            saveScoreAndWaitForNextPage(value);
+            if (pressedButton != int.parse(value)) {
+              setState(() => pressedButton = int.parse(value));
+              saveScoreAndWaitForNextPage(value);
+            }
           },
         ),
       ),
@@ -395,12 +440,17 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           child: Text(
             CONTINUE,
             style: TextStyle(
-                color: pressedButton == HOST_SKIP_VALUE ? primaryColor : accentColor, fontSize: fontExtraLarge),
+                color: pressedButton == HOST_SKIP_VALUE
+                    ? primaryColor
+                    : accentColor,
+                fontSize: fontExtraLarge),
           ),
           color: pressedButton == HOST_SKIP_VALUE ? accentColor : primaryColor,
           onPressed: () {
-            setState(() => pressedButton = HOST_SKIP_VALUE);
-            saveScoreAndWaitForNextPage(null);
+            if (pressedButton != HOST_SKIP_VALUE) {
+              setState(() => pressedButton = HOST_SKIP_VALUE);
+              saveScoreAndWaitForNextPage(null);
+            }
           },
         ),
       ),
