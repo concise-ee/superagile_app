@@ -31,6 +31,26 @@ class AboutPage extends StatelessWidget {
                   Container(
                     alignment: Alignment.bottomCenter,
                     child: Text(
+                      HOW,
+                      style: TextStyle(color: black, fontSize: fontLarge, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+              Image.asset('lib/assets/how_to_play_label.png'),
+              SizedBox(
+                height: 20,
+              ),
+              buildTutorial(),
+              SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
                       WHY,
                       style: TextStyle(color: black, fontSize: fontLarge, fontWeight: FontWeight.bold),
                     ),
@@ -198,6 +218,154 @@ class AboutPage extends StatelessWidget {
               ),
             ],
           ),
+        ));
+  }
+
+  Widget buildTutorial() {
+    return Container(
+        padding: EdgeInsets.only(left: 25),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(children: [
+              Flexible(
+                  fit: FlexFit.loose,
+                  flex: 1,
+                  child: Text(
+                    '1.',
+                    style: TextStyle(color: Colors.grey, fontSize: fontLarge),
+                  )),
+              Flexible(
+                fit: FlexFit.loose,
+                flex: 4,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 25, bottom: 5, top: 25, right: 25),
+                      child: Text(
+                        TUTORIAL_STEP_ONE,
+                        style: TextStyle(color: black, fontSize: fontSmall),
+                      )),
+                ),
+              ),
+            ]),
+            Row(
+              children: [
+                Flexible(
+                    fit: FlexFit.loose,
+                    flex: 1,
+                    child: Text(
+                      '2.',
+                      style: TextStyle(color: Colors.grey, fontSize: fontLarge),
+                    )),
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 4,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 25, bottom: 5, top: 25, right: 25),
+                        child: Text(
+                          TUTORIAL_STEP_TWO,
+                          style: TextStyle(color: black, fontSize: fontSmall),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+            Row(children: [
+              Flexible(
+                  fit: FlexFit.loose,
+                  flex: 1,
+                  child: Text(
+                    '3.',
+                    style: TextStyle(color: Colors.grey, fontSize: fontLarge),
+                  )),
+              Flexible(
+                fit: FlexFit.loose,
+                flex: 4,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 25, bottom: 5, top: 25, right: 25),
+                      child: Text(
+                        TUTORIAL_STEP_THREE,
+                        style: TextStyle(color: black, fontSize: fontSmall),
+                      )),
+                ),
+              ),
+            ]),
+            Row(
+              children: [
+                Flexible(
+                    fit: FlexFit.loose,
+                    flex: 1,
+                    child: Text(
+                      '4.',
+                      style: TextStyle(color: Colors.grey, fontSize: fontLarge),
+                    )),
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 4,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 25, bottom: 5, top: 25, right: 25),
+                        child: Text(
+                          TUTORIAL_STEP_FOUR,
+                          style: TextStyle(color: black, fontSize: fontSmall),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+            Row(children: [
+              Flexible(
+                  fit: FlexFit.loose,
+                  flex: 1,
+                  child: Text(
+                    '5.',
+                    style: TextStyle(color: Colors.grey, fontSize: fontLarge),
+                  )),
+              Flexible(
+                fit: FlexFit.loose,
+                flex: 4,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 25, bottom: 5, top: 25, right: 25),
+                      child: Text(
+                        TUTORIAL_STEP_FIVE,
+                        style: TextStyle(color: black, fontSize: fontSmall),
+                      )),
+                ),
+              ),
+            ]),
+            Row(
+              children: [
+                Flexible(
+                    fit: FlexFit.loose,
+                    flex: 1,
+                    child: Text(
+                      '6.',
+                      style: TextStyle(color: Colors.grey, fontSize: fontLarge),
+                    )),
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 4,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 25, bottom: 5, top: 25, right: 25),
+                        child: Text(
+                          TUTORIAL_STEP_SIX,
+                          style: TextStyle(color: black, fontSize: fontSmall),
+                        )),
+                  ),
+                ),
+              ],
+            )
+          ],
         ));
   }
 }

@@ -62,3 +62,16 @@ const FOLLOW_US = 'Follow us on social media';
 const UPDATE_APP = 'UPDATE APP';
 const CLICK_THE_QUESTION_MARK =
     '* Click the question mark in the top right corner to read more about superagile until all of your team is here.';
+const TUTORIAL_STEP_ONE =
+    'You must choose if you are the lead of the workshop (host) or a team member playing along. After inserting their name, the host has the option to join in with other team members to vote. The host will be given a 4-digit code that will allow the other team members to join the workshop.';
+const TUTORIAL_STEP_TWO =
+    "The yellow '\"play\"' button starts the workshop. (note: only the host has the right to start the workshop and is control of the flow)";
+const TUTORIAL_STEP_THREE =
+    'Read the question and without discussing the topic, choose a score (0, 1, 2 or 3) that best answers the question in your opinion. ';
+const TUTORIAL_STEP_FOUR =
+    "After everyone has answered, then it is time to discuss the results and, if the scores are different, start a new voting round. (note: it is only possible to progress to the next question if everyone's scores are the same.)";
+const TUTORIAL_STEP_FIVE =
+    'During each question, it is possible to see who has already voted by tapping on the circular progress bar in the upper right corner.';
+const TUTORIAL_STEP_SIX =
+    'Once all team members have answered each question with the same score then you can see the completed wheel at the end';
+const HOW = 'How';
