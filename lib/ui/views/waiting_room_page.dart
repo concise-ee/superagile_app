@@ -30,8 +30,7 @@ class WaitingRoomPage extends StatefulWidget {
   WaitingRoomPage(this._gameRef, this._participantRef);
 
   @override
-  _WaitingRoomPageState createState() =>
-      _WaitingRoomPageState(this._gameRef, this._participantRef);
+  _WaitingRoomPageState createState() => _WaitingRoomPageState(this._gameRef, this._participantRef);
 }
 
 class _WaitingRoomPageState extends State<WaitingRoomPage> {
@@ -70,8 +69,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
 
   Future<void> loadData() async {
     Game game = await gameService.findActiveGameByRef(gameRef);
-    Participant participant =
-        await participantService.findGameParticipantByRef(participantRef);
+    Participant participant = await participantService.findGameParticipantByRef(participantRef);
     setState(() {
       gamePin = game.pin.toString();
       role = participant.role;
@@ -82,8 +80,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   void listenForUpdateToGoToQuestionPage() {
     gameStream = gameService.getGameStream(gameRef).listen((event) async {
       if (Game.fromSnapshot(event).gameState == QUESTION_1) {
-        _log.info(
-            '${participantRef} navigates to GameQuestionPage, gameState: ${QUESTION_1}');
+        _log.info('${participantRef} navigates to GameQuestionPage, gameState: ${QUESTION_1}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -117,9 +114,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
             automaticallyImplyLeading: false,
             actions: [QuestionMarkButton()],
           ),
-          body: isLoading
-              ? Center(child: CircularProgressIndicator())
-              : buildBody()),
+          body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody()),
     );
   }
 
@@ -132,9 +127,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
       Container(
         child: Padding(
             padding: EdgeInsets.only(top: 30),
-            child: Text(WAITING_ROOM,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: fontLarge))),
+            child: Text(WAITING_ROOM, textAlign: TextAlign.center, style: TextStyle(fontSize: fontLarge))),
       ),
       if (role == Role.HOST) buildHostView(),
       if (role == Role.PLAYER) buildPlayerView(),
@@ -142,31 +135,29 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   Widget buildParticipantCount() {
-    return StreamBuilder<QuerySnapshot>(
-        stream: participantService.getParticipantsStream(gameRef),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          var participants =
-              participantService.findActiveParticipants(snapshot.data.docs);
-          var text = '';
-          if (participants.length > 1) {
-            text = 'There are ' +
-                participants.length.toString() +
-                ' people in this workshop.';
-          } else if (participants.length == 1) {
-            text = 'There is 1 person in this workshop.';
-          } else {
-            text = 'There are no people in this workshop yet.';
-          }
-          return Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: role == Role.PLAYER ? fontLarge : fontMedium,
-                    fontWeight: FontWeight.normal)),
-          );
-        });
+    return Padding(
+        padding: EdgeInsets.only(left: 30, right: 30),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: participantService.getParticipantsStream(gameRef),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return LinearProgressIndicator();
+              var participants = participantService.findActiveParticipants(snapshot.data.docs);
+              var text = '';
+              if (participants.length > 1) {
+                text = 'There are ' + participants.length.toString() + ' people in this workshop.';
+              } else if (participants.length == 1) {
+                text = 'There is 1 person in this workshop.';
+              } else {
+                text = 'There are no people in this workshop yet.';
+              }
+              return Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: role == Role.PLAYER ? fontLarge : fontMedium, fontWeight: FontWeight.normal)),
+              );
+            }));
   }
 
   Widget buildActiveParticipantsWidget() {
@@ -174,8 +165,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         stream: participantService.getParticipantsStream(gameRef),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
-          var participants =
-              participantService.findActiveParticipants(snapshot.data.docs);
+          var participants = participantService.findActiveParticipants(snapshot.data.docs);
           return ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -186,7 +176,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
                   padding: EdgeInsets.only(left: 55, right: 30, top: 20),
                   child: Text(
                     participants[index].name,
-                    style: TextStyle(color: white, fontSize: 20),
+                    style: TextStyle(color: white, fontSize: fontSmall),
                   ),
                 ),
               );
@@ -206,8 +196,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
   }
 
   Widget buildText(String text) {
-    return Text(text,
-        textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall));
+    return Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall));
   }
 
   Widget buildPlayerView() {
@@ -216,10 +205,7 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
         padding: EdgeInsets.only(left: 60, right: 60, top: 20, bottom: 60),
         child: buildText(CLICK_THE_QUESTION_MARK),
       ),
-      Padding(
-        padding: EdgeInsets.only(left: 30, right: 30),
-        child: buildParticipantCount(),
-      ),
+      buildParticipantCount(),
       Image.asset('lib/assets/superagile_wheel.png'),
     ]);
   }
@@ -237,13 +223,10 @@ class _WaitingRoomPageState extends State<WaitingRoomPage> {
     return Container(
       margin: const EdgeInsets.all(30.0),
       padding: const EdgeInsets.only(top: 10, bottom: 10, left: 50, right: 50),
-      decoration:
-          BoxDecoration(border: Border.all(width: 3.0, color: secondaryColor)),
+      decoration: BoxDecoration(border: Border.all(width: 3.0, color: secondaryColor)),
       child: Column(
         children: [
-          Text(text,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: fontExtraLarge, color: accentColor)),
+          Text(text, textAlign: TextAlign.center, style: TextStyle(fontSize: fontExtraLarge, color: accentColor)),
           buildText(CODE_SHARE_CALL)
         ],
       ),
