@@ -15,7 +15,6 @@ class QuestionAnswersSection extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(width: 1.0, color: secondaryColor),
             bottom: BorderSide(width: 1.0, color: secondaryColor),
           ),
         ),
@@ -24,14 +23,36 @@ class QuestionAnswersSection extends StatelessWidget {
             answerNumber.toString(),
             style: TextStyle(color: Colors.white, fontSize: fontExtraExtraLarge),
           ),
-          Padding(
+          Expanded(
+              child: Padding(
+                  padding: EdgeInsets.only(left: 25),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: getFirstHalfOfParticipants()))),
+          Expanded(
+              child: Padding(
             padding: EdgeInsets.only(left: 25),
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: participantNames
-                    .map((item) => Text(item, style: TextStyle(color: Colors.white, fontSize: fontSmall)))
-                    .toList()),
-          ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: getSecondHalfOfParticipants(),
+            ),
+          )),
         ]));
+  }
+
+  List<Widget> getParticipantNameList() {
+    return participantNames
+        .map((item) => Container(
+            child: Text(item,
+                overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white, fontSize: fontSmall))))
+        .toList();
+  }
+
+  List<Widget> getFirstHalfOfParticipants() {
+    var participants = getParticipantNameList();
+    return participants.sublist(0, (participants.length / 2).ceil());
+  }
+
+  List<Widget> getSecondHalfOfParticipants() {
+    var participants = getParticipantNameList();
+    return participants.sublist((participants.length / 2).ceil());
   }
 }
