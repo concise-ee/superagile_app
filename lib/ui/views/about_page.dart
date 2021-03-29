@@ -251,6 +251,8 @@ class AboutPage extends StatelessWidget {
             buildTutorialRow('4.', TUTORIAL_STEP_FOUR),
             buildTutorialRow('5.', TUTORIAL_STEP_FIVE),
             buildTutorialRow('6.', TUTORIAL_STEP_SIX),
+            buildTutorialRow('7.', TUTORIAL_STEP_SEVEN),
+            buildTutorialRow('8.', TUTORIAL_STEP_EIGHT),
           ],
         ));
   }
