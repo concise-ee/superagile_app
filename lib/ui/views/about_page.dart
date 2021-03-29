@@ -216,6 +216,24 @@ class AboutPage extends StatelessWidget {
                   )
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    fit: FlexFit.loose,
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Padding(
+                          padding: EdgeInsets.all(25),
+                          child: Text(HAVE_SUGGESTIONS_OR_QUESTIONS,
+                              style: TextStyle(color: black, fontSize: fontSmall, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center)),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ));

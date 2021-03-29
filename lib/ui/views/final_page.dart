@@ -94,55 +94,73 @@ class _FinalPage extends State<FinalPage> {
       return renderNoScores();
     }
     return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(children: [GamePin(gamePin: gamePin)]),
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SuperagileWheel(
-                    topics: questions.map((e) => e.topicNameShort).toList(),
-                    scores: agreedScores.values.toList(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                    child: Text(
-                      isMailSent ? EMAIL_SENT : INSERT_EMAIL_TO_GET_RESULTS,
-                      style: TextStyle(fontSize: fontSmall),
-                      textAlign: TextAlign.center,
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(children: [GamePin(gamePin: gamePin)]),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SuperagileWheel(
+                      topics: questions.map((e) => e.topicNameShort).toList(),
+                      scores: agreedScores.values.toList(),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                    child: RoundedTextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailController,
-                      hintText: EMAIL_FIELD_HINT_TEXT,
-                      validator: (value) {
-                        if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-                          setState(() {
-                            isMailSent = false;
-                          });
-                          return PLEASE_ENTER_VALID_EMAIL;
-                        }
-                        return null;
-                      },
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      child: Text(
+                        isMailSent ? EMAIL_SENT : INSERT_EMAIL_TO_GET_RESULTS,
+                        style: TextStyle(fontSize: fontSmall),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                    child: renderSendEmail(),
-                  ),
-                  Padding(padding: EdgeInsets.symmetric(vertical: 10), child: SocialMediaIcons()),
-                ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      child: RoundedTextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: _emailController,
+                        hintText: EMAIL_FIELD_HINT_TEXT,
+                        validator: (value) {
+                          if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value)) {
+                            setState(() {
+                              isMailSent = false;
+                            });
+                            return PLEASE_ENTER_VALID_EMAIL;
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      child: renderSendEmail(),
+                    ),
+                    Padding(padding: EdgeInsets.symmetric(vertical: 10), child: SocialMediaIcons()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Padding(
+                                padding: EdgeInsets.all(25),
+                                child: Text(HAVE_SUGGESTIONS_OR_QUESTIONS,
+                                    style: TextStyle(color: white, fontSize: fontSmall), textAlign: TextAlign.center)),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-    ));
+            ],
+          ),
+        ));
   }
 
   Widget renderSendEmail() {
