@@ -19,6 +19,7 @@ import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:superagile_app/utils/mixpanel_utils.dart';
 
 import 'final_page.dart';
 import 'game_question_page.dart';
@@ -226,6 +227,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
+              mixpanel.track('Question_results_page: Back to question: ' + this.questionNr.toString() + ' BUTTON');
               return GameQuestionPage(this.questionNr, this.participantRef, this.gameRef);
             }),
           );
