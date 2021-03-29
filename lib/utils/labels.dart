@@ -75,3 +75,5 @@ const TUTORIAL_STEP_FIVE =
 const TUTORIAL_STEP_SIX =
     'Once all team members have answered each question with the same score then you can see the completed wheel at the end';
 const HOW = 'How';
+
+const HAVE_SUGGESTIONS_OR_QUESTIONS = 'Have any questions or suggestions? Contact us at superagile@concise.ee';
