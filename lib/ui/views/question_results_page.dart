@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -20,7 +19,6 @@ import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
-
 import 'final_page.dart';
 import 'game_question_page.dart';
 
@@ -140,7 +138,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   Future<bool> _onBackPressed() {
     return showDialog(
       context: context,
-      builder: (context) => BackDialogAlert(),
+      builder: (context) => BackDialogAlert(participantRef, questionNr),
     );
   }
 

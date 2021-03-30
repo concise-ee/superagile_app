@@ -188,7 +188,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   Future<bool> _onBackPressed() {
     return showDialog(
       context: context,
-      builder: (context) => BackDialogAlert(),
+      builder: (context) => BackDialogAlert(participantRef, questionNr),
     );
   }
 

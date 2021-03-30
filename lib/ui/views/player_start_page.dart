@@ -89,6 +89,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
                                   .findActiveGameByRef(gameRef);
                               _log.info(
                                   '${playerRef} rejoins existing game:${gameRef.id} as Player');
+                              _participantService.setParticipantActive(playerRef);
                               return _gameStateRouter
                                   .joinCreatedGameAsExistingParticipant(
                                       game.gameState,
@@ -158,7 +159,7 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
     DocumentReference playerRef = await _participantService.addParticipant(
         gameRef,
         Participant(_nameController.text, loggedInUserUid,
-            DateTime.now().toString(), Role.PLAYER, true));
+            DateTime.now().toString(), Role.PLAYER, true, true));
     Game game = await _gameService.findActiveGameByRef(gameRef);
     return _gameStateRouter.joinCreatedGameAsExistingParticipant(
         game.gameState, playerRef, gameRef, context);

@@ -25,7 +25,7 @@ void main() {
     var pin = await gameService.generateAvailable4DigitPin();
     var gameRef = await gameService.addGame(Game(pin, loggedInUserUid, true, null));
     var hostRef = await participantService.addParticipant(
-        gameRef, Participant('hosting_participant', loggedInUserUid, DateTime.now().toString(), Role.HOST, false));
+        gameRef, Participant('hosting_participant', loggedInUserUid, DateTime.now().toString(), Role.HOST, false, true));
     await tester.pumpWidget(makeTestableWidget(WaitingRoomPage(gameRef, hostRef)));
 
     final nameFinder = find.text('hosting_participant');

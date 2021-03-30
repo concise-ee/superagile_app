@@ -42,12 +42,20 @@ class ParticipantService {
     return participantsSnap.docs.map((snap) => Participant.fromSnapshot(snap)).toList();
   }
 
+  void setParticipantInactive(DocumentReference participantRef) async {
+    participantRef.update({IS_ACTIVE: false});
+  }
+
+  void setParticipantActive(DocumentReference participantRef) async {
+    participantRef.update({IS_ACTIVE: true});
+  }
+
   Future<List<Participant>> findActiveGameParticipants(DocumentReference gameRef) async {
     List<Participant> participants = await findParticipants(gameRef);
-    participants.sort((a, b) => (a.name).compareTo(b.name));
+      participants.sort((a, b) => (a.name).compareTo(b.name));
     return participants
-        .where((participant) => DateTime.parse(participant.lastActive)
-            .isAfter(DateTime.now().subtract(Duration(seconds: ACTIVITY_INTERVAL))))
+        .where((participant) => participant.isActive && DateTime.parse(participant.lastActive)
+        .isAfter(DateTime.now().subtract(Duration(seconds: ACTIVITY_INTERVAL))))
         .toList();
   }
 

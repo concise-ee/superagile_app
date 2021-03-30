@@ -124,7 +124,7 @@ class _HostStartPageState extends State<HostStartPage> {
       var hostRef = await _participantService.addParticipant(
           gameRef,
           Participant(_nameController.text, loggedInUserUid,
-              DateTime.now().toString(), Role.HOST, isPlayingAlong));
+              DateTime.now().toString(), Role.HOST, isPlayingAlong, true));
       await _gameService.changeGameState(gameRef, GameState.WAITING_ROOM);
       _log.info(
           '${hostRef} HOST isPlayingAlong:${isPlayingAlong} and navigates to WaitingRoomPage');
