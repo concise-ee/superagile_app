@@ -14,7 +14,6 @@ import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
-import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/ui/components/social_media_icons.dart';
 import 'package:superagile_app/ui/components/superagile_wheel.dart';
@@ -98,7 +97,6 @@ class _FinalPage extends State<FinalPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Row(children: [GamePin(gamePin: gamePin)]),
               Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -107,6 +105,12 @@ class _FinalPage extends State<FinalPage> {
                       topics: questions.map((e) => e.topicNameShort).toList(),
                       scores: agreedScores.values.toList(),
                     ),
+                    Padding(
+                        padding: EdgeInsets.only(top: 12, bottom: 24),
+                        child: Text(
+                          CONGRATS + '!',
+                          style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+                        )),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       child: Text(
