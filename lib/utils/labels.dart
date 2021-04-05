@@ -22,7 +22,6 @@ const CONGRATS = 'CONGRATULATIONS';
 const GREAT_MINDS = 'Great minds think alike!';
 const GO_TO_NEXT_QUESTION = '* Click the play button to go to the next question.';
 const WAIT_FOR_NEXT_QUESTION = '* Wait for host to continue with next question.';
-const TEAM_VOTED = 'Your team has voted for answer ';
 const WAIT_FOR_TEAM = 'Wait until your team is here.';
 const BACK_TO_BEGINNING = 'Back to the beginning';
 const RECONNECT = 'Reconnect';

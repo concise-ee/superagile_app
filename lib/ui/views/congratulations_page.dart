@@ -132,7 +132,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
 
   Future<String> getAgreedScore() async {
     int agreedScore = await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
-    if (agreedScore == null) return '0';
+    if (agreedScore == null) return null;
     return agreedScore.toString();
   }
 
@@ -154,6 +154,43 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     );
   }
 
+  Widget buildCongratulations() {
+    return Container(
+      padding: EdgeInsets.all(12.0),
+      child: Column(
+        children: [
+          Padding(
+              padding: EdgeInsets.only(top: 12, bottom: 24),
+              child: Text(
+                CONGRATS,
+                style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+              )),
+          Padding(
+              padding: EdgeInsets.only(bottom: 24),
+              child: Text(
+                GREAT_MINDS,
+                style: TextStyle(fontSize: fontMedium),
+              )),
+          Container(
+              child: SizedBox(
+                  height:  MediaQuery.of(context).size.height * 0.3,
+                  child: BarChart.withSampleData(scoreMeanings, questionByNumber.topicName, int.parse(agreedScore)))),
+        ],
+      ),
+    );
+  }
+
+  Widget buildNoData() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 25.0),
+      child: Text(
+        NO_SCORES_TO_DISPLAY,
+        style: TextStyle(fontSize: fontMedium),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -166,49 +203,22 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Widget buildBody(BuildContext context) {
-    return Column(
+    return Scaffold(
+        body: SingleChildScrollView(
+          child:
+          Column(
       children: [
         LinearProgressIndicator(
           value: questionNr / NUMBER_OF_GAME_QUESTIONS,
         ),
         Row(children: [GamePin(gamePin: gamePin)]),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(top: 12, bottom: 24),
-                    child: Text(
-                      CONGRATS,
-                      style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(bottom: 24),
-                    child: Text(
-                      TEAM_VOTED + agreedScore,
-                      style: TextStyle(fontSize: fontMedium),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(bottom: 24),
-                    child: Text(
-                      GREAT_MINDS,
-                      style: TextStyle(fontSize: fontMedium),
-                    )),
-                Container(
-                    width: 400.0,
-                    height: 200.0,
-                    child: BarChart.withSampleData(scoreMeanings, questionByNumber.topicName, int.parse(agreedScore))),
-              ],
-            ),
-          ),
-        ),
+        if (agreedScore != null) buildCongratulations(),
+        if (agreedScore == null) buildNoData(),
         if (role == Role.HOST)
           Row(
             children: [
               Expanded(
                 child: Container(
-                  height: 200,
                   child: PlayButton(
                     onPressed: () async {
                       if (_firstPress) {
@@ -240,6 +250,6 @@ class _CongratulationsPage extends State<CongratulationsPage> {
             ],
           )
       ],
-    );
+    )));
   }
 }
