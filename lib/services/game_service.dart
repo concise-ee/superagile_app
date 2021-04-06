@@ -61,4 +61,13 @@ class GameService {
   Future<void> updateLastUpdate(DocumentReference gameRef, String dateTime) {
     return gameRef.update({LAST_UPDATE: dateTime});
   }
+
+  Future<void> changeGameKeepState(DocumentReference gameRef, bool keepState) async {
+    return gameRef.update({KEEP_ACTIVE: keepState});
+  }
+
+  Future<bool> getKeepState(DocumentReference gameRef) async {
+    Game game = await findActiveGameByRef(gameRef);
+    return game.keepActive;
+  }
 }

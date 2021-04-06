@@ -9,10 +9,12 @@ const CREATED_AT = 'createdAt';
 const GAME_STATE = 'gameState';
 const AGREED_SCORES = 'agreedScores';
 const LAST_UPDATE = 'lastUpdate';
+const KEEP_ACTIVE = 'keepActive';
 
 class Game {
   int pin;
   bool isActive;
+  bool keepActive;
   String hostUid;
   DateTime createdAt = DateTime.now();
   DateTime lastUpdate = DateTime.now();
@@ -34,6 +36,7 @@ class Game {
     game.lastUpdate = DateTime.parse(json[LAST_UPDATE]);
     game.agreedScores =
         SplayTreeMap<String, int>.from(json[AGREED_SCORES], (a, b) => int.parse(a).compareTo(int.parse(b)));
+    game.keepActive = json[KEEP_ACTIVE];
     return game;
   }
 
@@ -45,7 +48,8 @@ class Game {
       CREATED_AT: createdAt.toString(),
       LAST_UPDATE: lastUpdate.toString(),
       GAME_STATE: gameState,
-      AGREED_SCORES: agreedScores
+      AGREED_SCORES: agreedScores,
+      KEEP_ACTIVE: keepActive
     };
   }
 
