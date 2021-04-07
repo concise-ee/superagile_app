@@ -17,6 +17,7 @@ import 'package:superagile_app/services/timer_service.dart';
 import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
+import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/views/question_results_page.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
@@ -200,7 +201,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           appBar: AppBar(
               title: AgileWithBackIconButton(_onBackPressed),
               automaticallyImplyLeading: false,
-              actions: [buildParticipantsDialog()]),
+              actions: [buildParticipantsDialog(), QuestionMarkButton()]),
           body: isLoading
               ? Center(child: CircularProgressIndicator())
               : buildBody(context),

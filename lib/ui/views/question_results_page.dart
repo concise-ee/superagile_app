@@ -15,6 +15,7 @@ import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/question_answers_section.dart';
+import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/views/congratulations_page.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
@@ -31,11 +32,14 @@ class QuestionResultsPage extends StatefulWidget {
   final DocumentReference gameRef;
   final DocumentReference participantRef;
 
-  QuestionResultsPage({@required this.questionNr, @required this.participantRef, @required this.gameRef});
+  QuestionResultsPage(
+      {@required this.questionNr,
+      @required this.participantRef,
+      @required this.gameRef});
 
   @override
-  _QuestionResultsPageState createState() =>
-      _QuestionResultsPageState(this.questionNr, this.participantRef, this.gameRef);
+  _QuestionResultsPageState createState() => _QuestionResultsPageState(
+      this.questionNr, this.participantRef, this.gameRef);
 }
 
 class _QuestionResultsPageState extends State<QuestionResultsPage> {
@@ -90,7 +94,8 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
         if (newQuestionNr == questionNr) {
           await scoreService.deleteOldScore(participantRef, questionNr);
         }
-        _log.info('${participantRef} navigates to GameQuestionPage, newQuestionNr: ${newQuestionNr}');
+        _log.info(
+            '${participantRef} navigates to GameQuestionPage, newQuestionNr: ${newQuestionNr}');
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -98,7 +103,8 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
           }),
         );
       } else if (gameState.contains(GameState.CONGRATULATIONS)) {
-        _log.info('${participantRef} navigates to CongratulationsPage, newQuestionNr: ${newQuestionNr}');
+        _log.info(
+            '${participantRef} navigates to CongratulationsPage, newQuestionNr: ${newQuestionNr}');
         return Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -106,7 +112,8 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
           }),
         );
       } else if (gameState == GameState.FINAL) {
-        _log.info('${participantRef} navigates to FinalPage, gameState: ${gameState}');
+        _log.info(
+            '${participantRef} navigates to FinalPage, gameState: ${gameState}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -118,8 +125,10 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
   }
 
   Future<void> loadData() async {
-    Participant participant = await participantService.findGameParticipantByRef(participantRef);
-    var scores = await scoreService.findScoresForQuestion(this.gameRef, this.questionNr);
+    Participant participant =
+        await participantService.findGameParticipantByRef(participantRef);
+    var scores =
+        await scoreService.findScoresForQuestion(this.gameRef, this.questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       role = participant.role;
@@ -141,8 +150,13 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
     return WillPopScope(
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
-            appBar: AppBar(title: AgileWithBackIconButton(_onBackPressed), automaticallyImplyLeading: false),
-            body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context)));
+            appBar: AppBar(
+                title: AgileWithBackIconButton(_onBackPressed),
+                automaticallyImplyLeading: false,
+                actions: [QuestionMarkButton()]),
+            body: isLoading
+                ? Center(child: CircularProgressIndicator())
+                : buildBody(context)));
   }
 
   Widget buildBody(context) {
@@ -157,13 +171,20 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
                     child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            QuestionAnswersSection(answerNumber: 3, participantNames: questionScores.answered3),
-            QuestionAnswersSection(answerNumber: 2, participantNames: questionScores.answered2),
-            QuestionAnswersSection(answerNumber: 1, participantNames: questionScores.answered1),
-            QuestionAnswersSection(answerNumber: 0, participantNames: questionScores.answered0),
+            QuestionAnswersSection(
+                answerNumber: 3, participantNames: questionScores.answered3),
+            QuestionAnswersSection(
+                answerNumber: 2, participantNames: questionScores.answered2),
+            QuestionAnswersSection(
+                answerNumber: 1, participantNames: questionScores.answered1),
+            QuestionAnswersSection(
+                answerNumber: 0, participantNames: questionScores.answered0),
           ],
         )))),
-        if (role == Role.HOST) buildHostContainer() else buildParticipantContainer()
+        if (role == Role.HOST)
+          buildHostContainer()
+        else
+          buildParticipantContainer()
       ],
     );
   }
@@ -175,7 +196,9 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       child: Column(
         children: [
           if (!areVotedScoresSame()) ...[
-            Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall)),
+            Text(SAME_ANSWER,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: fontSmall)),
             Spacer(flex: 1),
           ],
           buildBackOrNextButton()
@@ -190,7 +213,9 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       height: !areVotedScoresSame() ? 80 : 0,
       child: Column(
         children: [
-          Text(SAME_ANSWER, textAlign: TextAlign.center, style: TextStyle(fontSize: fontSmall)),
+          Text(SAME_ANSWER,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: fontSmall)),
         ],
       ),
     );
@@ -203,13 +228,17 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
         onPressed: () async {
           if (_firstPress) {
             _firstPress = false;
-            await scoreService.updateAgreedScore(gameRef, getAgreedScore(), questionNr);
-            await gameService.changeGameState(gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
-            _log.info('${participantRef} HOST changed gameState to: ${GameState.CONGRATULATIONS}_$questionNr');
+            await scoreService.updateAgreedScore(
+                gameRef, getAgreedScore(), questionNr);
+            await gameService.changeGameState(
+                gameRef, '${GameState.CONGRATULATIONS}_$questionNr');
+            _log.info(
+                '${participantRef} HOST changed gameState to: ${GameState.CONGRATULATIONS}_$questionNr');
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) {
-                return CongratulationsPage(this.questionNr, this.participantRef, this.gameRef);
+                return CongratulationsPage(
+                    this.questionNr, this.participantRef, this.gameRef);
               }),
             );
           }
@@ -221,14 +250,19 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       onPressed: () async {
         if (_firstPress) {
           _firstPress = false;
-          await gameService.changeGameState(gameRef, '${GameState.QUESTION}_$questionNr');
+          await gameService.changeGameState(
+              gameRef, '${GameState.QUESTION}_$questionNr');
           await scoreService.deleteOldScore(participantRef, questionNr);
-          _log.info('${participantRef} HOST changed gameState to: ${GameState.QUESTION}_$questionNr');
+          _log.info(
+              '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_$questionNr');
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
-              mixpanel.track('Question_results_page: Back to question: ' + this.questionNr.toString() + ' BUTTON');
-              return GameQuestionPage(this.questionNr, this.participantRef, this.gameRef);
+              mixpanel.track('Question_results_page: Back to question: ' +
+                  this.questionNr.toString() +
+                  ' BUTTON');
+              return GameQuestionPage(
+                  this.questionNr, this.participantRef, this.gameRef);
             }),
           );
         }
