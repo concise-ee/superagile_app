@@ -12,6 +12,7 @@ import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
+import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
 import 'package:superagile_app/ui/components/barchart.dart';
@@ -97,6 +98,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
             int guestionNr = parseSequenceNumberFromGameState(gameState);
             mixpanel.track('Duration for question ' + (guestionNr - 1).toString());
             mixpanel.timeEvent('Duration for question ' + guestionNr.toString());
+            gameService.changeGameKeepState(gameRef, false);
             return GameQuestionPage(guestionNr, participantRef, gameRef);
           }),
         );
@@ -107,6 +109,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           context,
           MaterialPageRoute(builder: (context) {
             mixpanel.track('Duration for question 13');
+            gameService.changeGameKeepState(gameRef, false);
             return FinalPage(participantRef, gameRef);
           }),
         );
@@ -173,7 +176,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
               )),
           Container(
               child: SizedBox(
-                  height:  MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   child: BarChart.withSampleData(scoreMeanings, questionByNumber.topicName, int.parse(agreedScore)))),
         ],
       ),
@@ -205,8 +208,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget buildBody(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child:
-          Column(
+            child: Column(
       children: [
         LinearProgressIndicator(
           value: questionNr / NUMBER_OF_GAME_QUESTIONS,
@@ -229,6 +231,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                           return Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) {
+                              gameService.changeGameKeepState(gameRef, false);
                               return FinalPage(participantRef, gameRef);
                             }),
                           );
@@ -239,6 +242,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
+                            gameService.changeGameKeepState(gameRef, false);
                             return GameQuestionPage(questionNr + 1, participantRef, gameRef);
                           }),
                         );
@@ -248,7 +252,18 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 ),
               ),
             ],
-          )
+          ),
+        Row(
+          children: [
+            Expanded(
+                child: Container(
+                    child: AgileButton(
+                        onPressed: () async {
+                          gameService.changeGameKeepState(gameRef, true);
+                        },
+                        buttonTitle: GAME_PAUSE_BUTTON)))
+          ],
+        )
       ],
     )));
   }
