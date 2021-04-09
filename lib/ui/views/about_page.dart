@@ -22,7 +22,8 @@ class AboutPage extends StatelessWidget {
             children: [
               Container(
                   child: CustomPaint(
-                size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.1),
+                size: Size(MediaQuery.of(context).size.width,
+                    MediaQuery.of(context).size.height * 0.1),
                 painter: CurvePainter(),
               )),
               Row(
@@ -32,7 +33,10 @@ class AboutPage extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Text(
                       HOW,
-                      style: TextStyle(color: black, fontSize: fontLarge, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: black,
+                          fontSize: fontLarge,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -52,7 +56,10 @@ class AboutPage extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: Text(
                       WHY,
-                      style: TextStyle(color: black, fontSize: fontLarge, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: black,
+                          fontSize: fontLarge,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -73,7 +80,10 @@ class AboutPage extends StatelessWidget {
                       child: Padding(
                           padding: EdgeInsets.all(25),
                           child: Text(APPROACH,
-                              style: TextStyle(color: black, fontSize: fontSmall, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: fontSmall,
+                                  fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center)),
                     ),
                   ),
@@ -154,7 +164,10 @@ class AboutPage extends StatelessWidget {
                             right: 30,
                           ),
                           child: Text(HONEST,
-                              style: TextStyle(color: black, fontSize: fontSmall, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: fontSmall,
+                                  fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center)),
                     ),
                   ),
@@ -173,7 +186,8 @@ class AboutPage extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       child: Padding(
-                          padding: EdgeInsets.only(top: 50, bottom: 20, left: 20, right: 20),
+                          padding: EdgeInsets.only(
+                              top: 50, bottom: 20, left: 20, right: 20),
                           child: Text(
                             READ_MORE,
                             style: TextStyle(color: black, fontSize: fontSmall),
@@ -228,7 +242,10 @@ class AboutPage extends StatelessWidget {
                       child: Padding(
                           padding: EdgeInsets.all(25),
                           child: Text(HAVE_SUGGESTIONS_OR_QUESTIONS,
-                              style: TextStyle(color: black, fontSize: fontSmall, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  color: black,
+                                  fontSize: fontSmall,
+                                  fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center)),
                     ),
                   ),

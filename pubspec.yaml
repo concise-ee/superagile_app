@@ -38,6 +38,7 @@ dependencies:
   upgrader: ^2.8.2
   in_app_update: ^1.1.15
   mixpanel_flutter: ^1.0.1
+  wakelock: ^0.2.1+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

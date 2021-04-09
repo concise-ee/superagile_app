@@ -14,6 +14,7 @@ import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/mixpanel_utils.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'waiting_room_page.dart';
 
@@ -33,6 +34,9 @@ class _HostStartPageState extends State<HostStartPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      Wakelock.enable();
+    });
     return Form(
         key: _formKey,
         child: Scaffold(

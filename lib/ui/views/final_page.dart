@@ -20,6 +20,7 @@ import 'package:superagile_app/ui/components/superagile_wheel.dart';
 import 'package:superagile_app/ui/views/start_page.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:wakelock/wakelock.dart';
 
 class FinalPage extends StatefulWidget {
   final DocumentReference _participantRef;
@@ -61,7 +62,8 @@ class _FinalPage extends State<FinalPage> {
     var totalScore = await scoreService.getAgreedScores(gameRef);
     var pin = await gameService.getGamePinByRef(gameRef);
     var questionTemplates = await questionService.getAllQuestionTemplates();
-    questionTemplates.sort((a, b) => (int.parse(a.reference.id)).compareTo(int.parse(b.reference.id)));
+    questionTemplates.sort((a, b) =>
+        (int.parse(a.reference.id)).compareTo(int.parse(b.reference.id)));
     setState(() {
       agreedScores = totalScore;
       isLoading = false;
@@ -79,11 +81,18 @@ class _FinalPage extends State<FinalPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      Wakelock.enable();
+    });
     return WillPopScope(
       onWillPop: () => _onBackPressed(),
       child: Scaffold(
-        appBar: AppBar(title: AgileWithBackIconButton(_onBackPressed), automaticallyImplyLeading: false),
-        body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
+        appBar: AppBar(
+            title: AgileWithBackIconButton(_onBackPressed),
+            automaticallyImplyLeading: false),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : buildBody(context),
       ),
     );
   }
@@ -109,10 +118,13 @@ class _FinalPage extends State<FinalPage> {
                         padding: EdgeInsets.only(top: 12, bottom: 24),
                         child: Text(
                           CONGRATS + '!',
-                          style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: fontMedium,
+                              fontWeight: FontWeight.bold),
                         )),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       child: Text(
                         isMailSent ? EMAIL_SENT : INSERT_EMAIL_TO_GET_RESULTS,
                         style: TextStyle(fontSize: fontSmall),
@@ -120,13 +132,15 @@ class _FinalPage extends State<FinalPage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       child: RoundedTextFormField(
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         hintText: EMAIL_FIELD_HINT_TEXT,
                         validator: (value) {
-                          if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          if (!RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                               .hasMatch(value)) {
                             setState(() {
                               isMailSent = false;
@@ -138,10 +152,13 @@ class _FinalPage extends State<FinalPage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       child: renderSendEmail(),
                     ),
-                    Padding(padding: EdgeInsets.symmetric(vertical: 10), child: SocialMediaIcons()),
+                    Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: SocialMediaIcons()),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,7 +171,9 @@ class _FinalPage extends State<FinalPage> {
                             child: Padding(
                                 padding: EdgeInsets.all(25),
                                 child: Text(HAVE_SUGGESTIONS_OR_QUESTIONS,
-                                    style: TextStyle(color: white, fontSize: fontSmall), textAlign: TextAlign.center)),
+                                    style: TextStyle(
+                                        color: white, fontSize: fontSmall),
+                                    textAlign: TextAlign.center)),
                           ),
                         ),
                       ],
@@ -174,7 +193,8 @@ class _FinalPage extends State<FinalPage> {
             onPressed: () async {
               if (_formKey.currentState.validate()) {
                 setState(() => isMailSending = true);
-                await mailingService.sendResults(_emailController.text, agreedScores, calculateOverallScore());
+                await mailingService.sendResults(_emailController.text,
+                    agreedScores, calculateOverallScore());
                 setState(() {
                   isMailSending = false;
                   isMailSent = true;

@@ -23,6 +23,7 @@ import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/mixpanel_utils.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'final_page.dart';
 
@@ -36,7 +37,8 @@ class CongratulationsPage extends StatefulWidget {
   CongratulationsPage(this._questionNr, this._participantRef, this._gameRef);
 
   @override
-  _CongratulationsPage createState() => _CongratulationsPage(this._questionNr, this._participantRef, this._gameRef);
+  _CongratulationsPage createState() => _CongratulationsPage(
+      this._questionNr, this._participantRef, this._gameRef);
 }
 
 class _CongratulationsPage extends State<CongratulationsPage> {
@@ -96,15 +98,18 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           context,
           MaterialPageRoute(builder: (context) {
             int guestionNr = parseSequenceNumberFromGameState(gameState);
-            mixpanel.track('Duration for question ' + (guestionNr - 1).toString());
-            mixpanel.timeEvent('Duration for question ' + guestionNr.toString());
+            mixpanel
+                .track('Duration for question ' + (guestionNr - 1).toString());
+            mixpanel
+                .timeEvent('Duration for question ' + guestionNr.toString());
             gameService.changeGameKeepState(gameRef, false);
             return GameQuestionPage(guestionNr, participantRef, gameRef);
           }),
         );
       }
       if (gameState == GameState.FINAL) {
-        _log.info('${participantRef} navigates to FinalPage, gameState: ${gameState}');
+        _log.info(
+            '${participantRef} navigates to FinalPage, gameState: ${gameState}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -118,10 +123,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<void> loadData() async {
-    Participant participant = await participantService.findGameParticipantByRef(participantRef);
+    Participant participant =
+        await participantService.findGameParticipantByRef(participantRef);
     String agreedScore = await getAgreedScore();
     List<String> scoreMeanings = await getScoreMeanings();
-    QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
+    QuestionTemplate questionByNumber =
+        await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       this.role = participant.role;
@@ -134,13 +141,15 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<String> getAgreedScore() async {
-    int agreedScore = await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
+    int agreedScore =
+        await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
     if (agreedScore == null) return null;
     return agreedScore.toString();
   }
 
   Future<List<String>> getScoreMeanings() async {
-    QuestionTemplate questionTemplate = await questionService.findQuestionByNumber(questionNr);
+    QuestionTemplate questionTemplate =
+        await questionService.findQuestionByNumber(questionNr);
     return List.unmodifiable([
       '',
       '0. ' + questionTemplate.zeroMeaning,
@@ -166,7 +175,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
               padding: EdgeInsets.only(top: 12, bottom: 24),
               child: Text(
                 CONGRATS,
-                style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: fontMedium, fontWeight: FontWeight.bold),
               )),
           Padding(
               padding: EdgeInsets.only(bottom: 24),
@@ -177,7 +187,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           Container(
               child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.3,
-                  child: BarChart.withSampleData(scoreMeanings, questionByNumber.topicName, int.parse(agreedScore)))),
+                  child: BarChart.withSampleData(scoreMeanings,
+                      questionByNumber.topicName, int.parse(agreedScore)))),
         ],
       ),
     );
@@ -196,11 +207,18 @@ class _CongratulationsPage extends State<CongratulationsPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      Wakelock.enable();
+    });
     return WillPopScope(
       onWillPop: () => _onBackPressed(),
       child: Scaffold(
-        appBar: AppBar(title: AgileWithBackIconButton(_onBackPressed), automaticallyImplyLeading: false),
-        body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
+        appBar: AppBar(
+            title: AgileWithBackIconButton(_onBackPressed),
+            automaticallyImplyLeading: false),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : buildBody(context),
       ),
     );
   }
@@ -226,8 +244,10 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                       if (_firstPress) {
                         _firstPress = false;
                         if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
-                          await gameService.changeGameState(gameRef, GameState.FINAL);
-                          _log.info('${participantRef} HOST changed gameState to: ${GameState.FINAL}');
+                          await gameService.changeGameState(
+                              gameRef, GameState.FINAL);
+                          _log.info(
+                              '${participantRef} HOST changed gameState to: ${GameState.FINAL}');
                           return Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) {
@@ -236,14 +256,16 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                             }),
                           );
                         }
-                        await gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
+                        await gameService.changeGameState(
+                            gameRef, '${GameState.QUESTION}_${questionNr + 1}');
                         _log.info(
                             '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
                             gameService.changeGameKeepState(gameRef, false);
-                            return GameQuestionPage(questionNr + 1, participantRef, gameRef);
+                            return GameQuestionPage(
+                                questionNr + 1, participantRef, gameRef);
                           }),
                         );
                       }

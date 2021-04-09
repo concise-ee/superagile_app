@@ -14,6 +14,7 @@ import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/components/rounded_text_form_field.dart';
 import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/labels.dart';
+import 'package:wakelock/wakelock.dart';
 
 final _log = Logger((PlayerStartPage).toString());
 
@@ -35,6 +36,9 @@ class _PlayerStartPageState extends State<PlayerStartPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      Wakelock.enable();
+    });
     return Form(
         key: _formKey,
         child: Scaffold(

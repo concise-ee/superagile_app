@@ -21,6 +21,7 @@ import 'package:superagile_app/utils/game_state_router.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/mixpanel_utils.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'final_page.dart';
 import 'game_question_page.dart';
@@ -147,6 +148,9 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      Wakelock.enable();
+    });
     return WillPopScope(
         onWillPop: () => _onBackPressed(),
         child: Scaffold(
