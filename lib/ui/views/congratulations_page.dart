@@ -166,6 +166,20 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     );
   }
 
+  Widget displayCongrats() {
+    if (questionNr > 1) {
+      return Text(
+        YOUR_RESULT + agreedScore,
+        style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+      );
+    } else if (questionNr == 1) {
+      return Text(
+        CONGRATS,
+        style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+      );
+    }
+  }
+
   Widget buildCongratulations() {
     return Container(
       padding: EdgeInsets.all(12.0),
@@ -173,11 +187,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         children: [
           Padding(
               padding: EdgeInsets.only(top: 12, bottom: 24),
-              child: Text(
-                CONGRATS,
-                style: TextStyle(
-                    fontSize: fontMedium, fontWeight: FontWeight.bold),
-              )),
+              child: displayCongrats()),
           Padding(
               padding: EdgeInsets.only(bottom: 24),
               child: Text(

@@ -10,7 +10,6 @@ import 'package:superagile_app/ui/views/player_start_page.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/mixpanel_utils.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:wakelock/wakelock.dart';
 
 import 'host_start_page.dart';
 
@@ -37,9 +36,6 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      Wakelock.enable();
-    });
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(

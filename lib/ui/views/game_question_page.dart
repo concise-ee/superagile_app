@@ -32,7 +32,6 @@ class GameQuestionPage extends StatefulWidget {
   final int _questionNr;
   final DocumentReference _participantRef;
   final DocumentReference _gameRef;
-
   GameQuestionPage(this._questionNr, this._participantRef, this._gameRef);
 
   @override
@@ -352,11 +351,15 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       flex: 1,
                       child: Container(
                           alignment: Alignment.center,
-                          child: Text(
-                            questionTemplate.shortDesc,
-                            style: TextStyle(fontSize: fontSmall),
-                            textAlign: TextAlign.center,
-                          )),
+                        child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              questionTemplate.shortDesc,
+                              style: TextStyle(
+                                  fontSize: fontSmall,
+                                  letterSpacing: 2.5,
+                                  height: 1.5),
+                            )),),
                     ),
                     Flexible(
                       fit: FlexFit.loose,
@@ -367,7 +370,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                             padding: EdgeInsets.all(5),
                             child: Text(
                               questionTemplate.longDesc,
-                              style: TextStyle(fontSize: fontSmall),
+                              style: TextStyle(
+                                  fontSize: fontSmall,
+                                  letterSpacing: 2.5,
+                                  height: 1.5),
                             )),
                       ),
                     ),

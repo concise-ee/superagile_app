@@ -12,16 +12,20 @@ const TWO = '2';
 const THREE = '3';
 const VOTE_WITH_TEAM = 'VOTE WITH THE TEAM';
 const LEAD_THE_WORKSHOP = 'LEAD THE WORKSHOP';
-const HOST_OR_JOIN = 'Are you a member of the team and planning to play along? Or just a host?';
+const HOST_OR_JOIN =
+    'Are you a member of the team and planning to play along? Or just a host?';
 const DECISION_CANT_BE_CHANGED = "* The decision can't be changed.";
-const SAME_ANSWER = '* You are stuck on this question until your team agrees on the same number.';
+const SAME_ANSWER =
+    '* You are stuck on this question until your team agrees on the same number.';
 const CHANGE_ANSWER = 'CHANGE ANSWER';
 const BEGIN_GAME = 'Begin the game';
 const CODE_SHARE_CALL = '*Share this code with your team.';
 const CONGRATS = 'CONGRATULATIONS';
 const GREAT_MINDS = 'Great minds think alike!';
-const GO_TO_NEXT_QUESTION = '* Click the play button to go to the next question.';
-const WAIT_FOR_NEXT_QUESTION = '* Wait for host to continue with next question.';
+const GO_TO_NEXT_QUESTION =
+    '* Click the play button to go to the next question.';
+const WAIT_FOR_NEXT_QUESTION =
+    '* Wait for host to continue with next question.';
 const WAIT_FOR_TEAM = 'Wait until your team is here.';
 const BACK_TO_BEGINNING = 'Back to the beginning';
 const RECONNECT = 'Reconnect';
@@ -36,7 +40,8 @@ const ANSWERED = 'Answered:';
 const WARNING_NAME_EMPTY = 'Please enter your name';
 const PLEASE_ENTER_VALID_PIN = 'Please enter a valid pin';
 const PLEASE_ENTER_VALID_EMAIL = 'Please enter a valid e-mail';
-const PLAYER_IS_ALREADY_IN_GAME = 'A player with that name is already in the game';
+const PLAYER_IS_ALREADY_IN_GAME =
+    'A player with that name is already in the game';
 const CLOSE = 'Close';
 const EMAIL_ACTION_BUTTON = 'SEND RESULTS';
 const EMAIL_FIELD_HINT_TEXT = 'E-MAIL';
@@ -54,8 +59,9 @@ const NOT_A_PROCESS =
 const IN_THE_END =
     'In the end, it helps to save time and money. It makes innovation cheaper by paying attention to the right thing at the right time.';
 const BLOG = 'BLOG';
-const EBOOK = 'EBOOK';
-const HONEST = 'It is an honest and open approach to successful digital product building.';
+const EBOOK = 'E-BOOK';
+const HONEST =
+    'It is an honest and open approach to successful digital product building.';
 const READ_MORE = 'Read more:';
 const FOLLOW_US = 'Follow us on social media';
 const UPDATE_APP = 'UPDATE APP';
@@ -70,7 +76,7 @@ const TUTORIAL_STEP_THREE =
 const TUTORIAL_STEP_FOUR =
     'Read the question and without discussing the topic, choose a score (0, 1, 2 or 3) that best answers the question in your opinion. ';
 const TUTORIAL_STEP_FIVE =
-    "After everyone has answered, then it is time to discuss the results and, if the scores are different, start a new voting round. (note: it is only possible to progress to the next question if everyone's scores are the same.)";
+    "After everyone has answered, then it is time to discuss the results and, if the scores are different, start a new voting round for the same question. Only the host can start the process of voting again by clicking 'change answer'. (note: it is only possible to progress to the next question if everyone's scores are the same.)";
 const TUTORIAL_STEP_SIX =
     'During each question, it is possible to see who has already voted by tapping on the circular progress bar in the upper right corner.';
 const TUTORIAL_STEP_SEVEN =
@@ -79,5 +85,7 @@ const TUTORIAL_STEP_EIGHT =
     'As a host, we also recommend you to skim through our #superagile e-book (found below) to get a better understanding of the questions.';
 const HOW = 'How';
 
-const HAVE_SUGGESTIONS_OR_QUESTIONS = 'Have any questions or suggestions? Contact us at superagile@concise.ee';
+const HAVE_SUGGESTIONS_OR_QUESTIONS =
+    'Have any questions or suggestions? Contact us at superagile@concise.ee';
 const GAME_PAUSE_BUTTON = 'pause workshop';
+const YOUR_RESULT = 'Your result: ';
