@@ -168,15 +168,25 @@ class _CongratulationsPage extends State<CongratulationsPage> {
 
   Widget displayCongrats() {
     if (questionNr > 1) {
-      return Text(
-        YOUR_RESULT + agreedScore,
-        style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
-      );
-    } else if (questionNr == 1) {
-      return Text(
-        CONGRATS,
-        style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
-      );
+      return Column(children: [
+        Text(
+          YOUR_RESULT + agreedScore,
+          style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+        ),
+      ]);
+    } else {
+      return Column(children: [
+        Text(
+          CONGRATS,
+          style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
+        ),
+        Padding(
+            padding: EdgeInsets.only(bottom: 24),
+            child: Text(
+              GREAT_MINDS,
+              style: TextStyle(fontSize: fontMedium),
+            )),
+      ]);
     }
   }
 
@@ -188,12 +198,6 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           Padding(
               padding: EdgeInsets.only(top: 12, bottom: 24),
               child: displayCongrats()),
-          Padding(
-              padding: EdgeInsets.only(bottom: 24),
-              child: Text(
-                GREAT_MINDS,
-                style: TextStyle(fontSize: fontMedium),
-              )),
           Container(
               child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.3,

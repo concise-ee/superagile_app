@@ -17,7 +17,8 @@ class SuperagileWheel extends StatefulWidget {
   SuperagileWheel({
     @required this.topics,
     @required this.scores,
-    this.featuresTextStyle = const TextStyle(color: accentColor, fontSize: fontExtraExtraSmall),
+    this.featuresTextStyle =
+        const TextStyle(color: accentColor, fontSize: fontExtraExtraSmall),
     this.outlineColor = accentColor,
     this.axisColor = secondaryColor,
   });
@@ -26,7 +27,8 @@ class SuperagileWheel extends StatefulWidget {
   _SuperagileWheelState createState() => _SuperagileWheelState();
 }
 
-class _SuperagileWheelState extends State<SuperagileWheel> with SingleTickerProviderStateMixin {
+class _SuperagileWheelState extends State<SuperagileWheel>
+    with SingleTickerProviderStateMixin {
   double fraction = 0;
   Animation<double> animation;
   AnimationController animationController;
@@ -34,7 +36,8 @@ class _SuperagileWheelState extends State<SuperagileWheel> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: Duration(milliseconds: 1000), vsync: this);
+    animationController = AnimationController(
+        duration: Duration(milliseconds: 1000), vsync: this);
 
     animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       curve: Curves.fastOutSlowIn,
@@ -54,7 +57,12 @@ class _SuperagileWheelState extends State<SuperagileWheel> with SingleTickerProv
     return CustomPaint(
       size: Size(370, 370),
       painter: _SuperagileWheelPainter(
-          widget.topics, widget.scores, widget.featuresTextStyle, widget.outlineColor, widget.axisColor, fraction),
+          widget.topics,
+          widget.scores,
+          widget.featuresTextStyle,
+          widget.outlineColor,
+          widget.axisColor,
+          fraction),
     );
   }
 
@@ -98,11 +106,13 @@ class _SuperagileWheelPainter extends CustomPainter {
       var xAngle = cos(angle * index - pi / 2);
       var yAngle = sin(angle * index - pi / 2);
 
-      var featureOffset = Offset(centerOffset.dx + radius * xAngle, centerOffset.dy + radius * yAngle);
+      var featureOffset = Offset(
+          centerOffset.dx + radius * xAngle, centerOffset.dy + radius * yAngle);
 
       drawAxisLine(canvas, centerOffset, featureOffset);
 
-      drawFeatureLabel(canvas, centerOffset, angle, index, feature, featureLabelRadius);
+      drawFeatureLabel(
+          canvas, centerOffset, angle, index, feature, featureLabelRadius);
     });
 
     drawGraphOutline(canvas, centerOffset, scale, angle);
@@ -139,8 +149,8 @@ class _SuperagileWheelPainter extends CustomPainter {
     canvas.drawLine(startingOffset, endingOffset, axisPaint);
   }
 
-  void drawFeatureLabel(
-      Canvas canvas, Offset centerOffset, double angle, int index, String feature, double featureLabelRadius) {
+  void drawFeatureLabel(Canvas canvas, Offset centerOffset, double angle,
+      int index, String feature, double featureLabelRadius) {
     canvas.save();
     double startingAngle = angle * index - angle / 2 * (feature.length / 18);
     canvas.translate(centerOffset.dx, centerOffset.dy - featureLabelRadius);
@@ -154,12 +164,14 @@ class _SuperagileWheelPainter extends CustomPainter {
 
     double nextStartingAngle = startingAngle;
     for (int i = 0; i < feature.length; i++) {
-      nextStartingAngle = drawLetter(canvas, feature[i], nextStartingAngle, featureLabelRadius);
+      nextStartingAngle =
+          drawLetter(canvas, feature[i], nextStartingAngle, featureLabelRadius);
     }
     canvas.restore();
   }
 
-  double drawLetter(Canvas canvas, String letter, double prevAngle, double radius) {
+  double drawLetter(
+      Canvas canvas, String letter, double prevAngle, double radius) {
     TextPainter textPainter = new TextPainter(textDirection: TextDirection.ltr);
     textPainter.text = TextSpan(text: letter, style: featuresTextStyle);
     textPainter.layout(
@@ -179,7 +191,8 @@ class _SuperagileWheelPainter extends CustomPainter {
     return alpha;
   }
 
-  void drawGraphOutline(Canvas canvas, Offset centerOffset, double scale, double angle) {
+  void drawGraphOutline(
+      Canvas canvas, Offset centerOffset, double scale, double angle) {
     var graphOutlinePaint = Paint()
       ..color = accentColor
       ..style = PaintingStyle.stroke
@@ -198,13 +211,15 @@ class _SuperagileWheelPainter extends CustomPainter {
       var yAngle = sin(angle * index - pi / 2);
       var scaledPoint = scale * point * fraction;
 
-      path.lineTo(centerOffset.dx + scaledPoint * xAngle, centerOffset.dy + scaledPoint * yAngle);
+      path.lineTo(centerOffset.dx + scaledPoint * xAngle,
+          centerOffset.dy + scaledPoint * yAngle);
     });
     path.close();
     canvas.drawPath(path, graphOutlinePaint);
   }
 
-  void drawScoreLabels(Canvas canvas, Offset centerOffset, double angle, double scale) {
+  void drawScoreLabels(
+      Canvas canvas, Offset centerOffset, double angle, double scale) {
     data.asMap().forEach((index, point) {
       var xAngle = cos(angle * index - pi / 2);
       var yAngle = sin(angle * index - pi / 2);
@@ -212,7 +227,8 @@ class _SuperagileWheelPainter extends CustomPainter {
 
       var path = Path();
       path.addOval(Rect.fromCircle(
-        center: Offset(centerOffset.dx + scaledPoint * xAngle, centerOffset.dy + scaledPoint * yAngle),
+        center: Offset(centerOffset.dx + scaledPoint * xAngle,
+            centerOffset.dy + scaledPoint * yAngle),
         radius: 7,
       ));
 
@@ -229,10 +245,14 @@ class _SuperagileWheelPainter extends CustomPainter {
       canvas.drawPath(path, scoreLabelPaint);
       canvas.drawPath(path, scoreLabelOutlinePaint);
 
-      TextPainter textPainter = new TextPainter(textDirection: TextDirection.ltr);
+      TextPainter textPainter =
+          new TextPainter(textDirection: TextDirection.ltr);
       textPainter.text = TextSpan(
           text: point.toString(),
-          style: TextStyle(color: primaryColor, fontSize: fontExtraExtraSmall, fontWeight: FontWeight.bold));
+          style: TextStyle(
+              color: primaryColor,
+              fontSize: fontExtraExtraSmall,
+              fontWeight: FontWeight.bold));
       textPainter.layout(
         minWidth: 0,
         maxWidth: double.maxFinite,
@@ -271,11 +291,13 @@ class _SuperagileWheelPainter extends CustomPainter {
       minWidth: 0,
       maxWidth: double.maxFinite,
     );
-    var zeroOffset = Offset(centerOffset.dx - textPainter.width / 2, centerOffset.dy - textPainter.height / 2);
+    var zeroOffset = Offset(centerOffset.dx - textPainter.width / 2,
+        centerOffset.dy - textPainter.height / 2);
     textPainter.paint(canvas, zeroOffset);
   }
 
-  double calculateRotationAngle(double prevAngle, double alpha) => (alpha + prevAngle) / 2;
+  double calculateRotationAngle(double prevAngle, double alpha) =>
+      (alpha + prevAngle) / 2;
 
   @override
   bool shouldRepaint(_SuperagileWheelPainter oldDelegate) {
