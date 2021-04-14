@@ -27,6 +27,7 @@ dependencies:
   cloud_firestore: ^0.14.1+3
   firebase_auth: ^0.18.1+2
   charts_flutter: ^0.10.0
+  esys_flutter_share: ^1.0.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3

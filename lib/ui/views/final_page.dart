@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:superagile_app/entities/question_template.dart';
 import 'package:superagile_app/services/game_service.dart';
 import 'package:superagile_app/services/mailing_service.dart';
@@ -49,6 +54,7 @@ class _FinalPage extends State<FinalPage> {
   int gamePin;
   List<QuestionTemplate> questions;
   final _formKey = GlobalKey<FormState>();
+  GlobalKey _wheelKey = GlobalKey();
 
   _FinalPage(this.participantRef, this.gameRef);
 
@@ -70,6 +76,17 @@ class _FinalPage extends State<FinalPage> {
       gamePin = pin;
       questions = questionTemplates;
     });
+  }
+
+  void convertWidgetToImage() async {
+    RenderRepaintBoundary renderRepaintBoundary =
+        _wheelKey.currentContext.findRenderObject();
+    ui.Image boxImage = await renderRepaintBoundary.toImage(pixelRatio: 1);
+    ByteData byteData =
+        await boxImage.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List uInt8List = byteData.buffer.asUint8List();
+
+    await Share.file('image', 'superagile_wheel.png', uInt8List, 'image/png');
   }
 
   Future<bool> _onBackPressed() {
@@ -110,10 +127,13 @@ class _FinalPage extends State<FinalPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SuperagileWheel(
-                      topics: questions.map((e) => e.topicNameShort).toList(),
-                      scores: agreedScores.values.toList(),
-                    ),
+                    RepaintBoundary(
+                        key: _wheelKey,
+                        child: SuperagileWheel(
+                          topics:
+                              questions.map((e) => e.topicNameShort).toList(),
+                          scores: agreedScores.values.toList(),
+                        )),
                     Padding(
                         padding: EdgeInsets.only(top: 12, bottom: 24),
                         child: Text(
@@ -177,7 +197,12 @@ class _FinalPage extends State<FinalPage> {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    MaterialButton(
+                        child: Text('Share'),
+                        onPressed: () {
+                          convertWidgetToImage();
+                        })
                   ],
                 ),
               ),
