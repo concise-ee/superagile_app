@@ -84,7 +84,7 @@ const TUTORIAL_STEP_SEVEN =
 const TUTORIAL_STEP_EIGHT =
     'As a host, we also recommend you to skim through our #superagile e-book (found below) to get a better understanding of the questions.';
 const HOW = 'How';
-
+const SHARE_SCORE = 'SHARE YOUR SCORE';
 const HAVE_SUGGESTIONS_OR_QUESTIONS =
     'Have any questions or suggestions? Contact us at superagile@concise.ee';
 const GAME_PAUSE_BUTTON = 'pause workshop';

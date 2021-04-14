@@ -176,6 +176,15 @@ class _FinalPage extends State<FinalPage> {
                           EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                       child: renderSendEmail(),
                     ),
+                    SizedBox(height: 30),
+                    Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                        child: AgileButton(
+                            buttonTitle: SHARE_SCORE,
+                            onPressed: () {
+                              convertWidgetToImage();
+                            })),
                     Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: SocialMediaIcons()),
@@ -198,11 +207,6 @@ class _FinalPage extends State<FinalPage> {
                         ),
                       ],
                     ),
-                    MaterialButton(
-                        child: Text('Share'),
-                        onPressed: () {
-                          convertWidgetToImage();
-                        })
                   ],
                 ),
               ),
