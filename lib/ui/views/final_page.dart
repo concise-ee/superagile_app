@@ -82,11 +82,13 @@ class _FinalPage extends State<FinalPage> {
     RenderRepaintBoundary renderRepaintBoundary =
         _wheelKey.currentContext.findRenderObject();
     ui.Image boxImage = await renderRepaintBoundary.toImage(pixelRatio: 1);
+
     ByteData byteData =
         await boxImage.toByteData(format: ui.ImageByteFormat.png);
+
     Uint8List uInt8List = byteData.buffer.asUint8List();
 
-    await Share.file('image', 'superagile_wheel.png', uInt8List, 'image/png');
+    await Share.file('image', 'superagile_wheel.jpg', uInt8List, 'image/jpg');
   }
 
   Future<bool> _onBackPressed() {
@@ -129,11 +131,14 @@ class _FinalPage extends State<FinalPage> {
                   children: <Widget>[
                     RepaintBoundary(
                         key: _wheelKey,
-                        child: SuperagileWheel(
-                          topics:
-                              questions.map((e) => e.topicNameShort).toList(),
-                          scores: agreedScores.values.toList(),
-                        )),
+                        child: Container(
+                            color: primaryColor,
+                            child: SuperagileWheel(
+                              topics: questions
+                                  .map((e) => e.topicNameShort)
+                                  .toList(),
+                              scores: agreedScores.values.toList(),
+                            ))),
                     Padding(
                         padding: EdgeInsets.only(top: 12, bottom: 24),
                         child: Text(
