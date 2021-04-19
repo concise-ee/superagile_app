@@ -42,7 +42,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+    <key>NSPhotoLibraryAddUsageDescription</key> <string>Allow the user to save sample pics to their images.</string>	<false/>
     <key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>
