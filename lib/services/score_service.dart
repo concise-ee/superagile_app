@@ -59,6 +59,14 @@ class ScoreService {
     if (score.docs.isNotEmpty) return score.docs.single.reference.delete();
   }
 
+  Future<void> deleteOldScores(DocumentReference gameRef, int questionNr) async {
+    QuerySnapshot participantsSnap = await _participantsService.getParticipants(gameRef);
+    await Future.forEach(participantsSnap.docs, (participantSnap) async {
+      var participant = Participant.fromSnapshot(participantSnap);
+      deleteOldScore(participant.reference, questionNr);
+    });
+  }
+
   Future<void> updateAgreedScore(DocumentReference gameRef, int agreedScore, int questionNr) async {
     DocumentSnapshot gameSnap = await gameRef.get();
     Game game = Game.fromSnapshot(gameSnap);

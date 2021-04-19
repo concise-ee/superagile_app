@@ -92,9 +92,6 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
       String gameState = await gameService.getGameState(gameRef);
       int newQuestionNr = parseSequenceNumberFromGameState(gameState);
       if (gameState.contains(GameState.QUESTION)) {
-        if (newQuestionNr == questionNr) {
-          await scoreService.deleteOldScore(participantRef, questionNr);
-        }
         _log.info(
             '${participantRef} navigates to GameQuestionPage, newQuestionNr: ${newQuestionNr}');
         return Navigator.pushReplacement(
@@ -256,7 +253,7 @@ class _QuestionResultsPageState extends State<QuestionResultsPage> {
           _firstPress = false;
           await gameService.changeGameState(
               gameRef, '${GameState.QUESTION}_$questionNr');
-          await scoreService.deleteOldScore(participantRef, questionNr);
+          await scoreService.deleteOldScores(gameRef, questionNr);
           _log.info(
               '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_$questionNr');
           Navigator.pushReplacement(

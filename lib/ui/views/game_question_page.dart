@@ -79,6 +79,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   @override
   void dispose() {
     gameStream?.cancel();
+    timer.cancel();
     super.dispose();
   }
 
