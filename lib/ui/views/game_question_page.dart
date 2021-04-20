@@ -56,6 +56,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   bool isPlayingAlong;
   bool isLoading = true;
   int gamePin;
+  Timer timer;
   List<String> answeredParticipantNames = [];
   List<Participant> activeParticipants = [];
   final ValueNotifier<double> percentage = ValueNotifier<double>(0.0);
@@ -74,6 +75,7 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     super.initState();
     timerService.startActivityTimer(participantRef);
     loadDataAndSetupListeners();
+    timer = new Timer.periodic(new Duration(seconds:10), (Timer t) => gameService.updateLastUpdate(gameRef, DateTime.now().toString()));
   }
 
   @override
