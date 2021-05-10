@@ -17,8 +17,11 @@ class UpdateAvailable extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 50, horizontal: 25),
         child: Column(children: [
           Center(
-            child: Text('Update is available: ${updateInfo.availableVersionCode}. Please update app to continue.',
-                style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.w700), textAlign: TextAlign.center),
+            child: Text(
+                'Update is available: ${updateInfo.availableVersionCode}. Please update app to continue.',
+                style: TextStyle(
+                    fontSize: fontMedium, fontWeight: FontWeight.w700),
+                textAlign: TextAlign.center),
           ),
           Spacer(flex: 1),
           AgileButton(

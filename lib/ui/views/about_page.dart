@@ -5,6 +5,8 @@ import 'package:superagile_app/ui/components/curve_painter.dart';
 import 'package:superagile_app/utils/global_theme.dart';
 import 'package:superagile_app/utils/labels.dart';
 import 'package:superagile_app/utils/url_utils.dart';
+import 'package:superagile_app/utils/mixpanel_utils.dart';
+
 
 class AboutPage extends StatelessWidget {
   static const urlEbook = 'https://concise.ee/superagile';
@@ -209,6 +211,7 @@ class AboutPage extends StatelessWidget {
                         child: AgileButton(
                             onPressed: () {
                               launchURL(urlBlog);
+                              mixpanel.track('about_page: BLOG');
                             },
                             buttonTitle: BLOG),
                       ),
@@ -223,6 +226,7 @@ class AboutPage extends StatelessWidget {
                         child: AgileButton(
                             onPressed: () {
                               launchURL(urlEbook);
+                              mixpanel.track('about_page: EBOOK');
                             },
                             buttonTitle: EBOOK),
                       ),

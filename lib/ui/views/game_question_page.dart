@@ -60,6 +60,8 @@ class _GameQuestionPage extends State<GameQuestionPage> {
   List<String> answeredParticipantNames = [];
   List<Participant> activeParticipants = [];
   final ValueNotifier<double> percentage = ValueNotifier<double>(0.0);
+  String title =
+      """How well does your team function as a  <span style='color:lightseagreen;'>“full stack team”?""";
 
   _GameQuestionPage(this.questionNr, this.participantRef, this.gameRef);
 
@@ -75,7 +77,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     super.initState();
     timerService.startActivityTimer(participantRef);
     loadDataAndSetupListeners();
-    timer = new Timer.periodic(new Duration(seconds:10), (Timer t) => gameService.updateLastUpdate(gameRef, DateTime.now().toString()));
+    timer = new Timer.periodic(
+        new Duration(seconds: 10),
+        (Timer t) =>
+            gameService.updateLastUpdate(gameRef, DateTime.now().toString()));
   }
 
   @override
@@ -340,13 +345,12 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                                   )),
                             )),
                         Expanded(
-                          flex: 8,
-                          child: Container(
-                              child: Text(
-                            questionTemplate.question,
-                            style: TextStyle(fontSize: fontMedium),
-                          )),
-                        ),
+                            flex: 8,
+                            child: Container(
+                                child: Text(
+                              questionTemplate.question,
+                              style: TextStyle(fontSize: fontMedium),
+                            ))),
                       ],
                     ),
                     Flexible(
