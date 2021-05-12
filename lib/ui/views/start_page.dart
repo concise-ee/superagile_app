@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/question_mark%20_button.dart';
 import 'package:superagile_app/ui/components/update_available.dart';
@@ -12,6 +13,31 @@ import 'package:superagile_app/utils/mixpanel_utils.dart';
 import 'package:upgrader/upgrader.dart';
 
 import 'host_start_page.dart';
+
+class BeforeMain extends StatefulWidget {
+  @override
+  _BeforeMainState createState() => _BeforeMainState();
+}
+
+class _BeforeMainState extends State<BeforeMain> {
+
+  @override
+  Widget build(BuildContext context) {
+    return buildSplashScreen(context);
+  }
+
+  Widget buildSplashScreen(BuildContext context) {
+    return SplashScreen(
+      seconds: 6,
+      navigateAfterSeconds: StartPage(),
+      image: new Image.asset('lib/assets/superagile_app_logo.png'),
+      backgroundColor: Colors.yellowAccent,
+      styleTextUnderTheLoader: new TextStyle(),
+      photoSize: 100.0,
+      loaderColor: Colors.black,
+    );
+  }
+}
 
 class StartPage extends StatefulWidget {
   @override
@@ -36,6 +62,10 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
+    return popScope(context);
+  }
+
+  Widget popScope(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(

@@ -29,6 +29,6 @@ void main() async {
 class SuperagileApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: SUPERAGILE, home: StartPage(), theme: setTheme());
+    return MaterialApp(title: SUPERAGILE, home: BeforeMain(), theme: setTheme());
   }
 }
