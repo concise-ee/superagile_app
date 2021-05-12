@@ -30,10 +30,10 @@ class _BeforeMainState extends State<BeforeMain> {
     return SplashScreen(
       seconds: 6,
       navigateAfterSeconds: StartPage(),
-      image: new Image.asset('lib/assets/superagile_app_logo.png'),
+      image: new Image.asset('lib/assets/transparent_app_logo.png'),
       backgroundColor: Colors.yellowAccent,
       styleTextUnderTheLoader: new TextStyle(),
-      photoSize: 100.0,
+      photoSize: 200.0,
       loaderColor: Colors.black,
     );
   }
