@@ -45,5 +45,19 @@
 	<false/>
     <key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>fb520665182281846</string>
+      </array>
+      </dict>
+    </array>
+    <key>FacebookAppID</key>
+    <string>520665182281846</string>
+    <key>FacebookDisplayName</key>
+    <string>Superagile</string>
+
 </dict>
 </plist>
