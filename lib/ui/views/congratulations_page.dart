@@ -271,7 +271,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
               ),
             ],
           ),
-        Row(
+        if (role == Role.HOST)
+          Row(
           children: [
             Expanded(
                 child: Container(

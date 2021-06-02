@@ -80,7 +80,7 @@ const TUTORIAL_STEP_EIGHT =
 const HOW = 'How';
 const SHARE_SCORE = 'SHARE YOUR SCORE';
 const HAVE_SUGGESTIONS_OR_QUESTIONS = 'Have any questions or suggestions? Contact us at superagile@concise.ee';
-const GAME_PAUSE_BUTTON = 'pause workshop';
+const GAME_PAUSE_BUTTON = 'PAUSE WORKSHOP';
 const YOUR_RESULT = 'Your result: ';
 const PAUSE_TEXT =
     'The workshop has been successfully paused and it is safe to leave. To continue the workshop, just close this popup message and press play.';
