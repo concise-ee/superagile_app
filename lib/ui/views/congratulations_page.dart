@@ -37,7 +37,8 @@ class CongratulationsPage extends StatefulWidget {
   CongratulationsPage(this._questionNr, this._participantRef, this._gameRef);
 
   @override
-  _CongratulationsPage createState() => _CongratulationsPage(this._questionNr, this._participantRef, this._gameRef);
+  _CongratulationsPage createState() => _CongratulationsPage(
+      this._questionNr, this._participantRef, this._gameRef);
 }
 
 class _CongratulationsPage extends State<CongratulationsPage> {
@@ -97,15 +98,18 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           context,
           MaterialPageRoute(builder: (context) {
             int guestionNr = parseSequenceNumberFromGameState(gameState);
-            mixpanel.track('Duration for question ' + (guestionNr - 1).toString());
-            mixpanel.timeEvent('Duration for question ' + guestionNr.toString());
+            mixpanel
+                .track('Duration for question ' + (guestionNr - 1).toString());
+            mixpanel
+                .timeEvent('Duration for question ' + guestionNr.toString());
             gameService.changeGameKeepState(gameRef, false);
             return GameQuestionPage(guestionNr, participantRef, gameRef);
           }),
         );
       }
       if (gameState == GameState.FINAL) {
-        _log.info('${participantRef} navigates to FinalPage, gameState: ${gameState}');
+        _log.info(
+            '${participantRef} navigates to FinalPage, gameState: ${gameState}');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) {
@@ -119,10 +123,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<void> loadData() async {
-    Participant participant = await participantService.findGameParticipantByRef(participantRef);
+    Participant participant =
+        await participantService.findGameParticipantByRef(participantRef);
     String agreedScore = await getAgreedScore();
     List<String> scoreMeanings = await getScoreMeanings();
-    QuestionTemplate questionByNumber = await questionService.findQuestionByNumber(questionNr);
+    QuestionTemplate questionByNumber =
+        await questionService.findQuestionByNumber(questionNr);
     var pin = await gameService.getGamePinByRef(gameRef);
     setState(() {
       this.role = participant.role;
@@ -135,13 +141,15 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Future<String> getAgreedScore() async {
-    int agreedScore = await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
+    int agreedScore =
+        await scoreService.getAgreedScoreForQuestion(gameRef, questionNr);
     if (agreedScore == null) return null;
     return agreedScore.toString();
   }
 
   Future<List<String>> getScoreMeanings() async {
-    QuestionTemplate questionTemplate = await questionService.findQuestionByNumber(questionNr);
+    QuestionTemplate questionTemplate =
+        await questionService.findQuestionByNumber(questionNr);
     return List.unmodifiable([
       '',
       '0. ' + questionTemplate.zeroMeaning,
@@ -187,11 +195,14 @@ class _CongratulationsPage extends State<CongratulationsPage> {
       padding: EdgeInsets.all(12.0),
       child: Column(
         children: [
-          Padding(padding: EdgeInsets.only(top: 12, bottom: 24), child: displayCongrats()),
+          Padding(
+              padding: EdgeInsets.only(top: 12, bottom: 24),
+              child: displayCongrats()),
           Container(
               child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.3,
-                  child: BarChart.withSampleData(scoreMeanings, questionByNumber.topicName, int.parse(agreedScore)))),
+                  child: BarChart.withSampleData(scoreMeanings,
+                      questionByNumber.topicName, int.parse(agreedScore)))),
         ],
       ),
     );
@@ -216,8 +227,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     return WillPopScope(
       onWillPop: () => _onBackPressed(),
       child: Scaffold(
-        appBar: AppBar(title: AgileWithBackIconButton(_onBackPressed), automaticallyImplyLeading: false),
-        body: isLoading ? Center(child: CircularProgressIndicator()) : buildBody(context),
+        appBar: AppBar(
+            title: AgileWithBackIconButton(_onBackPressed),
+            automaticallyImplyLeading: false),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : buildBody(context),
       ),
     );
   }
@@ -243,25 +258,30 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                       if (_firstPress) {
                         _firstPress = false;
                         if (questionNr == NUMBER_OF_GAME_QUESTIONS) {
-                          await gameService.changeGameState(gameRef, GameState.FINAL);
-                          _log.info('${participantRef} HOST changed gameState to: ${GameState.FINAL}');
+                          await gameService.changeGameState(
+                              gameRef, GameState.FINAL);
+                          _log.info(
+                              '${participantRef} HOST changed gameState to: ${GameState.FINAL}');
                           return Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) {
                               gameService.changeGameKeepState(gameRef, false);
-                              mixpanel.track('congratulations_page: pause workshop');
+                              mixpanel.track(
+                                  'congratulations_page: pause workshop');
                               return FinalPage(participantRef, gameRef);
                             }),
                           );
                         }
-                        await gameService.changeGameState(gameRef, '${GameState.QUESTION}_${questionNr + 1}');
+                        await gameService.changeGameState(
+                            gameRef, '${GameState.QUESTION}_${questionNr + 1}');
                         _log.info(
                             '${participantRef} HOST changed gameState to: ${GameState.QUESTION}_${questionNr + 1}');
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
                             gameService.changeGameKeepState(gameRef, false);
-                            return GameQuestionPage(questionNr + 1, participantRef, gameRef);
+                            return GameQuestionPage(
+                                questionNr + 1, participantRef, gameRef);
                           }),
                         );
                       }
@@ -273,55 +293,61 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           ),
         if (role == Role.HOST)
           Row(
-          children: [
-            Expanded(
-                child: Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                        padding: EdgeInsets.all(25),
-                        child: AgileButton(
-                            onPressed: () async {
-                              gameService.changeGameKeepState(gameRef, true);
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return SimpleDialog(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                    elevation: 16,
-                                    children: [
-                                      Container(
-                                        height: 200.0,
-                                        width: 360.0,
-                                        child: Column(
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                PAUSE_TEXT,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(fontSize: fontMedium),
+            children: [
+              Expanded(
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: Padding(
+                          padding: EdgeInsets.all(25),
+                          child: AgileButton(
+                              onPressed: () async {
+                                gameService.changeGameKeepState(gameRef, true);
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return SimpleDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(40)),
+                                      elevation: 16,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.all(10),
+                                          height: 200.0,
+                                          width: 360.0,
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                child: Text(
+                                                  PAUSE_TEXT,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: fontMedium),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      SimpleDialogOption(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Center(
-                                            child: Text(
-                                              CLOSE,
-                                              style: TextStyle(fontSize: fontMedium, color: accentColor),
-                                            ),
-                                          ))
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            buttonTitle: GAME_PAUSE_BUTTON))))
-          ],
-        )
+                                        SimpleDialogOption(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Center(
+                                              child: Text(
+                                                CLOSE,
+                                                style: TextStyle(
+                                                    fontSize: fontMedium,
+                                                    color: accentColor),
+                                              ),
+                                            ))
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              buttonTitle: GAME_PAUSE_BUTTON))))
+            ],
+          )
       ],
     )));
   }
