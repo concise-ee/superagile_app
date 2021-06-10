@@ -249,7 +249,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
         if (agreedScore != null) buildCongratulations(),
         if (agreedScore == null) buildNoData(),
         if (role == Role.HOST)
-          Row(
+          Row (
             children: [
               Expanded(
                 child: Container(
@@ -313,13 +313,31 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                                       children: [
                                         Container(
                                           margin: const EdgeInsets.all(10),
-                                          height: 200.0,
-                                          width: 360.0,
+                                          height: 250.0,
+                                          width: 410.0,
                                           child: Column(
                                             children: [
                                               Center(
                                                 child: Text(
+                                                  PAUSE,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: fontMedium),
+                                                ),
+                                              ),
+                                              SizedBox(height: 30),
+                                              Center(
+                                                child: Text(
                                                   PAUSE_TEXT,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: fontMedium),
+                                                ),
+                                              ),
+                                              SizedBox(height: 30),
+                                              Center(
+                                                child: Text(
+                                                  GAME_CODE + gamePin.toString(),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                       fontSize: fontMedium),

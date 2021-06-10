@@ -83,4 +83,6 @@ const HAVE_SUGGESTIONS_OR_QUESTIONS = 'Have any questions or suggestions? Contac
 const GAME_PAUSE_BUTTON = 'PAUSE WORKSHOP';
 const YOUR_RESULT = 'Your result: ';
 const PAUSE_TEXT =
-    'The workshop has been successfully paused and it is safe to leave. To continue the workshop, just close this popup message and press play.';
+    'To continue the workshop, close this popup message and press play. If you close the app, please remember the workshop'+ "'" + 's code to join again later.';
+const PAUSE =
+    'PAUSED';

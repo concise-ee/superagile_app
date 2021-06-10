@@ -324,7 +324,10 @@ class _GameQuestionPage extends State<GameQuestionPage> {
         ),
         Row(children: [GamePin(gamePin: gamePin)]),
         Expanded(
-            child: SingleChildScrollView(
+            child:
+            Scrollbar(
+                child:
+                SingleChildScrollView(
                 padding: EdgeInsets.only(left: 25, right: 25),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -386,15 +389,15 @@ class _GameQuestionPage extends State<GameQuestionPage> {
                       ),
                     ),
                   ],
-                ))),
+                )))),
         if (role == Role.PLAYER || (role == Role.HOST && isPlayingAlong))
           SafeArea(
-              child: Row(
+              child: Column(
             children: [
-              renderScoreButton(ZERO, questionTemplate.zeroMeaning),
-              renderScoreButton(ONE, questionTemplate.oneMeaning),
-              renderScoreButton(TWO, questionTemplate.twoMeaning),
-              renderScoreButton(THREE, questionTemplate.threeMeaning)
+              renderScoreButton2(ZERO, questionTemplate.zeroMeaning),
+              renderScoreButton2(ONE, questionTemplate.oneMeaning),
+              renderScoreButton2(TWO, questionTemplate.twoMeaning),
+              renderScoreButton2(THREE, questionTemplate.threeMeaning)
             ],
           ))
         else
@@ -443,6 +446,44 @@ class _GameQuestionPage extends State<GameQuestionPage> {
           },
         ),
       ),
+    );
+  }
+
+
+  Widget renderScoreButton2(String value, String meaning) {
+    return Container(
+      margin: EdgeInsets.only(left: 25, right: 25, top: 10, bottom: 10),
+        height: 40,
+        child: RaisedButton(
+          elevation: 30,
+          hoverElevation: 60,
+          focusElevation: 60,
+          highlightElevation: 60,
+          child: Row(
+            children: [
+              Text(value + ' - ',
+                  style: TextStyle(
+                      color: value == pressedButton.toString()
+                          ? accentColor
+                          : primaryColor,
+                      fontSize: fontMedium)),
+              Text(meaning,
+                  style: TextStyle(
+                      color: value == pressedButton.toString()
+                          ? accentColor
+                          : primaryColor,
+                      fontSize: fontSmall),
+                  textAlign: TextAlign.center),
+            ],
+          ),
+          color: value == pressedButton.toString() ? primaryColor : accentColor,
+          onPressed: () {
+            if (pressedButton != int.parse(value)) {
+              setState(() => pressedButton = int.parse(value));
+              saveScoreAndWaitForNextPage(value);
+            }
+          },
+        ),
     );
   }
 
