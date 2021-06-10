@@ -406,50 +406,6 @@ class _GameQuestionPage extends State<GameQuestionPage> {
     );
   }
 
-  Expanded renderScoreButton(String value, String meaning) {
-    return Expanded(
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: secondaryColor, width: 5),
-          ),
-        ),
-        child: RaisedButton(
-          elevation: 0,
-          hoverElevation: 0,
-          focusElevation: 0,
-          highlightElevation: 0,
-          child: Column(
-            children: [
-              Text(value,
-                  style: TextStyle(
-                      color: value == pressedButton.toString()
-                          ? primaryColor
-                          : accentColor,
-                      fontSize: fontExtraLarge)),
-              Text(meaning,
-                  style: TextStyle(
-                      color: value == pressedButton.toString()
-                          ? primaryColor
-                          : accentColor,
-                      fontSize: fontExtraSmall),
-                  textAlign: TextAlign.center),
-            ],
-          ),
-          color: value == pressedButton.toString() ? accentColor : primaryColor,
-          onPressed: () {
-            if (pressedButton != int.parse(value)) {
-              setState(() => pressedButton = int.parse(value));
-              saveScoreAndWaitForNextPage(value);
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-
   Widget renderScoreButton2(String value, String meaning) {
     return Container(
       margin: EdgeInsets.only(left: 25, right: 25, top: 10, bottom: 10),
