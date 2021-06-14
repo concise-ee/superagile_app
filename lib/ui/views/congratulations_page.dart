@@ -12,10 +12,8 @@ import 'package:superagile_app/services/participant_service.dart';
 import 'package:superagile_app/services/question_service.dart';
 import 'package:superagile_app/services/score_service.dart';
 import 'package:superagile_app/services/timer_service.dart';
-import 'package:superagile_app/ui/components/agile_button.dart';
 import 'package:superagile_app/ui/components/agile_with_back_icon_button.dart';
 import 'package:superagile_app/ui/components/back_alert_dialog.dart';
-import 'package:superagile_app/ui/components/barchart.dart';
 import 'package:superagile_app/ui/components/game_pin.dart';
 import 'package:superagile_app/ui/components/play_button.dart';
 import 'package:superagile_app/ui/views/game_question_page.dart';
@@ -170,7 +168,12 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     if (questionNr > 1) {
       return Column(children: [
         Text(
-          YOUR_RESULT + agreedScore,
+          questionByNumber.topicName,
+          style: TextStyle(fontSize: fontLarge, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 10),
+        Text(
+          YOUR_RESULT,
           style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
         ),
       ]);
@@ -190,7 +193,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
     }
   }
 
-  Widget buildCongratulations() {
+  Widget buildCongratulations2() {
     return Container(
       padding: EdgeInsets.all(12.0),
       child: Column(
@@ -199,10 +202,44 @@ class _CongratulationsPage extends State<CongratulationsPage> {
               padding: EdgeInsets.only(top: 12, bottom: 24),
               child: displayCongrats()),
           Container(
-              child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: BarChart.withSampleData(scoreMeanings,
-                      questionByNumber.topicName, int.parse(agreedScore)))),
+            height: 200,
+            width: 200,
+            margin: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+                color: black,
+                shape: BoxShape.circle
+            ),
+            child:
+            Container(
+                height: 200,
+                width: 200,
+                margin: EdgeInsets.all(7.0),
+                decoration: BoxDecoration(
+                color: primaryColor,
+                shape: BoxShape.circle
+                ),
+              child:
+                Container(
+                height: 200,
+                  width: 200,
+                  margin: EdgeInsets.all(7.0),
+                  decoration: BoxDecoration(
+                  color: black,
+                  shape: BoxShape.circle
+                  ),
+                  child:
+              Container(
+                height: 100,
+                width: 100,
+                margin: EdgeInsets.all(7.0),
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  shape: BoxShape.circle
+              ),
+                child: Center(
+                    child: Text(agreedScore, style: TextStyle(fontSize: fontExtraExtraLarge))
+                ),
+          ))))
         ],
       ),
     );
@@ -229,7 +266,9 @@ class _CongratulationsPage extends State<CongratulationsPage> {
       child: Scaffold(
         appBar: AppBar(
             title: AgileWithBackIconButton(_onBackPressed),
-            automaticallyImplyLeading: false),
+            automaticallyImplyLeading: false,
+            actions: [if (role == Role.HOST) buildPause(context)],
+        ),
         body: isLoading
             ? Center(child: CircularProgressIndicator())
             : buildBody(context),
@@ -246,7 +285,7 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           value: questionNr / NUMBER_OF_GAME_QUESTIONS,
         ),
         Row(children: [GamePin(gamePin: gamePin)]),
-        if (agreedScore != null) buildCongratulations(),
+        if (agreedScore != null) buildCongratulations2(),
         if (agreedScore == null) buildNoData(),
         if (role == Role.HOST)
           Row (
@@ -291,82 +330,79 @@ class _CongratulationsPage extends State<CongratulationsPage> {
               ),
             ],
           ),
-        if (role == Role.HOST)
-          Row(
-            children: [
-              Expanded(
-                  child: Container(
-                      alignment: Alignment.center,
-                      child: Padding(
-                          padding: EdgeInsets.all(25),
-                          child: AgileButton(
-                              onPressed: () async {
-                                gameService.changeGameKeepState(gameRef, true);
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return SimpleDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(40)),
-                                      elevation: 16,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.all(10),
-                                          height: 250.0,
-                                          width: 410.0,
-                                          child: Column(
-                                            children: [
-                                              Center(
-                                                child: Text(
-                                                  PAUSE,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: fontMedium),
-                                                ),
-                                              ),
-                                              SizedBox(height: 30),
-                                              Center(
-                                                child: Text(
-                                                  PAUSE_TEXT,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: fontMedium),
-                                                ),
-                                              ),
-                                              SizedBox(height: 30),
-                                              Center(
-                                                child: Text(
-                                                  GAME_CODE + gamePin.toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: fontMedium),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SimpleDialogOption(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Center(
-                                              child: Text(
-                                                CLOSE,
-                                                style: TextStyle(
-                                                    fontSize: fontMedium,
-                                                    color: accentColor),
-                                              ),
-                                            ))
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              buttonTitle: GAME_PAUSE_BUTTON))))
-            ],
-          )
       ],
     )));
+  }
+
+
+  Widget buildPause(BuildContext context) {
+      return IconButton(
+        icon: Icon(Icons.pause_circle_outline_outlined ),
+        color: accentColor,
+        iconSize: 40,
+        onPressed: () async {
+          gameService.changeGameKeepState(gameRef, true);
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SimpleDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(40)),
+                elevation: 16,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    height: 300.0,
+                    width: 410.0,
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            PAUSE,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: fontMedium),
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Center(
+                          child: Text(
+                            PAUSE_TEXT,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: fontMedium),
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Center(
+                          child: Text(
+                            GAME_CODE + gamePin.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: fontMedium),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SimpleDialogOption(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Center(
+                        child: Text(
+                          CLOSE,
+                          style: TextStyle(
+                              fontSize: fontMedium,
+                              color: accentColor),
+                        ),
+                      ))
+                ],
+              );
+            },
+          );
+        },
+      );
   }
 }
