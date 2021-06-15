@@ -165,10 +165,10 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   }
 
   Widget displayCongrats() {
-    if (questionNr > 1) {
       return Column(children: [
         Text(
           questionByNumber.topicName,
+          textAlign: TextAlign.center,
           style: TextStyle(fontSize: fontLarge, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 10),
@@ -177,20 +177,6 @@ class _CongratulationsPage extends State<CongratulationsPage> {
           style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
         ),
       ]);
-    } else {
-      return Column(children: [
-        Text(
-          CONGRATS,
-          style: TextStyle(fontSize: fontMedium, fontWeight: FontWeight.bold),
-        ),
-        Padding(
-            padding: EdgeInsets.only(bottom: 24),
-            child: Text(
-              GREAT_MINDS,
-              style: TextStyle(fontSize: fontMedium),
-            )),
-      ]);
-    }
   }
 
   Widget buildCongratulations2() {
