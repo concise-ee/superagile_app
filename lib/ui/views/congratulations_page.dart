@@ -225,7 +225,14 @@ class _CongratulationsPage extends State<CongratulationsPage> {
                 child: Center(
                     child: Text(agreedScore, style: TextStyle(fontSize: fontExtraExtraLarge))
                 ),
-          ))))
+          )))),
+          Container(
+            padding: EdgeInsets.only(right: 20, left: 20),
+            child: Text(questionByNumber.explanation,
+              style: TextStyle(
+              fontSize: fontSmall, letterSpacing: 2.5, height: 1.5),
+              textAlign: TextAlign.justify)
+            ),
         ],
       ),
     );
@@ -265,7 +272,8 @@ class _CongratulationsPage extends State<CongratulationsPage> {
   Widget buildBody(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-            child: Column(
+            child:
+            Column(
       children: [
         LinearProgressIndicator(
           value: questionNr / NUMBER_OF_GAME_QUESTIONS,

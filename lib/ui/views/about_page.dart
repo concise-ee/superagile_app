@@ -103,6 +103,7 @@ class AboutPage extends StatelessWidget {
                           padding: EdgeInsets.all(25),
                           child: Text(
                             SUPERAGILE_IS_DESIGNED,
+                            textAlign: TextAlign.justify,
                             style: TextStyle(color: black, fontSize: fontSmall),
                           )),
                     ),
@@ -124,6 +125,7 @@ class AboutPage extends StatelessWidget {
                           padding: EdgeInsets.all(25),
                           child: Text(
                             NOT_A_PROCESS,
+                            textAlign: TextAlign.justify,
                             style: TextStyle(color: black, fontSize: fontSmall),
                           )),
                     ),
@@ -143,6 +145,7 @@ class AboutPage extends StatelessWidget {
                           padding: EdgeInsets.all(25),
                           child: Text(
                             IN_THE_END,
+                            textAlign: TextAlign.justify,
                             style: TextStyle(color: black, fontSize: fontSmall),
                           )),
                     ),
@@ -294,10 +297,10 @@ class AboutPage extends StatelessWidget {
           child: Container(
             alignment: Alignment.center,
             child: Padding(
-                padding: EdgeInsets.only(left: 25, bottom: 5, right: 25),
+                padding: EdgeInsets.only(left: 25, bottom: 10, right: 25),
                 child: Text(
                   step,
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.justify,
                   style: TextStyle(color: black, fontSize: fontSmall),
                 )),
           ),
